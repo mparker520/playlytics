@@ -1,1 +1,2 @@
-#PlayLytics Game Scoring App
+# PlayLytics Board Game Scoring Application
+

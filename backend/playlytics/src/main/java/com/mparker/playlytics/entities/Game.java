@@ -2,18 +2,21 @@ package com.mparker.playlytics.entities;
 
 // Imports
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
+// This data will be imported from Board Game Geek data
+// id will be imported, not auto-generated
 
 @Entity
+
 public class Game {
+
     // Database Columns
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column(name = "board_game", nullable = false, unique = true)
+    @NotNull
     private String name;
 
 }

@@ -4,14 +4,10 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
-
-
 @Entity
-@Table(name = "session_participants")
+@Table(name = "session_teams")
 
-public class SessionParticipant {
+public class SessionTeam {
 
     // Database Columns
     @Id
@@ -23,20 +19,7 @@ public class SessionParticipant {
     private int result;
 
 
-    @ManyToOne
-    @JoinColumn(name = "session_team_id", nullable = true)
-    private SessionTeam sessionTeam;
-
-
-    // Link to Player
-    @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
-    @NotNull
-    private Player player;
-
-
-    // Link to GamePlaySession
-    // Bidirectional Mapping @ Lines 32-33 of GamePlaySession.java
+    // Maps to GamePlaySession
     @ManyToOne
     @JoinColumn(name = "game_play_session_id", nullable = false)
     @NotNull

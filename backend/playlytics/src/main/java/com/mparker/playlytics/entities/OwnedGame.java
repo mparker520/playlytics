@@ -3,6 +3,10 @@ package com.mparker.playlytics.entities;
 // Imports
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "owned_games")
@@ -14,11 +18,16 @@ public class OwnedGame {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    // Link to User
+    @CreationTimestamp
+    @Column(name = "creation_timestamp")
+    private Timestamp creationTimestamp;
+
+
+    // Link to RegisteredPlayer
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "registered_player_id", nullable = false)
     @NotNull
-    private AppUser user;
+    private RegisteredPlayer registeredPlayer;
 
     // Link to Game
     @ManyToOne

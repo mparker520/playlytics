@@ -1,9 +1,9 @@
 package com.mparker.playlytics.entities;
 
 // Imports
+import com.mparker.playlytics.enums.ScoringModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name="play_sessions")
 
-public class PlaySession {
+public class GamePlaySession {
 
     // Database Columns
     @Id
@@ -23,16 +23,19 @@ public class PlaySession {
     @NotNull
     private Instant sessionDateTime;
 
-
-    // Mapping to Players (See Bidirectional mapping at Player.java 24-28)
-    @ManyToMany(mappedBy = "playSessions")
+    @Column(name = "scoring_model", nullable = false)
     @NotNull
-    private Set<Player> players = new HashSet<Player>();
+    private ScoringModel scoringModel;
+
+
+    // Set of SessionParticipants in GamePlaySession
+    @OneToMany(mappedBy = "gamePlaySession")
+    private Set<SessionParticipant> sessionParticipants = new HashSet<>();
 
 
     // Mapping to Game (Unidirectional)
     @ManyToOne
-    @JoinColumn(name = "game_Id", nullable = false)
+    @JoinColumn(name = "game_id", nullable = false)
     @NotNull
     private Game game;
 

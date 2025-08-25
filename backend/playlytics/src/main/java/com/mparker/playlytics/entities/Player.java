@@ -3,11 +3,7 @@ package com.mparker.playlytics.entities;
 // Imports
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Negative;
 import jakarta.validation.constraints.NotNull;
-
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity
@@ -31,13 +27,8 @@ public class Player {
     @NotNull
     private String displayName;
 
+    // GamePlaySessions are Mapped via the SessionParticipant Associative Entity
+    // See SessionParticipant.java
 
-    // Maps to Play Sessions (See Bidirectional mapping at PlaySession.java 22-23)
-    @ManyToMany
-    @JoinTable(name = "game_players",
-        joinColumns = @JoinColumn(name = "player_id"),
-        inverseJoinColumns = @JoinColumn(name= "play_session_id")
-    )
-    private Set<PlaySession> playSessions = new HashSet<>();
 
 }

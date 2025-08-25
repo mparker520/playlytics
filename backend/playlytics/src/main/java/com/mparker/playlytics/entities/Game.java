@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 // id will be imported, not auto-generated
 
 @Entity
+@Table (name = "board_games")
 
 public class Game {
 
@@ -15,7 +16,7 @@ public class Game {
     @Id
     private int id;
 
-    @Column(name = "board_game", nullable = false, unique = true)
+    @Column(name = "game_title", nullable = false, unique = true)
     @NotNull
     private String name;
 

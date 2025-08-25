@@ -18,7 +18,7 @@ public class Game {
 
     @Column(name = "game_title", nullable = false, unique = true)
     @NotNull
-    private String name;
+    private String gameTitle;
 
 
 }

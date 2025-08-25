@@ -1,13 +1,12 @@
 package com.mparker.playlytics.entities;
 
 // Imports
+import com.mparker.playlytics.enums.RegistrationStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 
 @Entity
@@ -31,7 +30,7 @@ public class Player {
     private byte[] avatar;
 
     @Column(name = "registration_status")
-    private boolean registrationStatus;
+    private RegistrationStatus registrationStatus;
 
     @CreationTimestamp
     @Column(name = "creation_timestamp")

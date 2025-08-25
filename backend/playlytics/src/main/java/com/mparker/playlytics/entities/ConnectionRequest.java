@@ -1,6 +1,8 @@
 package com.mparker.playlytics.entities;
 
 // Imports
+import com.mparker.playlytics.enums.ConnectionRequestStatus;
+import com.sun.net.httpserver.Request;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
@@ -8,15 +10,20 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.sql.Timestamp;
 
+
 @Entity
-@Table(name = "owned_games")
-public class OwnedGame {
+@Table(name = "connection_requests")
+
+public class ConnectionRequest {
 
     // Database Columns
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+
+    @Column(name = "connection_request_status", nullable = false)
+    @NotNull
+    private ConnectionRequestStatus connectionRequestStatus;
 
     @CreationTimestamp
     @Column(name = "creation_timestamp")
@@ -27,17 +34,18 @@ public class OwnedGame {
     private Timestamp updateTimestamp;
 
 
-    // Link to RegisteredPlayer
+    // Maps to RegisteredPlayer
     @ManyToOne
-    @JoinColumn(name = "registered_player_id", nullable = false)
+    @JoinColumn(name = "invite_recipient", nullable = false)
     @NotNull
-    private RegisteredPlayer registeredPlayer;
+    private RegisteredPlayer inviteRecipient;
 
-    // Link to Game
+    // Maps to RegisteredPlayer for Initiator
     @ManyToOne
-    @JoinColumn(name = "game_id", nullable = false)
+    @JoinColumn(name = "request_initiator", nullable = false)
     @NotNull
-    private Game game;
+    private RegisteredPlayer initiatorId;
+
 
 
 }

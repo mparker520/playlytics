@@ -36,7 +36,7 @@ public class SessionParticipant {
 
 
     // Link to GamePlaySession
-    // Bidirectional Mapping @ Lines 32-33 of GamePlaySession.java
+    // Bidirectional Mapping GamePlaySession.java
     @ManyToOne
     @JoinColumn(name = "game_play_session_id", nullable = false)
     @NotNull

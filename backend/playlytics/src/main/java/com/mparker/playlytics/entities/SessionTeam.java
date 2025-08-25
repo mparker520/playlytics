@@ -4,6 +4,9 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "session_teams")
 
@@ -17,6 +20,12 @@ public class SessionTeam {
     @Column(name = "result", nullable = false)
     @NotNull
     private int result;
+
+
+    // Bidirectional Mapping to SessionParticipants
+    @OneToMany
+    @JoinColumn(name = "members")
+    private Set<SessionParticipant> members = new HashSet<>();
 
 
     // Maps to GamePlaySession

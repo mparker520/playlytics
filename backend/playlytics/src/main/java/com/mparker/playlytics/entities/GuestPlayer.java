@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Email;
 
 @Entity
 @Table(name = "guest_players")
-@PrimaryKeyJoinColumn(name = "player_id")
+@PrimaryKeyJoinColumn(name = "guest_player_id")
 
 public class GuestPlayer extends Player {
 

@@ -35,13 +35,13 @@ public class ConnectionRequest {
 
 
     // Maps to RegisteredPlayer
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "invite_recipient", nullable = false)
     @NotNull
     private RegisteredPlayer inviteRecipient;
 
     // Maps to RegisteredPlayer for Initiator
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_initiator", nullable = false)
     @NotNull
     private RegisteredPlayer initiatorId;

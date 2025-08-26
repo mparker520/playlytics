@@ -29,7 +29,7 @@ public class SessionTeam {
 
 
     // Maps to GamePlaySession
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_play_session_id", nullable = false)
     @NotNull
     private GamePlaySession gamePlaySession;

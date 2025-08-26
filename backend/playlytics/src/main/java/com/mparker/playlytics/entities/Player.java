@@ -42,7 +42,7 @@ public class Player {
 
 
     // Maps to RegisteredPlayer to Indicate who Created this Player
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private RegisteredPlayer creatorId;
 

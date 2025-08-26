@@ -28,13 +28,13 @@ public class OwnedGame {
 
 
     // Link to RegisteredPlayer
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "registered_player_id", nullable = false)
     @NotNull
     private RegisteredPlayer registeredPlayer;
 
     // Link to Game
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", nullable = false)
     @NotNull
     private Game game;

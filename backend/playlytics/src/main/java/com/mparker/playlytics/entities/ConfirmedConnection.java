@@ -21,20 +21,20 @@ public class ConfirmedConnection {
     @CreationTimestamp
     @Column(name = "creation_timestamp")
     private Timestamp creationTimestamp;
-    
+
 
     // Maps to RegisteredPlayer
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "peer_a")
     private RegisteredPlayer peerAId;
 
     // Maps to Registered Player
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "peer_b")
     private RegisteredPlayer peerBId;
 
     // Maps to a ConnectionRequest if ConnectionRequest Status is APPROVED
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "connection_request")
     private ConnectionRequest connectionRequestId;
 

@@ -23,13 +23,13 @@ public class SessionParticipant {
     private int result;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "session_team_id", nullable = true)
     private SessionTeam sessionTeam;
 
 
     // Link to Player
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "player_id", nullable = false)
     @NotNull
     private Player player;
@@ -37,7 +37,7 @@ public class SessionParticipant {
 
     // Link to GamePlaySession
     // Bidirectional Mapping GamePlaySession.java
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_play_session_id", nullable = false)
     @NotNull
     private GamePlaySession gamePlaySession;

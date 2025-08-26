@@ -40,13 +40,13 @@ public class GamePlaySession {
 
 
     // Maps to RegisteredPlayer to Indicate who Created this GamePlaySession
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private RegisteredPlayer creatorId;
 
 
     // Maps to RegisteredPlayer to Indicate who Last Updated this GamePlaySession
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "last_updated_by")
     private RegisteredPlayer updaterId;
 
@@ -64,7 +64,7 @@ public class GamePlaySession {
 
 
     // Mapping to Game (Unidirectional)
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_id", nullable = false)
     @NotNull
     private Game game;

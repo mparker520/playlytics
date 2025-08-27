@@ -42,7 +42,7 @@ public class RegisteredPlayer extends Player {
     private Set<GhostPlayer> associations = new HashSet<>();
 
 
-    @OneToOne(mappedBy = "registeredPlayer")
+    @OneToOne(mappedBy = "registeredPlayer", fetch = FetchType.LAZY)
     private GhostPlayer ghostPlayer;
 
     // Inventory is Mapped via the OwnedGame Associative Entity

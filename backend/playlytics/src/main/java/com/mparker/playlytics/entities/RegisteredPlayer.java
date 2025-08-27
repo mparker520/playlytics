@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 
 @Entity
@@ -46,6 +47,7 @@ public class RegisteredPlayer extends Player {
 
     // Inventory is Mapped via the OwnedGame Associative Entity
     // See OwnedGame.java
+
 
 
 }

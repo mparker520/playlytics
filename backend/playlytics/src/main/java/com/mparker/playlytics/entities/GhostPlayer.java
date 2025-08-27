@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.UUID;
+
 
 @Entity
 @Table(name = "guest_players")
@@ -33,7 +35,6 @@ public class GhostPlayer extends Player {
 
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
-
 
 
 }

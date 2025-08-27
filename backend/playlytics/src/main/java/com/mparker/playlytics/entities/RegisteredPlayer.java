@@ -3,20 +3,23 @@ package com.mparker.playlytics.entities;
 // Imports
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
+
 
 
 @Entity
-@Table(name = "registered_players")
+@Table(name = "registered_players", indexes = {
+        @Index(name = "ix_registered_players_display_name", columnList = "display_name"),
+        @Index(name = "ix_registered_players_login_email", columnList = "login_email")
+})
+
 // User extends player and inherits id via Player's id
 @PrimaryKeyJoinColumn(name= "registered_player_id")
 
 public class RegisteredPlayer extends Player {
 
-    // Database Columns
+    // <editor-fold desc = "Database Columns">
 
     @Column(name = "display_name", nullable = false, length = 255, unique = true)
     @NotBlank
@@ -33,11 +36,16 @@ public class RegisteredPlayer extends Player {
     @NotNull
     private String password;
 
+    // </editor-fold>
+
+    // <editor-fold desc = "Relationship Mappings">
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "associations",
         joinColumns = @JoinColumn(name = "registered_player_id", nullable = false, updatable = false),
-        inverseJoinColumns = @JoinColumn(name = "ghost_player_id"))
+        inverseJoinColumns = @JoinColumn(name = "ghost_player_id"),
+        uniqueConstraints = @UniqueConstraint(name = "ux_associations_registered_ghost",
+                columnNames = {"registered_player_id", "ghost_player_id"})
     @NotNull
     private Set<GhostPlayer> associations = new HashSet<>();
 
@@ -48,6 +56,6 @@ public class RegisteredPlayer extends Player {
     // Inventory is Mapped via the OwnedGame Associative Entity
     // See OwnedGame.java
 
-
+    // </editor-fold>
 
 }

@@ -12,11 +12,16 @@ import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name="players")
+@Table(name="players", indexes = {
+        @Index(name = "multiIndex_players_first_last", columnList = "first_name, last_name"),
+        @Index(name = "multiIndex_players_last_first", columnList = "last_name, first_name"),
+
+})
 
 public class Player {
 
-    // Database Columns
+    // <editor-fold desc = "Database Columns">
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -45,12 +50,14 @@ public class Player {
     @Column(name = "update_timestamp")
     private Instant updateTimestamp;
 
+    // </editor-fold>
 
+    // <editor-fold desc = "Relationship Mappings">
     // GamePlaySessions are Mapped via the SessionParticipant Associative Entity
     // See SessionParticipant.java
+    // </editor-fold >
 
-
-    // Equals and HashCode Override Methods
+    // <editor-fold desc = "Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -79,5 +86,6 @@ public class Player {
         return uid.hashCode();
     }
 
+    // </editor-fold>
 
 }

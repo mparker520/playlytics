@@ -1,12 +1,9 @@
 package com.mparker.playlytics.composite_ids;
 
 // Imports
-import com.mparker.playlytics.entities.ConfirmedConnection;
-import com.mparker.playlytics.entities.Player;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
 
 @Embeddable

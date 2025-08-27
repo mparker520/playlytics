@@ -10,11 +10,14 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "session_teams")
+@Table(name = "session_teams", indexes = {
+        @Index(name = "multiIndex_session_teams_game_play_session_rank", columnList = "game_play_session_id, result"),
+})
 
 public class SessionTeam {
 
-    // Database Columns
+    // <editor-fold desc = "Database Columns">
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -23,6 +26,9 @@ public class SessionTeam {
     @NotNull
     private int result;
 
+    // </editor-fold>
+
+    // <editor-fold desc = "Relationship Mappings">
 
     // Bidirectional Mapping to SessionParticipants
     @OneToMany (mappedBy =  "sessionTeam")
@@ -37,8 +43,9 @@ public class SessionTeam {
     @NotNull
     private GamePlaySession gamePlaySession;
 
+    // </editor-fold>
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc = "Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -68,5 +75,6 @@ public class SessionTeam {
         return uid.hashCode();
     }
 
+    // </editor-fold>
 
 }

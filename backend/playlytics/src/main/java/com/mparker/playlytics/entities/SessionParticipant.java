@@ -4,16 +4,19 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import java.util.Objects;
 import java.util.UUID;
 
 
 @Entity
-@Table(name = "session_participants")
+@Table(name = "session_participants", indexes = {
+        @Index(name = "multiIndex_session_participants_player_result", columnList = "player_id, result"),
+        @Index(name = "multiIndex_session_participants_game_play_session_result", columnList = "game_play_session_id, result")
+})
 
 public class SessionParticipant {
 
-    // Database Columns
+    // <editor-fold desc = "Database Columns">
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -23,6 +26,9 @@ public class SessionParticipant {
     @Min(0)
     private int result;
 
+    // </editor-fold>
+
+    // <editor-fold desc = "Relationship Mappings">
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "session_team_id", nullable = true)
@@ -43,8 +49,9 @@ public class SessionParticipant {
     @NotNull
     private GamePlaySession gamePlaySession;
 
+    // </editor-fold>
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc = "Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -73,5 +80,7 @@ public class SessionParticipant {
     public int hashCode() {
         return uid.hashCode();
     }
+
+    // </editor-fold>
 
 }

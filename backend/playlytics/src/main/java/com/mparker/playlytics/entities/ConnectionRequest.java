@@ -11,11 +11,16 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name = "connection_requests")
+@Table(name = "connection_requests", indexes = {
+        @Index(name = "ix_connection_request_status", columnList = "connection_request_status"),
+        @Index(name="multiIndex_status_recipient", columnList = "connection_request_status, request_recipient"),
+        @Index(name="ix_connection_request_initiator", columnList =  "request_initiator"),
+        @Index(name = "ix_connection_request_recipient", columnList = "request_recipient")
+})
 
 public class ConnectionRequest {
 
-    // Database Columns
+    // <editor-fold desc="Database Columns">
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -33,6 +38,10 @@ public class ConnectionRequest {
     @Column(name = "update_timestamp")
     private Instant updateTimestamp;
 
+    // </editor-fold >
+
+
+    // <editor-fold desc="Relationship Mappings">
 
     // Maps to RegisteredPlayer
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -46,8 +55,10 @@ public class ConnectionRequest {
     @NotNull
     private RegisteredPlayer initiatorId;
 
+    // </editor-fold >
 
-    // Equals and HashCode Override Methods
+
+    // <editor-fold desc="Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -77,5 +88,6 @@ public class ConnectionRequest {
         return uid.hashCode();
     }
 
+    // </editor-fold >
 
 }

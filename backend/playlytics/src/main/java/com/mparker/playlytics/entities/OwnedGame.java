@@ -8,10 +8,12 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "owned_games")
+@Table(name = "owned_games", indexes = {
+        @Index(name = "ix_owned_games_owner", columnList = "owner_id")
+})
 public class OwnedGame {
 
-    // Database Columns
+    // <editor-fold desc = "Database Columns">
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,10 +23,13 @@ public class OwnedGame {
     @Column(name = "creation_timestamp", nullable = false, updatable = false)
     private Instant creationTimestamp;
 
+    // </editor-fold>
+
+    // <editor-fold desc = "Relationship Mappings">
 
     // Link to RegisteredPlayer
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "registered_player_id", nullable = false, updatable = false)
+    @JoinColumn(name = "owner_id", nullable = false, updatable = false)
     @NotNull
     private RegisteredPlayer registeredPlayer;
 
@@ -35,8 +40,9 @@ public class OwnedGame {
     @NotNull
     private Game game;
 
+    // </editor-fold>
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc = "Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -66,5 +72,6 @@ public class OwnedGame {
         return uid.hashCode();
     }
 
+    // </editor-fold>
 
 }

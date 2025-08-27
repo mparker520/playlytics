@@ -9,11 +9,14 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "confirmed_connections")
+@Table(name = "confirmed_connections", indexes = {
+        @Index(name = "multiIndex_a_b", columnList = "peer_a, peer_b"),
+        @Index(name = "multiIndex_b_a", columnList = "peer_b, peer_a")
+})
 
 public class ConfirmedConnection {
 
-    // Database Columns
+    // <editor-fold desc="Database Columns">
 
     @EmbeddedId
     private ConfirmedConnectionId id;
@@ -23,6 +26,11 @@ public class ConfirmedConnection {
     @NotNull
     private Instant creationTimestamp;
 
+    // </editor-fold >
+
+
+    // <editor-fold desc="Relationship Mappings">
+
 
     // Maps to RegisteredPlayer
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -30,11 +38,13 @@ public class ConfirmedConnection {
     @NotNull
     private RegisteredPlayer peerAId;
 
+
     // Maps to Registered Player
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "peer_b", nullable = false, updatable = false)
     @NotNull
     private RegisteredPlayer peerBId;
+
 
     // Maps to a ConnectionRequest if ConnectionRequest Status is APPROVED
     @OneToOne(fetch = FetchType.LAZY, optional = false)
@@ -42,8 +52,10 @@ public class ConfirmedConnection {
     @NotNull
     private ConnectionRequest connectionRequestId;
 
+    // </editor-fold>
 
-    // Equals and HashCode Override Methods
+
+    // <editor-fold desc="Equals & HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -73,5 +85,6 @@ public class ConfirmedConnection {
         return uid.hashCode();
     }
 
+    // </editor-fold >
 
 }

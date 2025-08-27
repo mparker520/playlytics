@@ -5,9 +5,6 @@ import com.mparker.playlytics.enums.GhostStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-import java.util.UUID;
 
 
 @Entity
@@ -17,7 +14,7 @@ import java.util.UUID;
 
 public class GhostPlayer extends Player {
 
-    // Database Columns
+    // <editor-fold desc="Database Columns">
 
     @Column(name = "identifier_email", nullable = false, unique = true)
     @Email
@@ -27,6 +24,9 @@ public class GhostPlayer extends Player {
     @Column(name = "status", nullable = false)
     private GhostStatus status;
 
+    // </editor-fold>
+
+    // <editor-fold desc="Relationship Mapping">
 
     // Mapping to Linked Registered Player If Applicable
     @OneToOne(fetch = FetchType.LAZY)
@@ -36,5 +36,6 @@ public class GhostPlayer extends Player {
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
 
+    // </editor-fold>
 
 }

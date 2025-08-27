@@ -3,8 +3,6 @@ package com.mparker.playlytics.entities;
 // Imports
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
@@ -16,7 +14,8 @@ import java.util.UUID;
 
 public class Game {
 
-    // Database Columns
+    // <editor-fold desc="Database Columns">
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -26,13 +25,13 @@ public class Game {
     @Size(max = 255)
     private String gameTitle;
 
+    // </editor-fold>
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc="Equals & HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
     private UUID uid = UUID.randomUUID();
-
     // Define Equals
     @Override
     public boolean equals(Object o) {
@@ -57,5 +56,6 @@ public class Game {
         return uid.hashCode();
     }
 
+    // </editor-fold>
 
 }

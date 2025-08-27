@@ -15,11 +15,16 @@ import java.util.UUID;
 
 
 @Entity
-@Table(name="play_sessions")
+@Table(name="game_play_sessions", indexes = {
+        @Index(name = "ix_game_play_session_scoring_model", columnList = "scoring_model"),
+        @Index(name="multiIndex_game_play_session_date_game", columnList = "session_date_time, game_id"),
+        @Index(name="multiIndex_game_play_session_game_date", columnList = "game_id, session_date_time")
+})
 
 public class GamePlaySession {
 
-    // Database Columns
+    // <editor-fold desc="Database Columns">
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -41,19 +46,15 @@ public class GamePlaySession {
     @Column(name = "update_timestamp")
     private Instant updateTimestamp;
 
+    // </editor-fold >
+
+    // <editor-fold desc="Relationship Mappings">
 
     // Maps to RegisteredPlayer to Indicate who Created this GamePlaySession
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by", nullable = false, updatable = false)
     @NotNull
     private RegisteredPlayer creatorId;
-
-
-    /* Maps to RegisteredPlayer to Indicate who Last Updated this GamePlaySession
-    THIS ENTIRE COLUMN IS WEIRD
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "last_updated_by")
-    private RegisteredPlayer updaterId; */
 
 
     // Set of SessionTeams in GamePlaySession
@@ -77,8 +78,9 @@ public class GamePlaySession {
     @NotNull
     private Game game;
 
+    // </editor-fold >
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc="Equals and HashCode">
 
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
@@ -108,5 +110,6 @@ public class GamePlaySession {
         return uid.hashCode();
     }
 
+    // </editor-fold>
 
 }

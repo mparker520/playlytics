@@ -4,6 +4,9 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "registered_players")
@@ -29,26 +32,20 @@ public class RegisteredPlayer extends Player {
     @NotNull
     private String password;
 
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "associations",
+        joinColumns = @JoinColumn(name = "registered_player_id", nullable = false, updatable = false),
+        inverseJoinColumns = @JoinColumn(name = "ghost_player_id"))
+    @NotNull
+    private Set<GhostPlayer> associations = new HashSet<>();
+
+
+    @OneToOne(mappedBy = "registeredPlayer")
+    private GhostPlayer ghostPlayer;
+
     // Inventory is Mapped via the OwnedGame Associative Entity
     // See OwnedGame.java
-
-
-
-    @PrePersist
-    @PreUpdate
-    public void stripInputFields() {
-
-        super.stripInputFields();
-
-        if (loginEmail != null) {
-            this.loginEmail = loginEmail.strip();
-        }
-
-        if (displayName != null) {
-            this.displayName = displayName.strip();
-        }
-
-    }
 
 
 }

@@ -5,6 +5,7 @@ import com.mparker.playlytics.enums.GhostStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 
 @Entity
@@ -25,14 +26,14 @@ public class GhostPlayer extends Player {
     private GhostStatus status;
 
 
-    @PrePersist
-    @PreUpdate
-    public void stripInputFields() {
+    // Mapping to Linked Registered Player If Applicable
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "registered_player_id", updatable = false, unique = true)
+    private RegisteredPlayer registeredPlayer;
 
-        if (identifierEmail != null) {
-            this.identifierEmail = identifierEmail.strip();
-        }
-    }
+
+    // Associations to Registered Players mapped in RegisteredPlayers.java
+
 
 
 }

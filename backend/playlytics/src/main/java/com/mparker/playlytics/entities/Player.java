@@ -45,19 +45,7 @@ public class Player {
     private Instant updateTimestamp;
 
 
-    @PrePersist
-    @PreUpdate
-    protected void stripInputFields() {
-        if (firstName != null) {
-            this.firstName = firstName.strip();
-        }
 
-        if (lastName != null) {
-            this.lastName = lastName.strip();
-        }
-
-
-    }
 
 
 

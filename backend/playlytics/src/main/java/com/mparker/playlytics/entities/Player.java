@@ -1,16 +1,15 @@
 package com.mparker.playlytics.entities;
 
 // Imports
-import com.mparker.playlytics.enums.RegistrationStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 
 @Entity
-// Player is joined to User through Inheritance via Player id being inherited as User id
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="players")
 
@@ -18,33 +17,49 @@ public class Player {
 
     // Database Columns
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    @Column(name = "display_name", nullable = false)
-    @NotNull
-    private String displayName;
+    @Column(name = "first_name", nullable = false, length = 255)
+    @NotBlank
+    @Size(max = 255)
+    private String firstName;
+
+    @Column(name = "last_name", nullable = false, length = 255)
+    @NotBlank
+    @Size(max = 255)
+    private String lastName;
+
 
     @Lob
     @Column(name = "avatar", columnDefinition = "bytea")
     private byte[] avatar;
 
-    @Column(name = "registration_status")
-    private RegistrationStatus registrationStatus;
 
     @CreationTimestamp
-    @Column(name = "creation_timestamp")
-    private Timestamp creationTimestamp;
+    @Column(name = "creation_timestamp", updatable = false)
+    private Instant creationTimestamp;
 
     @UpdateTimestamp
     @Column(name = "update_timestamp")
-    private Timestamp updateTimestamp;
+    private Instant updateTimestamp;
 
 
-    // Maps to RegisteredPlayer to Indicate who Created this Player
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    private RegisteredPlayer creatorId;
+    @PrePersist
+    @PreUpdate
+    protected void stripInputFields() {
+        if (firstName != null) {
+            this.firstName = firstName.strip();
+        }
+
+        if (lastName != null) {
+            this.lastName = lastName.strip();
+        }
+
+
+    }
+
+
 
     // GamePlaySessions are Mapped via the SessionParticipant Associative Entity
     // See SessionParticipant.java

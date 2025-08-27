@@ -14,7 +14,12 @@ public class RegisteredPlayer extends Player {
 
     // Database Columns
 
-    @Column(name = "login_email", nullable = false)
+    @Column(name = "display_name", nullable = false, length = 255, unique = true)
+    @NotBlank
+    @Size(max = 255)
+    private String displayName;
+
+    @Column(name = "login_email", nullable = false, unique = true)
     @NotNull
     @Email
     private String loginEmail;
@@ -26,6 +31,24 @@ public class RegisteredPlayer extends Player {
 
     // Inventory is Mapped via the OwnedGame Associative Entity
     // See OwnedGame.java
+
+
+
+    @PrePersist
+    @PreUpdate
+    public void stripInputFields() {
+
+        super.stripInputFields();
+
+        if (loginEmail != null) {
+            this.loginEmail = loginEmail.strip();
+        }
+
+        if (displayName != null) {
+            this.displayName = displayName.strip();
+        }
+
+    }
 
 
 }

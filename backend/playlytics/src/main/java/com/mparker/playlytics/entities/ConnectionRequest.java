@@ -2,13 +2,11 @@ package com.mparker.playlytics.entities;
 
 // Imports
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
-import com.sun.net.httpserver.Request;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.sql.Timestamp;
+import java.time.Instant;
 
 
 @Entity
@@ -19,33 +17,33 @@ public class ConnectionRequest {
     // Database Columns
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @Column(name = "connection_request_status", nullable = false)
     @NotNull
     private ConnectionRequestStatus connectionRequestStatus;
 
     @CreationTimestamp
-    @Column(name = "creation_timestamp")
-    private Timestamp creationTimestamp;
+    @Column(name = "creation_timestamp", nullable = false, updatable = false)
+    private Instant creationTimestamp;
 
     @UpdateTimestamp
     @Column(name = "update_timestamp")
-    private Timestamp updateTimestamp;
+    private Instant updateTimestamp;
 
 
     // Maps to RegisteredPlayer
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "invite_recipient", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "invite_recipient", nullable = false, updatable = false)
     @NotNull
     private RegisteredPlayer inviteRecipient;
 
     // Maps to RegisteredPlayer for Initiator
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_initiator", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "request_initiator", nullable = false, updatable = false)
     @NotNull
     private RegisteredPlayer initiatorId;
-
 
 
 }

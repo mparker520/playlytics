@@ -116,4 +116,71 @@ public class GamePlaySession {
 
     // </editor-fold>
 
+    // <editor-fold desc="Getters and Setters">
+
+    public Long getId() {
+        return id;
+    }
+
+    public Instant getSessionDateTime() {
+        return sessionDateTime;
+    }
+
+    public void setSessionDateTime(Instant sessionDateTime) {
+        this.sessionDateTime = sessionDateTime;
+    }
+
+    public ScoringModel getScoringModel() {
+        return scoringModel;
+    }
+
+    public void setScoringModel(ScoringModel scoringModel) {
+        this.scoringModel = scoringModel;
+    }
+
+    public Instant getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+
+    public Instant getUpdateTimestamp() {
+        return updateTimestamp;
+    }
+
+
+    public Player getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(Player creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public Set<SessionTeam> getSessionTeams() {
+        return sessionTeams;
+    }
+
+    public void setSessionTeams(Set<SessionTeam> sessionTeams) {
+        this.sessionTeams = sessionTeams;
+    }
+
+    public Set<SessionParticipant> getSessionParticipants() {
+        return sessionParticipants;
+    }
+
+    public void setSessionParticipants(Set<SessionParticipant> sessionParticipants) {
+        this.sessionParticipants = sessionParticipants;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+
+    // </editor-fold>
+
 }

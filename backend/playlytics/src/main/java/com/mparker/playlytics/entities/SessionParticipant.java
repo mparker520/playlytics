@@ -4,9 +4,6 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.util.UUID;
 
 
@@ -34,8 +31,8 @@ public class SessionParticipant {
     // <editor-fold desc = "Relationship Mappings">
 
     // Link to SessionTeam: Can be Null, not all SessionParticipants are part of a team
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "session_team_id", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_team_id")
     private SessionTeam sessionTeam;
 
 
@@ -85,6 +82,43 @@ public class SessionParticipant {
     public int hashCode() {
         return uid.hashCode();
     }
+
+    // </editor-fold>
+
+    // <editor-fold desc = "Getters and Setters">
+
+    public Long getId() {
+        return id;
+    }
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public SessionTeam getSessionTeam() {
+        return sessionTeam;
+    }
+
+    public void setSessionTeam(SessionTeam sessionTeam) {
+        this.sessionTeam = sessionTeam;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public GamePlaySession getGamePlaySession() {
+        return gamePlaySession;
+    }
+
 
     // </editor-fold>
 

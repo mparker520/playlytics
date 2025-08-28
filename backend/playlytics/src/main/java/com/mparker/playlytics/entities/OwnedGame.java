@@ -81,4 +81,24 @@ public class OwnedGame {
 
     // </editor-fold>
 
+    // <editor-fold desc="Getters and Setters">
+
+    public Long getId() {
+        return id;
+    }
+
+    public Instant getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public RegisteredPlayer getRegisteredPlayer() {
+        return registeredPlayer;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    // </editor-fold>
+
 }

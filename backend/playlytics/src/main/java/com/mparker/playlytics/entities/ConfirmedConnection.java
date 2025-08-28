@@ -94,4 +94,30 @@ public class ConfirmedConnection {
 
     // </editor-fold >
 
+
+    //<editor-fold desc="Getters">
+
+    public ConfirmedConnectionId getId() {
+        return id;
+    }
+
+    public Instant getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public RegisteredPlayer getPeerAId() {
+        return peerAId;
+    }
+
+    public RegisteredPlayer getPeerBId() {
+        return peerBId;
+    }
+
+    public ConnectionRequest getConnectionRequestId() {
+        return connectionRequestId;
+    }
+
+
+    //</editor-fold>
+
 }

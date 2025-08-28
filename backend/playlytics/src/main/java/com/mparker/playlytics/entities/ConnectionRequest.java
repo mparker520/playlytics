@@ -96,4 +96,37 @@ public class ConnectionRequest {
 
     // </editor-fold >
 
+    // <editor-fold desc="Getters and Setter">
+
+    public Long getId() {
+        return id;
+    }
+
+    public ConnectionRequestStatus getConnectionRequestStatus() {
+        return connectionRequestStatus;
+    }
+
+    public void setConnectionRequestStatus(ConnectionRequestStatus connectionRequestStatus) {
+        this.connectionRequestStatus = connectionRequestStatus;
+    }
+
+    public Instant getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public Instant getUpdateTimestamp() {
+        return updateTimestamp;
+    }
+
+    public RegisteredPlayer getInviteRecipient() {
+        return inviteRecipient;
+    }
+
+    public RegisteredPlayer getInitiatorId() {
+        return initiatorId;
+    }
+
+
+    // </editor-fold>
+
 }

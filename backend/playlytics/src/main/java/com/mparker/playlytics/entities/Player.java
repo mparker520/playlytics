@@ -70,10 +70,8 @@ public class Player {
         // If same in memory, equal is true
         if (this == o) return true;
 
-        // If object is null or the classes of this and object are not equal, false
-        if (o == null || !(o instanceof Player that)) return false;
-
-        // Establish object as this entity Instance
+        // If the instances of this and object are not equal, false
+        if (!(o instanceof Player that)) return false;
 
         // If this uid and object uid are equal, return true
         return uid.equals(that.uid);
@@ -87,5 +85,51 @@ public class Player {
     }
 
     // </editor-fold>
+
+    // <editor-fold desc="Getters and Setters">
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
+    }
+
+    public Instant getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public Instant getUpdateTimestamp() {
+        return updateTimestamp;
+    }
+
+    public void setUpdateTimestamp(Instant updateTimestamp) {
+        this.updateTimestamp = updateTimestamp;
+    }
+
+
+    // </editor-fold>
+
 
 }

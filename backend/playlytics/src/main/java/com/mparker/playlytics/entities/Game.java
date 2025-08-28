@@ -70,9 +70,6 @@ public class Game {
         return gameTitle;
     }
 
-    public UUID getUid() {
-        return uid;
-    }
 
     // </editor-fold>
 

@@ -8,9 +8,9 @@ import jakarta.validation.constraints.NotBlank;
 
 
 @Entity
-@Table(name = "guest_players")
+@Table(name = "ghost_players")
 
-@PrimaryKeyJoinColumn(name = "guest_player_id")
+@PrimaryKeyJoinColumn(name = "ghost_player_id")
 
 public class GhostPlayer extends Player {
 
@@ -30,11 +30,35 @@ public class GhostPlayer extends Player {
 
     // Mapping to Linked Registered Player If Applicable: Can be Null
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "registered_player_id", updatable = false, unique = true)
+    @JoinColumn(name = "registered_player_id",  unique = true)
     private RegisteredPlayer registeredPlayer;
 
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
+
+    // </editor-fold>
+
+    // <editor-fold desc="Getters and Setters">
+
+    public String getIdentifierEmail() {
+        return identifierEmail;
+    }
+
+    public GhostStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GhostStatus status) {
+        this.status = status;
+    }
+
+    public RegisteredPlayer getRegisteredPlayer() {
+        return registeredPlayer;
+    }
+
+    public void setRegisteredPlayer(RegisteredPlayer registeredPlayer) {
+        this.registeredPlayer = registeredPlayer;
+    }
 
     // </editor-fold>
 

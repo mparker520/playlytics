@@ -50,11 +50,50 @@ public class RegisteredPlayer extends Player {
     private Set<GhostPlayer> associations = new HashSet<>();
 
 
-    @OneToOne(mappedBy = "registeredPlayer", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "registeredPlayer")
     private GhostPlayer ghostPlayer;
 
     // Inventory is Mapped via the OwnedGame Associative Entity
     // See OwnedGame.java
+
+    // </editor-fold>
+
+    // <editor-fold desc = "Getters and Setters">
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getLoginEmail() {
+        return loginEmail;
+    }
+
+    public void setLoginEmail(String loginEmail) {
+        this.loginEmail = loginEmail;
+    }
+
+
+    // May Update this for Security
+    public String getPassword() {
+        return password;
+    }
+
+    // May Update this for Security
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Set<GhostPlayer> getAssociations() {
+        return associations;
+    }
+
+    public GhostPlayer getGhostPlayer() {
+        return ghostPlayer;
+    }
 
     // </editor-fold>
 

@@ -4,6 +4,9 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -28,13 +31,17 @@ public class OwnedGame {
     // <editor-fold desc = "Relationship Mappings">
 
     // Link to RegisteredPlayer
+    // Deletes OwnedGame if associated RegisteredPlayer is deleted
+    // Require FK to Game: Can't be Null.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "owner_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RegisteredPlayer registeredPlayer;
 
 
     // Link to Game
+    // Require FK to Game: Can't be Null.  If Game Entity is deleted, the deletion is rejected
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "game_id", nullable = false, updatable = false)
     @NotNull

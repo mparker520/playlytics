@@ -28,7 +28,7 @@ public class GhostPlayer extends Player {
 
     // <editor-fold desc="Relationship Mapping">
 
-    // Mapping to Linked Registered Player If Applicable
+    // Mapping to Linked Registered Player If Applicable: Can be Null
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "registered_player_id", updatable = false, unique = true)
     private RegisteredPlayer registeredPlayer;

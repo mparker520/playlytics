@@ -43,9 +43,9 @@ public class RegisteredPlayer extends Player {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "associations",
         joinColumns = @JoinColumn(name = "registered_player_id", nullable = false, updatable = false),
-        inverseJoinColumns = @JoinColumn(name = "ghost_player_id"),
+        inverseJoinColumns = @JoinColumn(name = "ghost_player_id", nullable = false, updatable = false),
         uniqueConstraints = @UniqueConstraint(name = "ux_associations_registered_ghost",
-                columnNames = {"registered_player_id", "ghost_player_id"})
+                columnNames = {"registered_player_id", "ghost_player_id"}))
     @NotNull
     private Set<GhostPlayer> associations = new HashSet<>();
 

@@ -58,4 +58,22 @@ public class Game {
 
     // </editor-fold>
 
+    // <editor-fold desc="Getters">
+
+    // Currently Setters are being omitted since all games will be imported
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getGameTitle() {
+        return gameTitle;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    // </editor-fold>
+
 }

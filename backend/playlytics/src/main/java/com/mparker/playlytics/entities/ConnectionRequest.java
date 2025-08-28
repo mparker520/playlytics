@@ -5,6 +5,8 @@ import com.mparker.playlytics.enums.ConnectionRequestStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.Instant;
 import java.util.UUID;
@@ -44,14 +46,18 @@ public class ConnectionRequest {
     // <editor-fold desc="Relationship Mappings">
 
     // Maps to RegisteredPlayer
+    // Connection Request is Deleted if the Invite Recipient is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "invite_recipient", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RegisteredPlayer inviteRecipient;
 
     // Maps to RegisteredPlayer for Initiator
+    // Connection Request is Deleted if the Invitor is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "request_initiator", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RegisteredPlayer initiatorId;
 

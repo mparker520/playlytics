@@ -4,6 +4,9 @@ package com.mparker.playlytics.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.UUID;
 
 
@@ -30,12 +33,14 @@ public class SessionParticipant {
 
     // <editor-fold desc = "Relationship Mappings">
 
+    // Link to SessionTeam: Can be Null, not all SessionParticipants are part of a team
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "session_team_id", nullable = true)
     private SessionTeam sessionTeam;
 
 
     // Link to Player
+    // Require FK to Player: Can't be Null.  If RegisteredPlayer is Deleted, will update to GhostPlayer.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "player_id", nullable = false)
     @NotNull

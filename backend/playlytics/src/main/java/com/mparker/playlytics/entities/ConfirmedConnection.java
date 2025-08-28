@@ -5,6 +5,9 @@ import com.mparker.playlytics.composite_ids.ConfirmedConnectionId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -33,15 +36,19 @@ public class ConfirmedConnection {
 
 
     // Maps to RegisteredPlayer
+    // If RegisteredPlayer is deleted, the Connection is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "peer_a", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RegisteredPlayer peerAId;
 
 
     // Maps to Registered Player
+    // If RegisteredPlayer is deleted, the Connection is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "peer_b", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     private RegisteredPlayer peerBId;
 

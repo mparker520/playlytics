@@ -50,29 +50,33 @@ public class GamePlaySession {
 
     // <editor-fold desc="Relationship Mappings">
 
-    // Maps to RegisteredPlayer to Indicate who Created this GamePlaySession
+    // Maps to Player to Indicate who Created this GamePlaySession.
+    // Require FK to Game: Can't be Null.  If RegisteredPlayer is Deleted, will update to GhostPlayer.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "created_by", nullable = false, updatable = false)
+    @JoinColumn(name = "created_by", nullable = false)
     @NotNull
-    private RegisteredPlayer creatorId;
+    private Player creatorId;
 
 
     // Set of SessionTeams in GamePlaySession
     // Bidirectional Mapping SessionTeam.Java
-    @OneToMany(mappedBy = "gamePlaySession")
+    // If GamePlaySession is deleted, all SessionTeams are deleted, if SessionTeam removed from set, SessionTeam removed from DB
+    @OneToMany(mappedBy = "gamePlaySession", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     @NotNull
     private Set<SessionTeam> sessionTeams = new HashSet<>();
 
 
     // Set of SessionParticipants in GamePlaySession
     // Bidirectional Mapping SessionParticipant.java
-    @OneToMany(mappedBy = "gamePlaySession")
+    // If GamePlaySession is deleted, all SessionParticipants are deleted, if SessionParticipant removed from set, SessionParticipant removed from DB
+    @OneToMany(mappedBy = "gamePlaySession", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
     @NotNull
     @Size(min = 1)
     private Set<SessionParticipant> sessionParticipants = new HashSet<>();
 
 
     // Mapping to Game (Unidirectional)
+    // Require FK to Game: Can't be Null.  If Game Entity is deleted, the deletion is rejected
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "game_id", nullable = false)
     @NotNull

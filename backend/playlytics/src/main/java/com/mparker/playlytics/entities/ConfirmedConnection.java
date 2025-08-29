@@ -37,6 +37,7 @@ public class ConfirmedConnection {
 
     // Maps to RegisteredPlayer
     // If RegisteredPlayer is deleted, the Connection is Deleted
+    @MapsId("registeredPlayerAId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "peer_a", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -46,6 +47,7 @@ public class ConfirmedConnection {
 
     // Maps to Registered Player
     // If RegisteredPlayer is deleted, the Connection is Deleted
+    @MapsId("registeredPlayerBId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "peer_b", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

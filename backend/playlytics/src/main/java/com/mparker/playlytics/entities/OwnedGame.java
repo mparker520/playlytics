@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
 import java.time.Instant;
 import java.util.UUID;
+
 
 @Entity
 @Table(name = "owned_games", indexes = {

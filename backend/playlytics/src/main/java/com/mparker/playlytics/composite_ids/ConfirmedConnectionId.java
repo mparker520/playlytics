@@ -10,16 +10,16 @@ import java.util.Objects;
 
 public class ConfirmedConnectionId implements Serializable {
 
-    // Database Columns
+    // <editor-fold desc="Variable Fields">
 
-    @Column(name = "registered_player_A_id", updatable = false)
-    private long registeredPlayerAId;
+    private Long registeredPlayerAId;
 
-    @Column(name = "registered_player_B_id", updatable = false)
-    private long registeredPlayerBId;
+    private Long registeredPlayerBId;
+
+    // </editor-fold>
 
 
-    // Equals and HashCode Override Methods
+    // <editor-fold desc="Equals and HashCode">
 
     @Override
     public boolean equals(Object o) {
@@ -33,5 +33,7 @@ public class ConfirmedConnectionId implements Serializable {
     public int hashCode() {
         return Objects.hash(registeredPlayerAId, registeredPlayerBId);
     }
+
+    // </editor-fold>
 
 }

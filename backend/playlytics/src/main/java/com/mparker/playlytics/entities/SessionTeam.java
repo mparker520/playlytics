@@ -102,6 +102,9 @@ public class SessionTeam {
         return gamePlaySession;
     }
 
+    public void setGamePlaySession(GamePlaySession gamePlaySession) {
+        this.gamePlaySession = gamePlaySession;
+    }
 
     // </editor-fold>
 

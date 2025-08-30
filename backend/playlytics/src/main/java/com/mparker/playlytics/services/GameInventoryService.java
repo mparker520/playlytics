@@ -6,6 +6,8 @@ import com.mparker.playlytics.repositories.OwnedGameRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 
@@ -21,7 +23,7 @@ public class GameInventoryService {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Add Game to RegisteredPlayer Inventory">
+    // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
 
     @Transactional
     public OwnedGame saveOwnedGame(OwnedGame ownedGame) {
@@ -32,16 +34,31 @@ public class GameInventoryService {
 
     // </editor-fold>
 
-    // <editor-fold desc = "Remove Game from RegisteredPlayer Inventory">
+    // <editor-fold desc = "View OwnedGames in RegisteredPlayer Inventory">
+
+    // Returns all RegisteredPlayer's OwnedGames
+    @Transactional(readOnly = true)
+    public List<OwnedGame> getAllOwnedGamesByPlayerId(Long playerId) {
+        return ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
+    }
+
+    @Transactional(readOnly = true)
+    // Returns RegisteredPlayer's OwnedGames by Name
+    public List<OwnedGame> findOwnedGameByNameAndPlayerId(String gameName, Long playerId) {
+        return ownedGameRepository.findAllByGame_gameTitleAndRegisteredPlayer_Id(gameName, playerId);
+    }
 
 
-    // Delete OwnedGame by passing in OwnedGame
+    // </editor-fold>
+
+    // <editor-fold desc = "Remove OwnedGame from RegisteredPlayer Inventory">
+
+
+    // Delete OwnedGame by passing in OwnedGame through Internal Validation
     @Transactional
     public void deleteOwnedGame(OwnedGame ownedGame) {
 
-        if (ownedGame != null) {
-                ownedGameRepository.delete(ownedGame);
-        }
+            ownedGameRepository.delete(ownedGame);
 
     }
 
@@ -49,27 +66,8 @@ public class GameInventoryService {
     @Transactional
     public void deleteOwnedGameByIdAndPlayerId(Long id, Long playerId) {
 
-        if (id != null && playerId != null) {
             ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(id, playerId);
-        }
 
-    }
-
-
-    // </editor-fold>
-
-    // <editor-fold desc = "View Games in RegisteredPlayer Inventory">
-
-    // Returns all RegisteredPlayer's OwnedGames
-    @Transactional(readOnly = true)
-    public Iterable<OwnedGame> getAllOwnedGamesByPlayerId(Long playerId) {
-        return ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
-    }
-
-    @Transactional(readOnly = true)
-    // Returns RegisteredPlayer's OwnedGames by Name
-    public Iterable<OwnedGame> getOwnedGameByNameAndPlayerId(String gameName, Long playerId) {
-        return ownedGameRepository.findAllByGame_gameTitleAndRegisteredPlayer_Id(gameName, playerId);
     }
 
 

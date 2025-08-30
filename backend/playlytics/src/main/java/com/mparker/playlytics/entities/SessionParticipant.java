@@ -119,7 +119,10 @@ public class SessionParticipant {
         return gamePlaySession;
     }
 
+    public void setGamePlaySession(GamePlaySession gamePlaySession) {
+        this.gamePlaySession = gamePlaySession;
+    }
 
-    // </editor-fold>
+// </editor-fold>
 
 }

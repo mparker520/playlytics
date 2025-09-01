@@ -1,11 +1,13 @@
-package com.mparker.playlytics.services;
+package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.entities.OwnedGame;
-import com.mparker.playlytics.repositories.OwnedGameRepository;
+import com.mparker.playlytics.dto.OwnedGameDTO;
+import com.mparker.playlytics.entity.OwnedGame;
+import com.mparker.playlytics.repository.GameRepository;
+import com.mparker.playlytics.repository.OwnedGameRepository;
+import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 
@@ -16,9 +18,14 @@ public class GameInventoryService {
     //<editor-fold desc = "Constructors and Dependencies">
 
     private final OwnedGameRepository ownedGameRepository;
+    private final RegisteredPlayerRepository registeredPlayerRepository;
+    private final GameRepository gameRepository;;
 
-    public GameInventoryService(final OwnedGameRepository ownedGameRepository) {
+    public GameInventoryService(OwnedGameRepository ownedGameRepository, RegisteredPlayerRepository registeredPlayerRepository, GameRepository gameRepository) {
         this.ownedGameRepository = ownedGameRepository;
+        this.registeredPlayerRepository = registeredPlayerRepository;
+        this.gameRepository = gameRepository;
+
     }
 
     //</editor-fold>
@@ -26,7 +33,11 @@ public class GameInventoryService {
     // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
 
     @Transactional
-    public OwnedGame saveOwnedGame(OwnedGame ownedGame) {
+    public OwnedGame saveOwnedGame(OwnedGameDTO ownedGameDTO) {
+
+            OwnedGame ownedGame = new OwnedGame();
+            ownedGame.setGame(gameRepository.getReferenceById(ownedGameDTO.gameId()));
+            ownedGame.setRegisteredPlayer(registeredPlayerRepository.getReferenceById(ownedGameDTO.playerId()));
 
             return ownedGameRepository.save(ownedGame);
 
@@ -53,14 +64,6 @@ public class GameInventoryService {
 
     // <editor-fold desc = "Remove OwnedGame from RegisteredPlayer Inventory">
 
-
-    // Delete OwnedGame by passing in OwnedGame through Internal Validation
-    @Transactional
-    public void deleteOwnedGame(OwnedGame ownedGame) {
-
-            ownedGameRepository.delete(ownedGame);
-
-    }
 
     // Delete OwnedGame by OwnedGame_Id and current Player_Id
     @Transactional

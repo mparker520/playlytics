@@ -1,19 +1,19 @@
-package com.mparker.playlytics.entities;
+package com.mparker.playlytics.entity;
 
 // Imports
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
+
 @Entity
-@Table(name = "session_teams", indexes = {
-        @Index(name = "multiIndex_session_teams_game_play_session_rank", columnList = "game_play_session_id, result"),
+@Table(name = "session_participants", indexes = {
+        @Index(name = "multiIndex_session_participants_player_result", columnList = "player_id, result"),
+        @Index(name = "multiIndex_session_participants_game_play_session_result", columnList = "game_play_session_id, result")
 })
 
-public class SessionTeam {
+public class SessionParticipant {
 
     // <editor-fold desc = "Database Columns">
 
@@ -23,22 +23,31 @@ public class SessionTeam {
 
     @Column(name = "result", nullable = false)
     @NotNull
+    @Min(0)
     private int result;
 
     // </editor-fold>
 
     // <editor-fold desc = "Relationship Mappings">
 
-    // Bidirectional Mapping to SessionParticipants
-    @OneToMany (mappedBy =  "sessionTeam")
-    @NotNull
-    @Size(min = 2)
-    private Set<SessionParticipant> teamMembers = new HashSet<>();
+    // Link to SessionTeam: Can be Null, not all SessionParticipants are part of a team
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "session_team_id")
+    private SessionTeam sessionTeam;
 
 
-    // Maps to GamePlaySession
+    // Link to Player
+    // Require FK to Player: Can't be Null.  If RegisteredPlayer is Deleted, will update to GhostPlayer.
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "game_play_session_id", nullable = false)
+    @JoinColumn(name = "player_id", nullable = false)
+    @NotNull
+    private Player player;
+
+
+    // Link to GamePlaySession
+    // Bidirectional Mapping GamePlaySession.java
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "game_play_session_id", nullable = false, updatable = false)
     @NotNull
     private GamePlaySession gamePlaySession;
 
@@ -61,7 +70,7 @@ public class SessionTeam {
         if (o == null || org.hibernate.Hibernate.getClass(this) != org.hibernate.Hibernate.getClass(o)) return false;
 
         // Establish object as this entity class
-        SessionTeam that = (SessionTeam) o;
+        SessionParticipant that = (SessionParticipant) o;
 
         // If this uid and object uid are equal, return true
         return uid.equals(that.uid);
@@ -90,12 +99,20 @@ public class SessionTeam {
         this.result = result;
     }
 
-    public Set<SessionParticipant> getTeamMembers() {
-        return teamMembers;
+    public SessionTeam getSessionTeam() {
+        return sessionTeam;
     }
 
-    public void setTeamMembers(Set<SessionParticipant> teamMembers) {
-        this.teamMembers = teamMembers;
+    public void setSessionTeam(SessionTeam sessionTeam) {
+        this.sessionTeam = sessionTeam;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public GamePlaySession getGamePlaySession() {
@@ -106,6 +123,6 @@ public class SessionTeam {
         this.gamePlaySession = gamePlaySession;
     }
 
-    // </editor-fold>
+// </editor-fold>
 
 }

@@ -1,4 +1,4 @@
-package com.mparker.playlytics.composite_ids;
+package com.mparker.playlytics.entity;
 
 // Imports
 import jakarta.persistence.*;

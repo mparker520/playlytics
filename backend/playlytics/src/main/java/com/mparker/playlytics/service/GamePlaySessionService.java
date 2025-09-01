@@ -1,12 +1,12 @@
-package com.mparker.playlytics.services;
+package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.entities.GamePlaySession;
-import com.mparker.playlytics.entities.SessionParticipant;
-import com.mparker.playlytics.entities.SessionTeam;
-import com.mparker.playlytics.repositories.GamePlaySessionRepository;
-import com.mparker.playlytics.repositories.SessionParticipantRepository;
-import com.mparker.playlytics.repositories.SessionTeamRepository;
+import com.mparker.playlytics.entity.GamePlaySession;
+import com.mparker.playlytics.entity.SessionParticipant;
+import com.mparker.playlytics.entity.SessionTeam;
+import com.mparker.playlytics.repository.GamePlaySessionRepository;
+import com.mparker.playlytics.repository.SessionParticipantRepository;
+import com.mparker.playlytics.repository.SessionTeamRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -98,16 +98,6 @@ public class GamePlaySessionService {
     //</editor-fold>
 
     // <editor-fold desc = "Delete GamePlaySession">
-
-
-    // Delete GamePlaySession by passing in GamePlaySession through Internal Validation
-    @Transactional
-    public void deleteGpSession(GamePlaySession gamePlaySession) {
-
-            gamePlaySessionRepository.delete(gamePlaySession);
-
-    }
-
 
     // Delete Game by Checking that Current User was a SessionParticipant in the GamePlaySession
     @Transactional

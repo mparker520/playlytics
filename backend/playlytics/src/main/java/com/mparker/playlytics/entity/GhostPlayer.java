@@ -1,4 +1,4 @@
-package com.mparker.playlytics.entities;
+package com.mparker.playlytics.entity;
 
 // Imports
 import com.mparker.playlytics.enums.GhostStatus;
@@ -33,6 +33,11 @@ public class GhostPlayer extends Player {
     @JoinColumn(name = "registered_player_id",  unique = true)
     private RegisteredPlayer registeredPlayer;
 
+    // Mapping to Creator
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator")
+    private RegisteredPlayer creator;
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
 

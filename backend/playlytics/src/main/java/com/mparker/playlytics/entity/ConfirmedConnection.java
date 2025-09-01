@@ -1,7 +1,6 @@
-package com.mparker.playlytics.entities;
+package com.mparker.playlytics.entity;
 
 // Imports
-import com.mparker.playlytics.composite_ids.ConfirmedConnectionId;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.CreationTimestamp;

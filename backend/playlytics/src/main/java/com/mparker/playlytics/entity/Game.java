@@ -1,4 +1,4 @@
-package com.mparker.playlytics.entities;
+package com.mparker.playlytics.entity;
 
 // Imports
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.mparker.playlytics.entities;
+package com.mparker.playlytics.entity;
 
 // Imports
 import jakarta.persistence.*;
@@ -95,8 +95,16 @@ public class OwnedGame {
         return registeredPlayer;
     }
 
+    public void setRegisteredPlayer(RegisteredPlayer registeredPlayer) {
+        this.registeredPlayer = registeredPlayer;
+    }
+
     public Game getGame() {
         return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     // </editor-fold>

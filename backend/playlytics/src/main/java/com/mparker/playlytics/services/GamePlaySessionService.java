@@ -89,10 +89,10 @@ public class GamePlaySessionService {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Update GamePlaySession">
-    //</editor-fold>
+    // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
 
     // <editor-fold desc = "Lookup GamePlaySession">
+
 
 
     //</editor-fold>
@@ -104,9 +104,7 @@ public class GamePlaySessionService {
     @Transactional
     public void deleteGpSession(GamePlaySession gamePlaySession) {
 
-        if (gamePlaySession != null) {
             gamePlaySessionRepository.delete(gamePlaySession);
-        }
 
     }
 
@@ -115,15 +113,11 @@ public class GamePlaySessionService {
     @Transactional
     public void deleteGpSessionByIdAndPlayerId(Long id, Long playerId) {
 
-        if(id != null && playerId != null) {
-
             boolean playerIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(id, playerId);
 
-            if(playerIsParticipant == true) {
+            if(playerIsParticipant) {
                 gamePlaySessionRepository.deleteById(id);
             }
-
-        }
 
     }
 

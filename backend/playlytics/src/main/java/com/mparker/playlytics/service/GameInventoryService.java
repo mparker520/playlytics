@@ -2,12 +2,17 @@ package com.mparker.playlytics.service;
 
 // Imports
 import com.mparker.playlytics.dto.OwnedGameDTO;
+import com.mparker.playlytics.dto.OwnedGameResponseDTO;
+import com.mparker.playlytics.entity.Game;
 import com.mparker.playlytics.entity.OwnedGame;
+import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.repository.GameRepository;
 import com.mparker.playlytics.repository.OwnedGameRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -33,13 +38,27 @@ public class GameInventoryService {
     // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
 
     @Transactional
-    public OwnedGame saveOwnedGame(OwnedGameDTO ownedGameDTO) {
+    public OwnedGameResponseDTO saveOwnedGame(OwnedGameDTO ownedGameDTO) {
 
+            // Create OwnedGame Entity and Set Fields
             OwnedGame ownedGame = new OwnedGame();
-            ownedGame.setGame(gameRepository.getReferenceById(ownedGameDTO.gameId()));
-            ownedGame.setRegisteredPlayer(registeredPlayerRepository.getReferenceById(ownedGameDTO.playerId()));
 
-            return ownedGameRepository.save(ownedGame);
+            Game game = gameRepository.getReferenceById(ownedGameDTO.gameId());
+            ownedGame.setGame(game);
+
+            RegisteredPlayer player = registeredPlayerRepository.getReferenceById(ownedGameDTO.playerId());
+            ownedGame.setRegisteredPlayer(player);
+
+
+            // Save OwnedGame
+            ownedGameRepository.save(ownedGame);
+
+
+            // Create and Return GameResponseDTO
+            Long gameId = game.getId();
+            String gameName = game.getGameTitle();
+
+            return  new OwnedGameResponseDTO(gameId, gameName);
 
     }
 
@@ -47,16 +66,45 @@ public class GameInventoryService {
 
     // <editor-fold desc = "View OwnedGames in RegisteredPlayer Inventory">
 
-    // Returns all RegisteredPlayer's OwnedGames
-    @Transactional(readOnly = true)
-    public List<OwnedGame> getAllOwnedGamesByPlayerId(Long playerId) {
-        return ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
+
+    // View OwnedGames Helper Method to Create List of OwnedGameReponseDTOs
+
+    private List<OwnedGameResponseDTO> getOwnedGamesDTOList(List<OwnedGame> ownedGamesList) {
+
+        List<OwnedGameResponseDTO> ownedGamesResponseDTOList = new ArrayList<>();
+
+        for (OwnedGame ownedGame : ownedGamesList) {
+
+            Long gameId = ownedGame.getGame().getId();
+            String gameName = ownedGame.getGame().getGameTitle();
+
+            OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(gameId, gameName);
+            ownedGamesResponseDTOList.add(ownedGamesResponseDTO);
+
+        }
+
+        return ownedGamesResponseDTOList;
+
     }
 
+
+    // Returns all RegisteredPlayer's OwnedGames
     @Transactional(readOnly = true)
-    // Returns RegisteredPlayer's OwnedGames by Name
-    public List<OwnedGame> findOwnedGameByNameAndPlayerId(String gameName, Long playerId) {
-        return ownedGameRepository.findAllByGame_gameTitleAndRegisteredPlayer_Id(gameName, playerId);
+    public List<OwnedGameResponseDTO> getAllOwnedGamesByPlayerId(Long playerId) {
+
+        List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
+        return getOwnedGamesDTOList(ownedGamesList);
+
+    }
+
+
+    // Returns RegisteredPlayer's OwnedGames by Game Name
+    @Transactional(readOnly = true)
+    public List<OwnedGameResponseDTO> findOwnedGamesByNameAndPlayerId(String gameName, Long playerId) {
+
+        List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByGame_gameTitleAndRegisteredPlayer_Id(gameName, playerId);
+        return getOwnedGamesDTOList(ownedGamesByNameList);
+
     }
 
 

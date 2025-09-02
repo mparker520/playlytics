@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 
@@ -162,10 +161,11 @@ public class GamePlaySessionService {
     private GamePlaySessionResponseDTO createGpSessionResponseDTO(GamePlaySession gamePlaySession) {
         Instant sessionDateTime = gamePlaySession.getSessionDateTime();
         ScoringModel scoringModel = gamePlaySession.getScoringModel();
-        String gameName = gamePlaySession.getGame().getGameTitle();
+        Game game = gamePlaySession.getGame();
         Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
+        Set<SessionTeam> sessionTeams = gamePlaySession.getSessionTeams();
 
-        return new GamePlaySessionResponseDTO(sessionDateTime, scoringModel, gameName, sessionParticipants);
+        return new GamePlaySessionResponseDTO(sessionDateTime, scoringModel, game, sessionParticipants, sessionTeams);
 
     }
 
@@ -174,6 +174,64 @@ public class GamePlaySessionService {
     // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
 
     // <editor-fold desc = "Lookup GamePlaySession">
+
+
+    // List of all GamePlaySessions for a RegisteredPlayer
+    @Transactional (readOnly = true)
+    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerId(Long playerId) {
+
+        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
+        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+            gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+        }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
+
+    // List of all GamePlaySessions for a RegisteredPlayer by Game Title
+    @Transactional (readOnly = true)
+    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndGameName(Long playerId, String gameName) {
+
+        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
+        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+            String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
+            if (gamePlaySessionName.equals(gameName)) {
+                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+            }
+        }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
+
+    // List of all GamePlaySessions for a RegisteredPlayer by Date
+    // TODO: Fix time conversion
+    @Transactional (readOnly = true)
+    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
+
+        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
+        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+            Instant gamePlaySessionDateTime = gamePlaySession.getSessionDateTime();
+
+            if (gamePlaySessionDateTime.equals(sessionDateTime)) {
+                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+            }
+        }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
+
 
 
     //</editor-fold>

@@ -4,6 +4,8 @@ package com.mparker.playlytics.repository;
 import com.mparker.playlytics.entity.SessionParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Set;
+
 public interface SessionParticipantRepository extends JpaRepository<SessionParticipant, Long> {
 
     // Is Player a participant in GamePlaySession
@@ -11,4 +13,5 @@ public interface SessionParticipantRepository extends JpaRepository<SessionParti
 
     public SessionParticipant existsByPlayer_Id(Long playerId);
 
+    Set<SessionParticipant> findAllByPlayer_Id(Long playerId);
 }

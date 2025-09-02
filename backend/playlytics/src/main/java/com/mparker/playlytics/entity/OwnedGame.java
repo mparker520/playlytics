@@ -81,6 +81,18 @@ public class OwnedGame {
 
     // </editor-fold>
 
+    // <editor-fold desc = "Constructors">
+
+    public OwnedGame() {
+    }
+
+    public OwnedGame(RegisteredPlayer registeredPlayer, Game game) {
+        this.registeredPlayer = registeredPlayer;
+        this.game = game;
+    }
+
+    // </editor-fold>
+
     // <editor-fold desc="Getters and Setters">
 
     public Long getId() {

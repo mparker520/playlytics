@@ -85,6 +85,18 @@ public class SessionParticipant {
 
     // </editor-fold>
 
+    // <editor-fold desc = "Constructors">
+
+    public SessionParticipant() {
+    }
+
+    public SessionParticipant(int result, Player player) {
+        this.result = result;
+        this.player = player;
+    }
+
+// </editor-fold>
+
     // <editor-fold desc = "Getters and Setters">
 
     public Long getId() {

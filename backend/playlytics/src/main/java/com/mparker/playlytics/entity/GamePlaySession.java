@@ -55,7 +55,7 @@ public class GamePlaySession {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "created_by", nullable = false)
     @NotNull
-    private Player creatorId;
+    private Player creator;
 
 
     // Set of SessionTeams in GamePlaySession
@@ -116,6 +116,20 @@ public class GamePlaySession {
 
     // </editor-fold>
 
+    // <editor-fold desc="Constructors">
+
+    public GamePlaySession() {
+    }
+
+    public GamePlaySession(Instant sessionDateTime, ScoringModel scoringModel, Player creator, Game game) {
+        this.sessionDateTime = sessionDateTime;
+        this.scoringModel = scoringModel;
+        this.creator = creator;
+        this.game = game;
+    }
+
+    // </editor-fold>
+
     // <editor-fold desc="Getters and Setters">
 
     public Long getId() {
@@ -148,12 +162,12 @@ public class GamePlaySession {
     }
 
 
-    public Player getCreatorId() {
-        return creatorId;
+    public Player getcreator() {
+        return creator;
     }
 
-    public void setCreatorId(Player creatorId) {
-        this.creatorId = creatorId;
+    public void setcreator(Player creator) {
+        this.creator = creator;
     }
 
     public Set<SessionTeam> getSessionTeams() {

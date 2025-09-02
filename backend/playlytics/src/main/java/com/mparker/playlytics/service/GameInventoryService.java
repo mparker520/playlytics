@@ -40,14 +40,11 @@ public class GameInventoryService {
     @Transactional
     public OwnedGameResponseDTO saveOwnedGame(OwnedGameDTO ownedGameDTO) {
 
-            // Create OwnedGame Entity and Set Fields
-            OwnedGame ownedGame = new OwnedGame();
-
-            Game game = gameRepository.getReferenceById(ownedGameDTO.gameId());
-            ownedGame.setGame(game);
-
+            // Create OwnedGame Entity
             RegisteredPlayer player = registeredPlayerRepository.getReferenceById(ownedGameDTO.playerId());
-            ownedGame.setRegisteredPlayer(player);
+            Game game = gameRepository.getReferenceById(ownedGameDTO.gameId());
+
+            OwnedGame ownedGame = new OwnedGame(player, game);
 
 
             // Save OwnedGame
@@ -55,8 +52,8 @@ public class GameInventoryService {
 
 
             // Create and Return GameResponseDTO
-            Long gameId = game.getId();
-            String gameName = game.getGameTitle();
+            Long gameId = ownedGame.getGame().getId();
+            String gameName = ownedGame.getGame().getGameTitle();
 
             return  new OwnedGameResponseDTO(gameId, gameName);
 

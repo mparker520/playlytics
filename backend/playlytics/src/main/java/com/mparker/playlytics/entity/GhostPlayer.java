@@ -43,6 +43,23 @@ public class GhostPlayer extends Player {
 
     // </editor-fold>
 
+    //<editor-fold desc = "Constructors">
+
+    public GhostPlayer() {
+    }
+
+    public GhostPlayer(String firstName, String lastName, byte[] avatar, String identifierEmail, GhostStatus status, RegisteredPlayer registeredPlayer, RegisteredPlayer creator) {
+
+        super(firstName, lastName, avatar);
+
+        this.identifierEmail = identifierEmail;
+        this.status = status;
+        this.registeredPlayer = registeredPlayer;
+        this.creator = creator;
+    }
+
+    //</editor-fold>
+
     // <editor-fold desc="Getters and Setters">
 
     public String getIdentifierEmail() {
@@ -63,6 +80,10 @@ public class GhostPlayer extends Player {
 
     public void setRegisteredPlayer(RegisteredPlayer registeredPlayer) {
         this.registeredPlayer = registeredPlayer;
+    }
+
+    public RegisteredPlayer getCreator() {
+        return creator;
     }
 
     // </editor-fold>

@@ -86,6 +86,19 @@ public class Player {
 
     // </editor-fold>
 
+    // <editor-fold desc="Constructors">
+
+    public Player() {
+    }
+
+    public Player(String firstName, String lastName, byte[] avatar) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.avatar = avatar;
+    }
+
+    // </editor-fold>
+
     // <editor-fold desc="Getters and Setters">
 
     public Long getId() {

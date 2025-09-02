@@ -24,7 +24,7 @@ public class GameInventoryService {
 
     private final OwnedGameRepository ownedGameRepository;
     private final RegisteredPlayerRepository registeredPlayerRepository;
-    private final GameRepository gameRepository;;
+    private final GameRepository gameRepository;
 
     public GameInventoryService(OwnedGameRepository ownedGameRepository, RegisteredPlayerRepository registeredPlayerRepository, GameRepository gameRepository) {
         this.ownedGameRepository = ownedGameRepository;

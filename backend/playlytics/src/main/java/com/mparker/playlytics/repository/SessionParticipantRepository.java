@@ -9,4 +9,6 @@ public interface SessionParticipantRepository extends JpaRepository<SessionParti
     // Is Player a participant in GamePlaySession
     public boolean existsByGamePlaySession_IdAndPlayer_Id(Long gamePlaySessionId, Long playerId);
 
+    public SessionParticipant existsByPlayer_Id(Long playerId);
+
 }

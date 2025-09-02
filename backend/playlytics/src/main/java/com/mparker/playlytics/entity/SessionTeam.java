@@ -25,6 +25,10 @@ public class SessionTeam {
     @NotNull
     private int result;
 
+    @Column(name = "team_name", nullable = false)
+    @NotNull
+    private String teamName;
+
     // </editor-fold>
 
     // <editor-fold desc = "Relationship Mappings">
@@ -75,6 +79,18 @@ public class SessionTeam {
     }
 
     // </editor-fold>
+
+    // <editor-fold desc = "Constructors">
+
+    public SessionTeam() {
+    }
+
+    public SessionTeam(int result, String teamName) {
+        this.result = result;
+        this.teamName = teamName;
+    }
+
+    // </editor-fold >
 
     // <editor-fold desc = "Getters and Setters">
 

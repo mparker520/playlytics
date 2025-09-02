@@ -4,14 +4,15 @@ package com.mparker.playlytics.service;
 import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
 import com.mparker.playlytics.dto.SessionParticipantDTO;
+import com.mparker.playlytics.dto.SessionTeamDTO;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.repository.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -40,6 +41,43 @@ public class GamePlaySessionService {
 
     // <editor-fold desc = "Create GamePlaySession">
 
+    // Assemble GamePlaySession
+    @Transactional
+    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Set<SessionParticipantDTO> sessionParticipantsDTOSet, Set<SessionTeamDTO> sessionTeamsDTOSet) {
+
+        // Create GamePlaySession
+        GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO);
+
+        // Create SessionParticipants from sessionParticipantDTO Set
+        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(sessionParticipantsDTOSet);
+
+        // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
+        if (gamePlaySession.getScoringModel() == ScoringModel.TEAM && sessionTeamsDTOSet.size() > 1) {
+
+            // Create Session Teams
+            Set<SessionTeam> sessionTeamSet = createSessionTeamSet(sessionTeamsDTOSet, sessionParticipantSet);
+
+            // Link Teams and GamePlaySession
+            linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
+
+        }
+
+        // Link GamePlaySession and SessionParticipants together
+        linkGpSessionAndParticipants(gamePlaySession, sessionParticipantSet);
+
+        // Save GamePlaySession
+        gamePlaySessionRepository.save(gamePlaySession);
+
+        // Create and Return GamePlaySessionResponse DTO
+        return createGpSessionResponseDTO(gamePlaySession);
+
+    }
+
+
+    //</editor-fold>
+
+    // <editor-fold desc = "Helper Methods for Assembling a GamePlaySession">
+
     // Create GamePlaySession Helper Method
     private GamePlaySession createGpSession(GamePlaySessionDTO gamePlaySessionDTO) {
 
@@ -54,45 +92,67 @@ public class GamePlaySessionService {
     }
 
     // Create SessionParticipants Helper Method
-    private List<SessionParticipant> createSessionParticipantList(List<SessionParticipantDTO> sessionParticipantsDTOList) {
-        List<SessionParticipant> sessionParticipantsList = new ArrayList<>();
+    private Set<SessionParticipant> createSessionParticipantsSet(Set<SessionParticipantDTO> sessionParticipantsDTOSet) {
+        Set<SessionParticipant> sessionParticipantsSet = new HashSet<>();
 
-        for (SessionParticipantDTO sessionParticipantDTO : sessionParticipantsDTOList) {
+        for (SessionParticipantDTO sessionParticipantDTO : sessionParticipantsDTOSet) {
             int result = sessionParticipantDTO.result();
             Long playerId = sessionParticipantDTO.playerId();
             Player player = playerRepository.getReferenceById(playerId);
 
             SessionParticipant sessionParticipant = new SessionParticipant(result, player);
-            sessionParticipantsList.add(sessionParticipant);
+            sessionParticipantsSet.add(sessionParticipant);
         }
+
+        return sessionParticipantsSet;
+
+    }
+
+    // Create SessionTeams Helper Method
+    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) {
+
+        Set<SessionTeam> sessionTeamsSet = new HashSet<>();
+
+        for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
+
+            int result = sessionTeamDTO.result();
+            String teamName = sessionTeamDTO.teamName();
+
+            // Constructor for SessionTeam
+            SessionTeam sessionTeam = new SessionTeam(result, teamName);
+
+            for (Long playerId : sessionTeamDTO.playerIds()) {
+
+                for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
+                    if (sessionParticipant.getId().equals(playerId)) {
+                        sessionParticipant.setSessionTeam(sessionTeam);
+                        sessionTeam.getTeamMembers().add(sessionParticipant);
+                    }
+                }
+
+            }
+
+            sessionTeamsSet.add(sessionTeam);
+
+        }
+
+        return sessionTeamsSet;
+
     }
 
     // Attach GamePlaySession and SessionParticipants Helper Method
-    private void addGpSessionParticipants(GamePlaySession gamePlaySession, List<SessionParticipant> sessionParticipantsList) {
+    private void linkGpSessionAndParticipants(GamePlaySession gamePlaySession, Set<SessionParticipant> sessionParticipantsSet) {
 
-        for (SessionParticipant sessionParticipant : sessionParticipantsList) {
+        for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
             sessionParticipant.setGamePlaySession(gamePlaySession);
             gamePlaySession.getSessionParticipants().add(sessionParticipant);
         }
 
     }
 
-    // Set Team for SessionParticipants Helper Method
-    private void setTeamForParticipants(List<SessionTeam> sessionTeams) {
-
-        for (SessionTeam sessionTeam : sessionTeams) {
-
-            for(SessionParticipant sessionParticipant : sessionTeam.getTeamMembers()) {
-                sessionParticipant.setSessionTeam(sessionTeam);
-            }
-
-        }
-
-    }
-
     // Attach GamePlaySession and SessionTeams Helper Method
-    private void addTeamsToGpSession(GamePlaySession gamePlaySession, List<SessionTeam> sessionTeams) {
-        for (SessionTeam sessionTeam : sessionTeams) {
+    private void linkTeamsAndGpSession(GamePlaySession gamePlaySession, Set<SessionTeam> sessionTeamSet) {
+        for (SessionTeam sessionTeam : sessionTeamSet) {
             sessionTeam.setGamePlaySession(gamePlaySession);
             gamePlaySession.getSessionTeams().add(sessionTeam);
         }
@@ -109,42 +169,7 @@ public class GamePlaySessionService {
 
     }
 
-
-    // Create GamePlaySession -- No Teams
-    @Transactional
-    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, List<SessionParticipantDTO> sessionParticipantsDTOList) {
-
-        // Create GamePlaySession
-        GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO);
-
-        // Create SessionParticipants from SessionParticipantDTO List
-        List<SessionParticipant> sessionParticipantsList = createSessionParticipantList(sessionParticipantsDTOList);
-
-        // Link GamePlaySession and SessionParticipants together
-        addGpSessionParticipants(gamePlaySession, sessionParticipantsList);
-
-        // Save GamePlaySession
-        gamePlaySessionRepository.save(gamePlaySession);
-
-        // Create and Return GamePlaySessionResponse DTO
-
-        return createGpSessionResponseDTO(gamePlaySession);
-
-    }
-
-    // Create GamePlaySession -- With Teams
-    @Transactional
-    public GamePlaySession createGpSessionWithTeams(GamePlaySession gamePlaySession, List<SessionParticipant> sessionParticipants, List<SessionTeam> sessionTeams) {
-
-        setTeamForParticipants(sessionTeams);
-        addTeamsToGpSession(gamePlaySession, sessionTeams);
-        addGpSessionParticipants(gamePlaySession, sessionParticipants);
-        return gamePlaySessionRepository.save(gamePlaySession);
-
-    }
-
-
-    //</editor-fold>
+    // </editor-fold>
 
     // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
 

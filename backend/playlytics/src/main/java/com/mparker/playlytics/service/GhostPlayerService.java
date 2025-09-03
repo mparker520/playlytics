@@ -9,6 +9,10 @@ import com.mparker.playlytics.enums.GhostStatus;
 import com.mparker.playlytics.repository.GhostPlayerRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -27,18 +31,34 @@ public class GhostPlayerService {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Create GhostPlayer">
+    //<editor-fold desc = "GhostPlayer Helper Methods">
+
+    private GhostPlayerResponseDTO createGhostPlayerResponseDTO(GhostPlayer ghostPlayer) {
+
+        String firstName = ghostPlayer.getFirstName();
+        String lastName = ghostPlayer.getLastName();
+        byte[] avatar = ghostPlayer.getAvatar();
+        String identifierEmail = ghostPlayer.getIdentifierEmail();
+        Long creatorId = ghostPlayer.getCreator().getId();
+
+
+        return new GhostPlayerResponseDTO(firstName, lastName, avatar, identifierEmail, creatorId);
+
+    }
 
     //</editor-fold>
 
+    // <editor-fold desc = "Create GhostPlayer">
+
     // Create GhostPlayer (Method for RegisteredPlayer to create GhostPlayer from Scratch)
+    @Transactional()
     private GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO) {
 
         // Initialize Fields from DTO
         String firstName = ghostPlayerDTO.firstName();
         String lastName = ghostPlayerDTO.lastName();
         byte[] avatar = ghostPlayerDTO.avatar();
-        String identifierEmail = ghostPlayerDTO.identifierEmail();
+        String identifierEmail = ghostPlayerDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase();
         GhostStatus status = ghostPlayerDTO.status();
         Long registeredPlayerId = ghostPlayerDTO.registeredPlayerId();
         Long creatorId = ghostPlayerDTO.creatorId();
@@ -56,28 +76,24 @@ public class GhostPlayerService {
 
     }
 
-    //<editor-field desc = "Create GhostPlayer Helper Methods">
 
-    private GhostPlayerResponseDTO createGhostPlayerResponseDTO(GhostPlayer ghostPlayer) {
-
-        String firstName = ghostPlayer.getFirstName();
-        String lastName = ghostPlayer.getLastName();
-        byte[] avatar = ghostPlayer.getAvatar();
-        String identifierEmail = ghostPlayer.getIdentifierEmail();
-        Long creatorId = ghostPlayer.getCreator().getId();
-
-
-        return new GhostPlayerResponseDTO(firstName, lastName, avatar, identifierEmail, creatorId);
-
-    }
-
-    //</editor-field>
+    //</editor-fold>
 
     //<editor-fold desc = "Update GhostPlayer">
 
     //</editor-fold>
 
     // <editor-fold desc = "Lookup GhostPlayer">
+
+    @Transactional(readOnly = true)
+    private GhostPlayerResponseDTO findGhostPlayerByIdentifierEmail(String identifierEmail) {
+
+        String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findGhostPlayerByIdentifierEmail(identifierEmailNormalized);
+
+        return createGhostPlayerResponseDTO(ghostPlayer);
+
+    }
 
     //</editor-fold>
 

@@ -3,6 +3,7 @@ package com.mparker.playlytics.service;
 // Imports
 import com.mparker.playlytics.dto.GhostPlayerDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.GhostPlayerUpdateDTO;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.enums.GhostStatus;
@@ -11,8 +12,6 @@ import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-import java.util.Set;
 
 
 @Service
@@ -80,6 +79,31 @@ public class GhostPlayerService {
     //</editor-fold>
 
     //<editor-fold desc = "Update GhostPlayer">
+
+    @Transactional
+    private GhostPlayerResponseDTO updateGhostPlayer(Long currentPlayerId, Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
+        if (ghostPlayer.getCreator().getId().equals(currentPlayerId)) {
+
+            if (ghostPlayerUpdateDTO.firstName().isPresent()) {
+                ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName().get());
+            }
+
+            if (ghostPlayerUpdateDTO.lastName().isPresent()) {
+                ghostPlayer.setLastName(ghostPlayerUpdateDTO.lastName().get());
+            }
+            
+            if(ghostPlayerUpdateDTO.avatar().isPresent()) {
+                ghostPlayer.setAvatar(ghostPlayerUpdateDTO.avatar().get());
+            }
+
+            else if  (ghostPlayerUpdateDTO.avatar() != null && !ghostPlayerUpdateDTO.avatar().isU) {
+                ghostPlayer.setAvatar(null);
+            }
+
+            return createGhostPlayerResponseDTO(ghostPlayer);
+        }
+    }
 
     //</editor-fold>
 

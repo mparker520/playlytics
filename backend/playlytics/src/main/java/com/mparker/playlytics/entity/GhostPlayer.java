@@ -66,6 +66,10 @@ public class GhostPlayer extends Player {
         return identifierEmail;
     }
 
+    public void setIdentifierEmail(String identifierEmail) {
+        this.identifierEmail = identifierEmail;
+    }
+
     public GhostStatus getStatus() {
         return status;
     }

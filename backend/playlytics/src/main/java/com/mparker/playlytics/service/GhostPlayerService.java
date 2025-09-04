@@ -82,27 +82,44 @@ public class GhostPlayerService {
 
     @Transactional
     private GhostPlayerResponseDTO updateGhostPlayer(Long currentPlayerId, Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+
+        // Retrieve GhostPlayer from GhostPlayerRepository
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
+
+        // If Current Player is Creator of GhostPlayer, Allow for Update
         if (ghostPlayer.getCreator().getId().equals(currentPlayerId)) {
 
-            if (ghostPlayerUpdateDTO.firstName().isPresent()) {
-                ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName().get());
+            if (ghostPlayerUpdateDTO.firstName() != null) {
+                ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName());
             }
 
-            if (ghostPlayerUpdateDTO.lastName().isPresent()) {
-                ghostPlayer.setLastName(ghostPlayerUpdateDTO.lastName().get());
-            }
-            
-            if(ghostPlayerUpdateDTO.avatar().isPresent()) {
-                ghostPlayer.setAvatar(ghostPlayerUpdateDTO.avatar().get());
+            if (ghostPlayerUpdateDTO.lastName() != null) {
+                ghostPlayer.setLastName(ghostPlayerUpdateDTO.lastName());
             }
 
-            else if  (ghostPlayerUpdateDTO.avatar() != null && !ghostPlayerUpdateDTO.avatar().isU) {
-                ghostPlayer.setAvatar(null);
+            if (ghostPlayerUpdateDTO.avatar() != null) {
+                ghostPlayer.setAvatar(ghostPlayerUpdateDTO.avatar());
             }
 
-            return createGhostPlayerResponseDTO(ghostPlayer);
+            if (ghostPlayerUpdateDTO.identifierEmail() != null) {
+                ghostPlayer.setIdentifierEmail(ghostPlayerUpdateDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase());
+            }
+
+            if (ghostPlayerUpdateDTO.status() != null) {
+                ghostPlayer.setStatus(ghostPlayerUpdateDTO.status());
+            }
+
+            if (ghostPlayerUpdateDTO.registeredPlayerId() != null) {
+                ghostPlayer.setRegisteredPlayer(registeredPlayerRepository.getReferenceById(ghostPlayerUpdateDTO.registeredPlayerId()));
+            }
+
+            ghostPlayerRepository.save(ghostPlayer);
+
+
         }
+
+        return createGhostPlayerResponseDTO(ghostPlayer);
+
     }
 
     //</editor-fold>

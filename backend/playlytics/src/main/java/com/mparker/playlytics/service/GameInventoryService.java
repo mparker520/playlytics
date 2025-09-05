@@ -38,10 +38,10 @@ public class GameInventoryService {
     // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
 
     @Transactional
-    public OwnedGameResponseDTO saveOwnedGame(OwnedGameDTO ownedGameDTO) {
+    public OwnedGameResponseDTO saveOwnedGame(Long registeredPlayerId, OwnedGameDTO ownedGameDTO) {
 
             // Create OwnedGame Entity
-            RegisteredPlayer player = registeredPlayerRepository.getReferenceById(ownedGameDTO.playerId());
+            RegisteredPlayer player = registeredPlayerRepository.getReferenceById(registeredPlayerId);
             Game game = gameRepository.getReferenceById(ownedGameDTO.gameId());
 
             OwnedGame ownedGame = new OwnedGame(player, game);

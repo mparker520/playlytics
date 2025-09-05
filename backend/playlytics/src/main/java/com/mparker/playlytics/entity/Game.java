@@ -4,7 +4,6 @@ package com.mparker.playlytics.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import java.util.UUID;
 
 // This data will be imported from Board Game Geek data

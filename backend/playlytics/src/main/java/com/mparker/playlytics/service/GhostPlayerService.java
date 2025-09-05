@@ -20,8 +20,8 @@ public class GhostPlayerService {
 
     //<editor-fold desc = "Constructors and Dependencies">
 
-    public final GhostPlayerRepository ghostPlayerRepository;
-    public final RegisteredPlayerRepository registeredPlayerRepository;
+    private final GhostPlayerRepository ghostPlayerRepository;
+    private final RegisteredPlayerRepository registeredPlayerRepository;
 
     public GhostPlayerService(final GhostPlayerRepository ghostPlayerRepository, final RegisteredPlayerRepository registeredPlayerRepository) {
         this.ghostPlayerRepository = ghostPlayerRepository;

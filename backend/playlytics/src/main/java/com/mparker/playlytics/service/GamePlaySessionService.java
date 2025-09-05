@@ -21,16 +21,14 @@ public class GamePlaySessionService {
 
     //<editor-fold desc = "Constructors and Dependencies">
 
-    public final GamePlaySessionRepository gamePlaySessionRepository;
-    public final SessionParticipantRepository sessionParticipantRepository;
-    public final SessionTeamRepository sessionTeamRepository;
-    public final PlayerRepository playerRepository;
-    public final GameRepository gameRepository;
+    private final GamePlaySessionRepository gamePlaySessionRepository;
+    private final SessionParticipantRepository sessionParticipantRepository;
+    private final PlayerRepository playerRepository;
+    private final GameRepository gameRepository;
 
-    public GamePlaySessionService(final GamePlaySessionRepository gamePlaySessionRepository, final SessionParticipantRepository sessionParticipantRepository, final SessionTeamRepository sessionTeamRepository, final PlayerRepository playerRepository, final GameRepository gameRepository) {
+    public GamePlaySessionService(final GamePlaySessionRepository gamePlaySessionRepository, final SessionParticipantRepository sessionParticipantRepository, final PlayerRepository playerRepository, final GameRepository gameRepository) {
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
-        this.sessionTeamRepository = sessionTeamRepository;
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
     }

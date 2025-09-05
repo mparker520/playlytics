@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.HashSet;
+
 
 @Entity
 @Table(name = "ghost_players")
@@ -30,7 +32,7 @@ public class GhostPlayer extends Player {
 
     // Mapping to Linked Registered Player If Applicable: Can be Null
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "registered_player_id",  unique = true)
+    @JoinColumn(name = "linked_registered_player_id",  unique = true)
     private RegisteredPlayer registeredPlayer;
 
     // Mapping to Creator
@@ -40,6 +42,7 @@ public class GhostPlayer extends Player {
     private RegisteredPlayer creator;
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
+
 
     // </editor-fold>
 

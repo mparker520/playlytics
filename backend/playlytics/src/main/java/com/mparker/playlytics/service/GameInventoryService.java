@@ -112,7 +112,7 @@ public class GameInventoryService {
 
     // Delete OwnedGame by OwnedGame_Id and current Player_Id
     @Transactional
-    public void deleteOwnedGameByIdAndPlayerId(Long id, Long playerId) {
+    public void deleteByIdAndPlayerId(Long id, Long playerId) {
 
             ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(id, playerId);
 

@@ -12,7 +12,7 @@ import java.util.HashSet;
 @Entity
 @Table(name = "ghost_players")
 
-@PrimaryKeyJoinColumn(name = "ghost_player_id")
+@PrimaryKeyJoinColumn(name = "id")
 
 public class GhostPlayer extends Player {
 

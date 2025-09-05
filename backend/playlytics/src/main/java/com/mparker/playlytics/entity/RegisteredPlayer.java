@@ -15,7 +15,7 @@ import java.util.Set;
 })
 
 // User extends player and inherits id via Player's id
-@PrimaryKeyJoinColumn(name= "registered_player_id")
+@PrimaryKeyJoinColumn(name= "id")
 
 public class RegisteredPlayer extends Player {
 

@@ -87,19 +87,20 @@ public class GameInventoryService {
 
     // Returns all RegisteredPlayer's OwnedGames
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> getAllOwnedGamesByPlayerId(Long playerId) {
+    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long playerId) {
 
         List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
+
         return getOwnedGamesDTOList(ownedGamesList);
 
     }
 
 
-    // Returns RegisteredPlayer's OwnedGames by Game Name
+    // Returns RegisteredPlayer's OwnedGames by Game Title
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findOwnedGamesByNameAndPlayerId(String gameName, Long playerId) {
+    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(Long playerId, String gameName) {
 
-        List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByGame_gameTitleAndRegisteredPlayer_Id(gameName, playerId);
+        List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(playerId, gameName);
         return getOwnedGamesDTOList(ownedGamesByNameList);
 
     }

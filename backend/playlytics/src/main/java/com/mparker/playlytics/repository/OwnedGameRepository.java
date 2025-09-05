@@ -14,7 +14,7 @@ public interface OwnedGameRepository  extends JpaRepository<OwnedGame, Long> {
         // Custom Method to find all OwnedGames belonging to a RegisteredPlayer
         List<OwnedGame> findAllByRegisteredPlayer_Id(Long playerId);
 
-        // Custom Method to find all OwnedGames by name, belonging to a RegisteredPlayer
-        List<OwnedGame> findAllByGame_gameTitleAndRegisteredPlayer_Id(String gameName, Long playerId);
+        // Custom Method to find all OwnedGames belonging to Player and Having Title
+        List<OwnedGame> findAllByRegisteredPlayer_IdAndGame_gameTitle(Long playerId, String gameName);
 
 }

@@ -34,6 +34,7 @@ public class GamePlaySession {
     @NotNull
     private Instant sessionDateTime;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "scoring_model", nullable = false)
     @NotNull
     private ScoringModel scoringModel;

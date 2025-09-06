@@ -1,28 +1,26 @@
 package com.mparker.playlytics.controller;
 
 // Imports
-import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.service.GameInventoryService;
+import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RestController
-public class OwnedGameController {
+public class GamePlaySessionController {
 
     //<editor-fold desc = "Constructor">
 
-    private final GameInventoryService gameInventoryService;
+    private final GamePlaySessionService gamePlaySessionService;
 
-    public OwnedGameController(GameInventoryService gameInventoryService) {
-        this.gameInventoryService = gameInventoryService;
+    public GamePlaySessionController(GamePlaySessionService gamePlaySessionService) {
+        this.gamePlaySessionService = gamePlaySessionService;
     }
 
     //</editor-fold>
 
-    //<editor-fold desc = "GET Mapping">
+   /* //<editor-fold desc = "GET Mapping">
     @GetMapping("/registered_players/{registered_player_id}/owned_games")
     public ResponseEntity<List<OwnedGameResponseDTO>> getOwnedGames(
             @PathVariable("registered_player_id") Long registered_player_id,
@@ -44,24 +42,24 @@ public class OwnedGameController {
 
     //<editor-fold desc = "POST Mapping">
 
-    @PostMapping("/registered_players/{registered_player_id}/owned_games/{game_id}")
+    @PostMapping("/registered_players/{registered_player_id}/owned_games")
     public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
             @PathVariable("registered_player_id") Long registered_player_id,
-            @PathVariable("game_id") Long gameId)  {
-        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registered_player_id, gameId);
+            @RequestBody OwnedGameDTO ownedGameDTO)  {
+        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registered_player_id, ownedGameDTO);
         return ResponseEntity.ok(ownedGameResponseDTO);
 
     }
 
-    //</editor-fold>
+    //</editor-fold> */
 
-    //<editor-fold desc = "DELETE Mappings">
+    //<editor-fold desc = "DELETE Mapping">
 
-    @DeleteMapping("/registered_players/{registered_player_id}/owned_games/{owned_game_id}")
-    public ResponseEntity<Void> deleteOwnedGame(
+    @DeleteMapping("/registered_players/{registered_player_id}/game_play_sessions/{game_play_session_id}")
+    public ResponseEntity<String> deleteGamePlaySession(
             @PathVariable Long registered_player_id,
-            @PathVariable Long owned_game_id) {
-        gameInventoryService.deleteByIdAndPlayerId(owned_game_id, registered_player_id);
+            @PathVariable Long game_play_session_id) {
+        gamePlaySessionService.deleteByIdAndPlayerId(game_play_session_id, registered_player_id);
         return ResponseEntity.noContent().build();
     }
 

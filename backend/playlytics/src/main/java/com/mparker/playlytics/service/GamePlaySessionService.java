@@ -238,7 +238,7 @@ public class GamePlaySessionService {
 
     // Delete Game by Checking that Current User was a SessionParticipant in the GamePlaySession
     @Transactional
-    public void deleteGpSessionByIdAndPlayerId(Long id, Long playerId) {
+    public void deleteByIdAndPlayerId(Long id, Long playerId) {
 
             boolean playerIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(id, playerId);
 

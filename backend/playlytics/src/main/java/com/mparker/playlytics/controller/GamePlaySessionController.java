@@ -24,7 +24,7 @@ public class GamePlaySessionController {
     //</editor-fold>
 
  //<editor-fold desc = "GET Mapping">
-    @GetMapping("/registered_players/{registered_player_id}/game_play_sessions")
+    @GetMapping("/game_play_sessions/{registered_player_id}")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @PathVariable("registered_player_id") Long registered_player_id,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
@@ -57,10 +57,10 @@ public class GamePlaySessionController {
 
     //<editor-fold desc = "DELETE Mapping">
 
-    @DeleteMapping("/registered_players/{registered_player_id}/game_play_sessions/{game_play_session_id}")
+    @DeleteMapping("/game_play_sessions/{game_play_session_id}")
     public ResponseEntity<String> deleteGamePlaySession(
-            @PathVariable Long registered_player_id,
-            @PathVariable Long game_play_session_id) {
+            @PathVariable Long game_play_session_id,
+            Long registered_player_id) {
         gamePlaySessionService.deleteByIdAndPlayerId(game_play_session_id, registered_player_id);
         return ResponseEntity.noContent().build();
     }

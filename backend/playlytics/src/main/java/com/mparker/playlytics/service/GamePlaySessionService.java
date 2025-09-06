@@ -159,11 +159,19 @@ public class GamePlaySessionService {
     private GamePlaySessionResponseDTO createGpSessionResponseDTO(GamePlaySession gamePlaySession) {
         Instant sessionDateTime = gamePlaySession.getSessionDateTime();
         ScoringModel scoringModel = gamePlaySession.getScoringModel();
-        Game game = gamePlaySession.getGame();
-        Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
-        Set<SessionTeam> sessionTeams = gamePlaySession.getSessionTeams();
+        String gameName = gamePlaySession.getGame().getGameTitle();
 
-        return new GamePlaySessionResponseDTO(sessionDateTime, scoringModel, game, sessionParticipants, sessionTeams);
+        Set<Long> sessionParticipantIds = new HashSet<>();
+        for (SessionParticipant sessionParticipant : gamePlaySession.getSessionParticipants()) {
+            sessionParticipantIds.add(sessionParticipant.getId());
+        }
+
+        Set<Long> sessionTeamIds = new HashSet<>();
+        for (SessionTeam sessionTeam : gamePlaySession.getSessionTeams()) {
+            sessionTeamIds.add(sessionTeam.getId());
+        }
+
+        return new GamePlaySessionResponseDTO(sessionDateTime, scoringModel, gameName, sessionParticipantIds, sessionTeamIds);
 
     }
 
@@ -176,7 +184,7 @@ public class GamePlaySessionService {
 
     // List of all GamePlaySessions for a RegisteredPlayer
     @Transactional (readOnly = true)
-    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerId(Long playerId) {
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long playerId) {
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
 
@@ -192,7 +200,7 @@ public class GamePlaySessionService {
 
     // List of all GamePlaySessions for a RegisteredPlayer by Game Title
     @Transactional (readOnly = true)
-    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndGameName(Long playerId, String gameName) {
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerIdAndGameName(Long playerId, String gameName) {
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
 
@@ -212,7 +220,7 @@ public class GamePlaySessionService {
     // List of all GamePlaySessions for a RegisteredPlayer by Date
     // TODO: Fix time conversion
     @Transactional (readOnly = true)
-    private Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
+    public Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
 

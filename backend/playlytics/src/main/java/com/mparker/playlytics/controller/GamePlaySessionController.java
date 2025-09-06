@@ -1,10 +1,15 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
+import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.service.GameInventoryService;
 import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 
 @RestController
@@ -20,19 +25,19 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
-   /* //<editor-fold desc = "GET Mapping">
-    @GetMapping("/registered_players/{registered_player_id}/owned_games")
-    public ResponseEntity<List<OwnedGameResponseDTO>> getOwnedGames(
+ //<editor-fold desc = "GET Mapping">
+    @GetMapping("/registered_players/{registered_player_id}/game_play_sessions")
+    public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @PathVariable("registered_player_id") Long registered_player_id,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
 
         if (gameTitle == null) {
-            List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(registered_player_id);
+            Set<GamePlaySessionResponseDTO> allOwnedGames = gamePlaySessionService.findAllByPlayerId(registered_player_id);
             return ResponseEntity.ok(allOwnedGames);
         }
 
         else {
-            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(registered_player_id, gameTitle);
+            Set<GamePlaySessionResponseDTO> ownedGamesByName = gamePlaySessionService.findAllByPlayerIdAndGameName(registered_player_id, gameTitle);
             return ResponseEntity.ok(ownedGamesByName);
         }
 
@@ -40,7 +45,7 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
-    //<editor-fold desc = "POST Mapping">
+   /*//<editor-fold desc = "POST Mapping">
 
     @PostMapping("/registered_players/{registered_player_id}/owned_games")
     public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(

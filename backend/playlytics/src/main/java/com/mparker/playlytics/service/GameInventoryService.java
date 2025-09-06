@@ -1,7 +1,6 @@
 package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.dto.OwnedGameDTO;
 import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.entity.Game;
 import com.mparker.playlytics.entity.OwnedGame;
@@ -38,11 +37,11 @@ public class GameInventoryService {
     // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
 
     @Transactional
-    public OwnedGameResponseDTO saveOwnedGame(Long registeredPlayerId, OwnedGameDTO ownedGameDTO) {
+    public OwnedGameResponseDTO saveOwnedGame(Long registeredPlayerId, Long gameId) {
 
             // Create OwnedGame Entity
             RegisteredPlayer player = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-            Game game = gameRepository.getReferenceById(ownedGameDTO.gameId());
+            Game game = gameRepository.getReferenceById(gameId);
 
             OwnedGame ownedGame = new OwnedGame(player, game);
 
@@ -52,7 +51,6 @@ public class GameInventoryService {
 
 
             // Create and Return GameResponseDTO
-            Long gameId = ownedGame.getGame().getId();
             String gameName = ownedGame.getGame().getGameTitle();
 
             return  new OwnedGameResponseDTO(gameId, gameName);

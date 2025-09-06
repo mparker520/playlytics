@@ -1,7 +1,6 @@
 package com.mparker.playlytics.controller;
 
 // Imports
-import com.mparker.playlytics.dto.OwnedGameDTO;
 import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.service.GameInventoryService;
 import org.springframework.http.ResponseEntity;

@@ -1,14 +1,12 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
-import com.mparker.playlytics.dto.OwnedGameResponseDTO;
-import com.mparker.playlytics.service.GameInventoryService;
 import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 
@@ -45,18 +43,17 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
-   /*//<editor-fold desc = "POST Mapping">
+  //<editor-fold desc = "POST Mapping">
 
-    @PostMapping("/registered_players/{registered_player_id}/owned_games")
-    public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
-            @PathVariable("registered_player_id") Long registered_player_id,
-            @RequestBody OwnedGameDTO ownedGameDTO)  {
-        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registered_player_id, ownedGameDTO);
-        return ResponseEntity.ok(ownedGameResponseDTO);
+    @PostMapping("/game_play_sessions")
+    public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
+            @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
+        GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO);
+        return ResponseEntity.ok(gamePlaySessionResponseDTO);
 
     }
 
-    //</editor-fold> */
+    //</editor-fold>
 
     //<editor-fold desc = "DELETE Mapping">
 

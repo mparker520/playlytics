@@ -40,19 +40,19 @@ public class GamePlaySessionService {
 
     // Assemble GamePlaySession
     @Transactional
-    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Set<SessionParticipantDTO> sessionParticipantsDTOSet, Set<SessionTeamDTO> sessionTeamsDTOSet) {
+    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO) {
 
         // Create GamePlaySession
         GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO);
 
         // Create SessionParticipants from sessionParticipantDTO Set
-        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(sessionParticipantsDTOSet);
+        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet());
 
         // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
-        if (gamePlaySession.getScoringModel() == ScoringModel.TEAM && sessionTeamsDTOSet.size() > 1) {
+        if (gamePlaySession.getScoringModel() == ScoringModel.TEAM && gamePlaySessionDTO.sessionTeamDTOSet().size() > 1) {
 
             // Create Session Teams
-            Set<SessionTeam> sessionTeamSet = createSessionTeamSet(sessionTeamsDTOSet, sessionParticipantSet);
+            Set<SessionTeam> sessionTeamSet = createSessionTeamSet(gamePlaySessionDTO.sessionTeamDTOSet(), sessionParticipantSet);
 
             // Link Teams and GamePlaySession
             linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
@@ -121,7 +121,7 @@ public class GamePlaySessionService {
             for (Long playerId : sessionTeamDTO.playerIds()) {
 
                 for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
-                    if (sessionParticipant.getId().equals(playerId)) {
+                    if (sessionParticipant.getPlayer().getId().equals(playerId)) {
                         sessionParticipant.setSessionTeam(sessionTeam);
                         sessionTeam.getTeamMembers().add(sessionParticipant);
                     }

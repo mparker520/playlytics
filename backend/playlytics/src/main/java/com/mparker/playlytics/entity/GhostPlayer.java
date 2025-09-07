@@ -6,8 +6,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-import java.util.HashSet;
-
 
 @Entity
 @Table(name = "ghost_players")
@@ -23,6 +21,7 @@ public class GhostPlayer extends Player {
     @NotBlank
     private String identifierEmail;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private GhostStatus status;
 

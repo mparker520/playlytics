@@ -18,7 +18,7 @@ public class SessionTeam {
     // <editor-fold desc = "Database Columns">
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "result", nullable = false)

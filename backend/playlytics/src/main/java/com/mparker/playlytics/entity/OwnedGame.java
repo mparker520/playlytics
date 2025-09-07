@@ -19,7 +19,7 @@ public class OwnedGame {
     // <editor-fold desc = "Database Columns">
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp

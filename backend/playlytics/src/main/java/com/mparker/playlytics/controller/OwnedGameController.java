@@ -44,11 +44,11 @@ public class OwnedGameController {
 
     //<editor-fold desc = "POST Mapping">
 
-    @PostMapping("/registered-players/{registeredPlayerId}/owned-games/{ownedGameId}")
+    @PostMapping("/registered-players/{registeredPlayerId}/owned-games/{gameId}")
     public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
-            @PathVariable("ownedGameId") Long ownedGameId)  {
-        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registeredPlayerId, ownedGameId);
+            @PathVariable("gameId") Long gameId)  {
+        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registeredPlayerId, gameId);
         return ResponseEntity.ok(ownedGameResponseDTO);
 
     }

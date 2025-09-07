@@ -16,7 +16,7 @@ public class Game {
     // <editor-fold desc="Database Columns">
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "game_title", length = 255, nullable = false, updatable = false, unique = true)

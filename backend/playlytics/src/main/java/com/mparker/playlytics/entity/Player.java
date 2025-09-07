@@ -23,7 +23,7 @@ public class Player {
     // <editor-fold desc = "Database Columns">
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", nullable = false, length = 255)
@@ -37,7 +37,6 @@ public class Player {
     private String lastName;
 
 
-    @Lob
     @Column(name = "avatar", columnDefinition = "bytea")
     private byte[] avatar;
 

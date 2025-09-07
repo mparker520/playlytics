@@ -51,18 +51,34 @@ public class GhostPlayerService {
 
     // Create GhostPlayer (Method for RegisteredPlayer to create GhostPlayer from Scratch)
     @Transactional()
-    private GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO) {
+    public GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO) {
 
         // Initialize Fields from DTO
         String firstName = ghostPlayerDTO.firstName();
         String lastName = ghostPlayerDTO.lastName();
         byte[] avatar = ghostPlayerDTO.avatar();
+
         String identifierEmail = ghostPlayerDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase();
         GhostStatus status = ghostPlayerDTO.status();
+
         Long registeredPlayerId = ghostPlayerDTO.registeredPlayerId();
+        RegisteredPlayer registeredPlayer;
+
+        if (registeredPlayerId != null) {
+            registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        }
+        else {
+            registeredPlayer = null;
+        }
+
         Long creatorId = ghostPlayerDTO.creatorId();
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer creator = registeredPlayerRepository.getReferenceById(creatorId);
+        RegisteredPlayer creator;
+        if (creatorId != null) {
+            creator = registeredPlayerRepository.getReferenceById(creatorId);
+        }
+        else {
+            creator = null;
+        }
 
         // Create GhostPlayer
         GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, identifierEmail, status, registeredPlayer, creator);
@@ -81,7 +97,7 @@ public class GhostPlayerService {
     //<editor-fold desc = "Update GhostPlayer">
 
     @Transactional
-    private GhostPlayerResponseDTO updateGhostPlayer(Long currentPlayerId, Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+    public GhostPlayerResponseDTO updateGhostPlayer(Long currentPlayerId, Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
 
         // Retrieve GhostPlayer from GhostPlayerRepository
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
@@ -127,7 +143,7 @@ public class GhostPlayerService {
     // <editor-fold desc = "Lookup GhostPlayer">
 
     @Transactional(readOnly = true)
-    private GhostPlayerResponseDTO findGhostPlayerByIdentifierEmail(String identifierEmail) {
+    public GhostPlayerResponseDTO findGhostPlayerByIdentifierEmail(String identifierEmail) {
 
         String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
         GhostPlayer ghostPlayer = ghostPlayerRepository.findGhostPlayerByIdentifierEmail(identifierEmailNormalized);

@@ -25,7 +25,7 @@ public class ConnectionRequest {
     // <editor-fold desc="Database Columns">
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "connection_request_status", nullable = false)

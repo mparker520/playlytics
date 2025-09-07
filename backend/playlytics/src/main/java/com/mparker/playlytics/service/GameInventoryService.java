@@ -10,7 +10,6 @@ import com.mparker.playlytics.repository.OwnedGameRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,9 +84,9 @@ public class GameInventoryService {
 
     // Returns all RegisteredPlayer's OwnedGames
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long playerId) {
+    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long registeredPlayerId) {
 
-        List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(playerId);
+        List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(registeredPlayerId);
 
         return getOwnedGamesDTOList(ownedGamesList);
 
@@ -96,9 +95,9 @@ public class GameInventoryService {
 
     // Returns RegisteredPlayer's OwnedGames by Game Title
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(Long playerId, String gameName) {
+    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(Long registeredPlayerId, String gameName) {
 
-        List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(playerId, gameName);
+        List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(registeredPlayerId, gameName);
         return getOwnedGamesDTOList(ownedGamesByNameList);
 
     }
@@ -111,9 +110,9 @@ public class GameInventoryService {
 
     // Delete OwnedGame by OwnedGame_Id and current Player_Id
     @Transactional
-    public void deleteByIdAndPlayerId(Long id, Long playerId) {
+    public void deleteByIdAndPlayerId(Long ownedGameId, Long playerId) {
 
-            ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(id, playerId);
+            ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(ownedGameId, playerId);
 
     }
 

@@ -184,11 +184,11 @@ public class GamePlaySessionService {
 
     // List of all GamePlaySessions for a RegisteredPlayer
     @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long playerId) {
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long registeredPlayerId) {
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
 
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
         for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
             GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
             gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
@@ -200,15 +200,15 @@ public class GamePlaySessionService {
 
     // List of all GamePlaySessions for a RegisteredPlayer by Game Title
     @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByPlayerIdAndGameName(Long playerId, String gameName) {
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerIdAndGameName(Long registeredPlayerId, String gameTitle) {
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
 
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
         for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
             GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
             String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
-            if (gamePlaySessionName.equals(gameName)) {
+            if (gamePlaySessionName.equals(gameTitle)) {
                 gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
             }
         }
@@ -246,12 +246,12 @@ public class GamePlaySessionService {
 
     // Delete Game by Checking that Current User was a SessionParticipant in the GamePlaySession
     @Transactional
-    public void deleteByIdAndPlayerId(Long id, Long playerId) {
+    public void deleteByIdAndPlayerId(Long sessionId, Long registeredPlayerId) {
 
-            boolean playerIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(id, playerId);
+            boolean playerIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(sessionId, registeredPlayerId);
 
             if(playerIsParticipant) {
-                gamePlaySessionRepository.deleteById(id);
+                gamePlaySessionRepository.deleteById(sessionId);
             }
 
     }

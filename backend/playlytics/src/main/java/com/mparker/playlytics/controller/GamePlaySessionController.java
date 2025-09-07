@@ -24,18 +24,18 @@ public class GamePlaySessionController {
     //</editor-fold>
 
  //<editor-fold desc = "GET Mapping">
-    @GetMapping("/registered_players/{registered_player_id}/game_play_sessions")
+    @GetMapping("/registered-players/{registeredPlayerId}/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
-            @PathVariable("registered_player_id") Long registered_player_id,
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
 
         if (gameTitle == null) {
-            Set<GamePlaySessionResponseDTO> allOwnedGames = gamePlaySessionService.findAllByPlayerId(registered_player_id);
+            Set<GamePlaySessionResponseDTO> allOwnedGames = gamePlaySessionService.findAllByPlayerId(registeredPlayerId);
             return ResponseEntity.ok(allOwnedGames);
         }
 
         else {
-            Set<GamePlaySessionResponseDTO> ownedGamesByName = gamePlaySessionService.findAllByPlayerIdAndGameName(registered_player_id, gameTitle);
+            Set<GamePlaySessionResponseDTO> ownedGamesByName = gamePlaySessionService.findAllByPlayerIdAndGameName(registeredPlayerId, gameTitle);
             return ResponseEntity.ok(ownedGamesByName);
         }
 
@@ -45,7 +45,7 @@ public class GamePlaySessionController {
 
   //<editor-fold desc = "POST Mapping">
 
-    @PostMapping("/game_play_sessions")
+    @PostMapping("/game-play-sessions")
     public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
             @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
         GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO);
@@ -57,12 +57,12 @@ public class GamePlaySessionController {
 
     //<editor-fold desc = "DELETE Mapping">
 
-    @DeleteMapping("/game_play_sessions/{game_play_session_id}")
+    @DeleteMapping("/game-play-sessions/{sessionId}")
     public ResponseEntity<String> deleteGamePlaySession(
-            @PathVariable ("game_play_session_id") Long game_play_session_id,
+            @PathVariable ("sessionId") Long sessionId,
             // TODO: Update to auth context
-            @RequestParam("registered_player_id") Long registered_player_id) {
-        gamePlaySessionService.deleteByIdAndPlayerId(game_play_session_id, registered_player_id);
+            @RequestParam("registeredPlayerId") Long registeredPlayerId) {
+        gamePlaySessionService.deleteByIdAndPlayerId(sessionId, registeredPlayerId);
         return ResponseEntity.noContent().build();
     }
 

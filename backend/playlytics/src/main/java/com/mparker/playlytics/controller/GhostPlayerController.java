@@ -5,9 +5,7 @@ import com.mparker.playlytics.dto.GhostPlayerDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.service.GhostPlayerService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -25,6 +23,13 @@ public class GhostPlayerController {
     //</editor-fold>
 
     //<editor-fold desc = "GET Mapping">
+
+    @GetMapping("/ghost-players/{identifierEmail}")
+    public ResponseEntity<GhostPlayerResponseDTO> getGhostPlayer(@PathVariable String identifierEmail) {
+        GhostPlayerResponseDTO  ghostPlayerResponseDTO = ghostPlayerService.findByIdentifierEmail(identifierEmail);
+        return ResponseEntity.ok(ghostPlayerResponseDTO);
+    }
+
     //</editor-fold>
 
     //<editor-fold desc = "PATCH Mapping">

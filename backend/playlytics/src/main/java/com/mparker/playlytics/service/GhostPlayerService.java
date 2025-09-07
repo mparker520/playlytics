@@ -143,10 +143,10 @@ public class GhostPlayerService {
     // <editor-fold desc = "Lookup GhostPlayer">
 
     @Transactional(readOnly = true)
-    public GhostPlayerResponseDTO findGhostPlayerByIdentifierEmail(String identifierEmail) {
+    public GhostPlayerResponseDTO findByIdentifierEmail(String identifierEmail) {
 
         String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findGhostPlayerByIdentifierEmail(identifierEmailNormalized);
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(identifierEmailNormalized);
 
         return createGhostPlayerResponseDTO(ghostPlayer);
 

@@ -59,8 +59,8 @@ public class OwnedGameController {
 
     @DeleteMapping("/registered-players/{registeredPlayerId}/owned-games/{ownedGameId}")
     public ResponseEntity<Void> deleteOwnedGame(
-            @PathVariable Long registeredPlayerId,
-            @PathVariable Long ownedGameId) {
+            @PathVariable ("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable ("ownedGameId") Long ownedGameId) {
         gameInventoryService.deleteByIdAndPlayerId(ownedGameId, registeredPlayerId);
         return ResponseEntity.noContent().build();
     }

@@ -3,6 +3,7 @@ package com.mparker.playlytics.controller;
 // Imports
 import com.mparker.playlytics.dto.GhostPlayerDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.GhostPlayerUpdateDTO;
 import com.mparker.playlytics.service.GhostPlayerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,8 @@ public class GhostPlayerController {
     //<editor-fold desc = "GET Mapping">
 
     @GetMapping("/ghost-players/{identifierEmail}")
-    public ResponseEntity<GhostPlayerResponseDTO> getGhostPlayer(@PathVariable String identifierEmail) {
+    public ResponseEntity<GhostPlayerResponseDTO> getGhostPlayer(
+            @PathVariable ("identifierEmail") String identifierEmail) {
         GhostPlayerResponseDTO  ghostPlayerResponseDTO = ghostPlayerService.findByIdentifierEmail(identifierEmail);
         return ResponseEntity.ok(ghostPlayerResponseDTO);
     }
@@ -33,6 +35,17 @@ public class GhostPlayerController {
     //</editor-fold>
 
     //<editor-fold desc = "PATCH Mapping">
+    @PatchMapping("/ghost-players/{ghostPlayerId}")
+    public ResponseEntity<GhostPlayerResponseDTO> updateGhostPlayer(
+            @PathVariable Long ghostPlayerId,
+            @RequestParam("currentPlayerId") Long currentPlayerId,
+            @RequestBody GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+
+        GhostPlayerResponseDTO ghostPlayerResponseDTO = ghostPlayerService.updateGhostPlayer(ghostPlayerId, currentPlayerId, ghostPlayerUpdateDTO);
+        return ResponseEntity.ok(ghostPlayerResponseDTO);
+
+    }
+
     //</editor-fold>
 
     //<editor-fold desc = "POST Mapping">

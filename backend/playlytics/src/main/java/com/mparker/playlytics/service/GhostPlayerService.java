@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @Service
 
 public class GhostPlayerService {
@@ -97,7 +96,7 @@ public class GhostPlayerService {
     //<editor-fold desc = "Update GhostPlayer">
 
     @Transactional
-    public GhostPlayerResponseDTO updateGhostPlayer(Long currentPlayerId, Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+    public GhostPlayerResponseDTO updateGhostPlayer(Long ghostPlayerId, Long currentPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
 
         // Retrieve GhostPlayer from GhostPlayerRepository
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);

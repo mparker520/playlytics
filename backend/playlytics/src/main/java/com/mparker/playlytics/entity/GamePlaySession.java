@@ -163,11 +163,11 @@ public class GamePlaySession {
     }
 
 
-    public Player getcreator() {
+    public Player getCreator() {
         return creator;
     }
 
-    public void setcreator(Player creator) {
+    public void setCreator(Player creator) {
         this.creator = creator;
     }
 

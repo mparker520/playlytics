@@ -1,7 +1,7 @@
 package com.mparker.playlytics.enums;
 
 public enum GhostStatus {
-    CREATED,
+    NEW,
     UPGRADED,
     DEACTIVATED
 }

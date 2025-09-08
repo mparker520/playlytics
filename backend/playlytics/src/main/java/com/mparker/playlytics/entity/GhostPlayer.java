@@ -32,7 +32,7 @@ public class GhostPlayer extends Player {
     // Mapping to Linked Registered Player If Applicable: Can be Null
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "linked_registered_player_id",  unique = true)
-    private RegisteredPlayer registeredPlayer;
+    private RegisteredPlayer linkedRegisteredPlayer;
 
     // Mapping to Creator
 
@@ -56,7 +56,7 @@ public class GhostPlayer extends Player {
 
         this.identifierEmail = identifierEmail;
         this.status = status;
-        this.registeredPlayer = registeredPlayer;
+        this.linkedRegisteredPlayer = registeredPlayer;
         this.creator = creator;
     }
 
@@ -80,16 +80,20 @@ public class GhostPlayer extends Player {
         this.status = status;
     }
 
-    public RegisteredPlayer getRegisteredPlayer() {
-        return registeredPlayer;
+    public RegisteredPlayer getLinkedRegisteredPlayer() {
+        return linkedRegisteredPlayer;
     }
 
-    public void setRegisteredPlayer(RegisteredPlayer registeredPlayer) {
-        this.registeredPlayer = registeredPlayer;
+    public void setLinkedRegisteredPlayer(RegisteredPlayer linkedRegisteredPlayer) {
+        this.linkedRegisteredPlayer = linkedRegisteredPlayer;
     }
 
     public RegisteredPlayer getCreator() {
         return creator;
+    }
+
+    public void setCreator(RegisteredPlayer creator) {
+        this.creator = creator;
     }
 
     // </editor-fold>

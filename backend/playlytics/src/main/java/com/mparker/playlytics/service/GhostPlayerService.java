@@ -131,7 +131,7 @@ public class GhostPlayerService {
             }
 
             if (ghostPlayerUpdateDTO.registeredPlayerId() != null) {
-                ghostPlayer.setRegisteredPlayer(registeredPlayerRepository.getReferenceById(ghostPlayerUpdateDTO.registeredPlayerId()));
+                ghostPlayer.setLinkedRegisteredPlayer(registeredPlayerRepository.getReferenceById(ghostPlayerUpdateDTO.registeredPlayerId()));
             }
 
             ghostPlayerRepository.save(ghostPlayer);

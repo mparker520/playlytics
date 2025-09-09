@@ -1,6 +1,8 @@
 package com.mparker.playlytics.service;
 
 // Imports
+import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
+import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.entity.GamePlaySession;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
@@ -19,14 +21,12 @@ public class RegisteredPlayerService {
     //<editor-fold desc = "Constructors and Dependencies">
 
     private final RegisteredPlayerRepository registeredPlayerRepository;
-    private final ConfirmedConnectionRepository connectionRepository;
     private final GhostPlayerRepository ghostPlayerRepository;
     private final GamePlaySessionRepository gamePlaySessionRepository;
     private final SessionParticipantRepository sessionParticipantRepository;
 
-    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, ConfirmedConnectionRepository connectionRepository, GhostPlayerRepository ghostPlayerRepository, GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository) {
+    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository) {
         this.registeredPlayerRepository = registeredPlayerRepository;
-        this.connectionRepository = connectionRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
@@ -35,6 +35,34 @@ public class RegisteredPlayerService {
     //</editor-fold>
 
     //<editor-fold desc = "Update RegisteredPlayer">
+
+    @Transactional
+    public RegisteredPlayerUpdateDTO updateRegisteredPlayer(Long registeredPlayerId, RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
+
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+
+        if(registeredPlayerUpdateDTO.firstName() != null) {
+            registeredPlayer.setFirstName(registeredPlayerUpdateDTO.firstName());
+        }
+
+        if(registeredPlayerUpdateDTO.lastName() != null) {
+            registeredPlayer.setLastName(registeredPlayerUpdateDTO.lastName());
+        }
+
+        if(registeredPlayerUpdateDTO.avatar() != null) {
+            registeredPlayer.setAvatar(registeredPlayerUpdateDTO.avatar());
+        }
+
+        if(registeredPlayerUpdateDTO.displayName() != null) {
+            registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
+        }
+
+        registeredPlayerRepository.save(registeredPlayer);
+
+        return new RegisteredPlayerUpdateDTO(registeredPlayer.getFirstName(), registeredPlayer.getLastName(), registeredPlayer.getAvatar(), registeredPlayer.getDisplayName());
+
+    }
+
     //</editor-fold>
 
     //<editor-fold desc = "Create RegisteredPlayer">
@@ -112,6 +140,7 @@ public class RegisteredPlayerService {
         }
 
     }
+
 
     //</editor-fold>
 

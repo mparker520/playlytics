@@ -2,9 +2,13 @@ package com.mparker.playlytics.controller;
 
 // Imports
 
+import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
+import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.service.RegisteredPlayerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 
@@ -21,11 +25,21 @@ public class RegisteredPlayerController {
     //</editor-fold>
 
 
-    //<editor-fold desc = "Update Mapping">
+    //<editor-fold desc = "PATCH Mapping">
+
+    @PatchMapping("/registered-players/{registeredPlayerId}")
+    public ResponseEntity<RegisteredPlayerUpdateDTO> updateGhostPlayer(
+            @PathVariable Long registeredPlayerId,
+            @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
+
+        RegisteredPlayerUpdateDTO registeredPlayerResponseDTO = registeredPlayerService.updateRegisteredPlayer(registeredPlayerId, registeredPlayerUpdateDTO);
+        return ResponseEntity.ok(registeredPlayerResponseDTO);
+
+    }
 
     //</editor-fold>
 
-    //<editor-fold desc = "Delete Mapping">
+    //<editor-fold desc = "DELETE Mapping">
 
     @DeleteMapping("registered-players/{registeredPlayerId}")
     public ResponseEntity<Void> deleteRegisteredPlayer(

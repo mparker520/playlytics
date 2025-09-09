@@ -58,7 +58,7 @@ public class GhostPlayerService {
         byte[] avatar = ghostPlayerDTO.avatar();
 
         String identifierEmail = ghostPlayerDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase();
-        GhostStatus status = ghostPlayerDTO.status();
+        GhostStatus status = GhostStatus.NEW;
 
         Long registeredPlayerId = ghostPlayerDTO.registeredPlayerId();
         RegisteredPlayer registeredPlayer;

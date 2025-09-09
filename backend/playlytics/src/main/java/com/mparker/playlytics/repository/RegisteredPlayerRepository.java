@@ -8,4 +8,6 @@ public interface RegisteredPlayerRepository extends JpaRepository<RegisteredPlay
 
     RegisteredPlayer findByLoginEmail(String email);
 
+    void deleteAssociationByIdAndGhostPlayerId(Long registeredPlayerId, Long ghostPlayerId);
+
 }

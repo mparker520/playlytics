@@ -65,21 +65,6 @@ public class RegisteredPlayerService {
 
     //</editor-fold>
 
-    //<editor-fold desc = "Create RegisteredPlayer">
-
-    //</editor-fold>
-
-    //<editor-fold desc = "Lookup RegisteredPlayer">
-
-
-
-    // Lookup All Connections
-
-    // Lookup All Associations
-
-
-    //</editor-fold>
-
     //<editor-fold desc = "Delete RegisteredPlayer">
 
     @Transactional

@@ -24,7 +24,6 @@ public class RegisteredPlayerController {
 
     //</editor-fold>
 
-
     //<editor-fold desc = "PATCH Mapping">
 
     @PatchMapping("/registered-players/{registeredPlayerId}")

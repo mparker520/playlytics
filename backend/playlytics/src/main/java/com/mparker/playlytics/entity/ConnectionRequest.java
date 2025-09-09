@@ -52,7 +52,7 @@ public class ConnectionRequest {
     @JoinColumn(name = "recipient", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer recipientId;
+    private RegisteredPlayer recipient;
 
     // Maps to RegisteredPlayer for Initiator
     // Connection Request is Deleted if the Invitor is Deleted
@@ -60,7 +60,7 @@ public class ConnectionRequest {
     @JoinColumn(name = "sender", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer senderId;
+    private RegisteredPlayer sender;
 
     // </editor-fold >
 
@@ -119,12 +119,12 @@ public class ConnectionRequest {
         return updateTimestamp;
     }
 
-    public RegisteredPlayer getRecipientId() {
-        return recipientId;
+    public RegisteredPlayer getRecipient() {
+        return recipient;
     }
 
-    public RegisteredPlayer getSenderId() {
-        return senderId;
+    public RegisteredPlayer getSender() {
+        return sender;
     }
 
 // </editor-fold>

@@ -1,15 +1,17 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
+import com.mparker.playlytics.entity.ConnectionRequest;
+import com.mparker.playlytics.repository.ConnectionRequestRepository;
 import com.mparker.playlytics.service.GameInventoryService;
 import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 
 @RestController
@@ -39,6 +41,15 @@ public class NetworkController {
 
     // GET SENT CONNECTION REQUESTS
 
+    @GetMapping("/network/{registeredPlayerId}/sent-connection-requests")
+    public ResponseEntity<Set<ConnectionRequestResponseDTO>>  getSentConnectionRequests(
+            @PathVariable("registeredPlayerId") Long registeredPlayer) {
+
+        Set<ConnectionRequestResponseDTO> allSentConnectionRequests = networkService.getAllSentConnectionRequests(registeredPlayer);
+        return ResponseEntity.ok(allSentConnectionRequests);
+
+    }
+
     // GET PENDING CONNECTION REQUESTS
 
 
@@ -59,7 +70,7 @@ public class NetworkController {
 
 
     //<editor-fold desc = "DELETE Mappings">
-
+    // TODO: Remove Confirmed Connection
 
     // Remove Association with GhostPlayer
 
@@ -74,6 +85,7 @@ public class NetworkController {
 
 
     // Remove Confirmed Connection / Dissolve Connection Request
+
 
     // Delete Sent ConnectionRequest
 

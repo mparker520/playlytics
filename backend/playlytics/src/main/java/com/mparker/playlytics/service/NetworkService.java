@@ -3,6 +3,7 @@ package com.mparker.playlytics.service;
 // Imports
 
 
+import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
@@ -12,6 +13,10 @@ import com.mparker.playlytics.repository.GhostPlayerRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Service
 public class NetworkService {
@@ -32,6 +37,27 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc = " View Sent Connection Requests">
+
+    @Transactional(readOnly = true)
+    public Set<ConnectionRequestResponseDTO> getAllSentConnectionRequests(Long registeredPlayerId) {
+
+        Set<ConnectionRequest> allSentConnectionRequests = connectionRequestRepository.getAllBySender_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
+        Set<ConnectionRequestResponseDTO> allSentConnectionRequestResponses = new HashSet<>();
+
+        for (ConnectionRequest connectionRequest : allSentConnectionRequests) {
+
+            ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(registeredPlayerId, connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
+            allSentConnectionRequestResponses.add(connectionRequestResponseDTO);
+
+        }
+
+
+        return allSentConnectionRequestResponses;
+
+    }
+
+    //</editor-fold>
 
     //<editor-fold desc = "Remove Associations">
 
@@ -53,7 +79,7 @@ public class NetworkService {
     public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
 
         ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
-        if(connectionRequest.getSenderId().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+        if(connectionRequest.getSender().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
 
             connectionRequestRepository.delete(connectionRequest);
 

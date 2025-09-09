@@ -3,8 +3,11 @@ package com.mparker.playlytics.service;
 // Imports
 
 
+import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
+import com.mparker.playlytics.enums.ConnectionRequestStatus;
+import com.mparker.playlytics.repository.ConnectionRequestRepository;
 import com.mparker.playlytics.repository.GhostPlayerRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.stereotype.Service;
@@ -18,11 +21,13 @@ public class NetworkService {
 
     private final RegisteredPlayerRepository registeredPlayerRepository;
     private final GhostPlayerRepository ghostPlayerRepository;
+    private final ConnectionRequestRepository connectionRequestRepository;
 
 
-    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository) {
+    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, ConnectionRequestRepository connectionRequestRepository) {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
+        this.connectionRequestRepository = connectionRequestRepository;
     }
 
     //</editor-fold>
@@ -37,6 +42,23 @@ public class NetworkService {
        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
 
         registeredPlayer.getAssociations().remove(ghostPlayer);
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Cancel Sent ConnectionRequest">
+
+    @Transactional
+    public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
+
+        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+        if(connectionRequest.getSenderId().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+
+            connectionRequestRepository.delete(connectionRequest);
+
+
+        }
 
     }
 

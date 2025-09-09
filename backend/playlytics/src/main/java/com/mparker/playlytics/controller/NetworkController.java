@@ -63,8 +63,6 @@ public class NetworkController {
 
     // Remove Association with GhostPlayer
 
-
-
     @DeleteMapping("/network/{registeredPlayerId}/remove-associations/{ghostPlayerId}")
     public ResponseEntity<Void> removeAssociation(
             @PathVariable ("registeredPlayerId") Long registeredPlayerId,
@@ -79,6 +77,16 @@ public class NetworkController {
 
     // Delete Sent ConnectionRequest
 
+    @DeleteMapping("/network/{registeredPlayerId}/cancel-connection-requests/{connectionRequestId}")
+    public ResponseEntity<Void> removePendingConnectionRequests(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("connectionRequestId") Long connectionRequestId) {
+
+        networkService.cancelConnectionRequest(registeredPlayerId, connectionRequestId);
+
+        return ResponseEntity.noContent().build();
+
+    }
 
     //</editor-fold>
 

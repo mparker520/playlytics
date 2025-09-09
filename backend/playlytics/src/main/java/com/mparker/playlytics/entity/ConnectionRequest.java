@@ -28,6 +28,7 @@ public class ConnectionRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "connection_request_status", nullable = false)
     @NotNull
     private ConnectionRequestStatus connectionRequestStatus;
@@ -48,18 +49,18 @@ public class ConnectionRequest {
     // Maps to RegisteredPlayer
     // Connection Request is Deleted if the Invite Recipient is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "invite_recipient", nullable = false, updatable = false)
+    @JoinColumn(name = "recipient", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer inviteRecipient;
+    private RegisteredPlayer recipientId;
 
     // Maps to RegisteredPlayer for Initiator
     // Connection Request is Deleted if the Invitor is Deleted
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "request_initiator", nullable = false, updatable = false)
+    @JoinColumn(name = "sender", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer initiatorId;
+    private RegisteredPlayer senderId;
 
     // </editor-fold >
 
@@ -118,15 +119,14 @@ public class ConnectionRequest {
         return updateTimestamp;
     }
 
-    public RegisteredPlayer getInviteRecipient() {
-        return inviteRecipient;
+    public RegisteredPlayer getRecipientId() {
+        return recipientId;
     }
 
-    public RegisteredPlayer getInitiatorId() {
-        return initiatorId;
+    public RegisteredPlayer getSenderId() {
+        return senderId;
     }
 
-
-    // </editor-fold>
+// </editor-fold>
 
 }

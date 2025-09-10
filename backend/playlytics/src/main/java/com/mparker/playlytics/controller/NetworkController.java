@@ -72,9 +72,19 @@ public class NetworkController {
 
     // Create Association
 
-    // Create ConnectionRequestion
+    @PostMapping("/network/{registeredPlayerId}/add-association/{ghostPlayerId}")
+    public ResponseEntity<GhostPlayerResponseDTO> addAssociation(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("ghostPlayerId") Long ghostPlayerId) {
 
-    // Confirm ConnectionRequestion / Create Confirmed Connection
+            GhostPlayerResponseDTO ghostPlayerResponseDTO = networkService.addAssociation(registeredPlayerId, ghostPlayerId);
+            return ResponseEntity.ok(ghostPlayerResponseDTO);
+
+    }
+
+    // Create ConnectionRequest
+
+    // Confirm ConnectionRequest / Create Confirmed Connection
 
 
     //</editor-fold>
@@ -85,7 +95,7 @@ public class NetworkController {
 
     // Remove Association with GhostPlayer
 
-    @DeleteMapping("/network/{registeredPlayerId}/remove-associations/{ghostPlayerId}")
+    @DeleteMapping("/network/{registeredPlayerId}/remove-association/{ghostPlayerId}")
     public ResponseEntity<Void> removeAssociation(
             @PathVariable ("registeredPlayerId") Long registeredPlayerId,
             @PathVariable ("ghostPlayerId") Long ghostPlayerId) {

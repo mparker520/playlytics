@@ -60,6 +60,21 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc = "Add Association">
+
+    @Transactional
+    public GhostPlayerResponseDTO addAssociation(Long registeredPlayerId, Long ghostPlayerId) {
+
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
+        registeredPlayer.getAssociations().add(ghostPlayer);
+
+        return new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = " View All Associations">
 
     @Transactional(readOnly = true)
@@ -81,8 +96,6 @@ public class NetworkService {
     }
 
     //</editor-fold>
-
-
 
     //<editor-fold desc = "Remove Associations">
 

@@ -63,6 +63,14 @@ public class NetworkController {
 
     // GET PENDING CONNECTION REQUESTS
 
+    @GetMapping("network/{registeredPlayerId}/pending-connection-requests")
+    public ResponseEntity<Set<ConnectionRequestResponseDTO>> getPendingConnectionRequests(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+
+           Set<ConnectionRequestResponseDTO> allPendingConnectionRequests = networkService.getAllPendingConnectionRequests(registeredPlayerId);
+           return ResponseEntity.ok(allPendingConnectionRequests);
+
+    }
 
     //</editor-fold>
 

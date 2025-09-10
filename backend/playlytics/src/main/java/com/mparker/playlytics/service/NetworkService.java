@@ -53,8 +53,28 @@ public class NetworkService {
 
         }
 
-
         return allSentConnectionRequestResponses;
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = " View Pending Connection Requests">
+
+    @Transactional(readOnly = true)
+    public Set<ConnectionRequestResponseDTO> getAllPendingConnectionRequests(Long registeredPlayerId) {
+
+        Set<ConnectionRequest> allPendingConnectionRequests = connectionRequestRepository.getAllByRecipient_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
+        Set<ConnectionRequestResponseDTO> allPendingConnectionRequestResponses = new HashSet<>();
+
+        for (ConnectionRequest connectionRequest : allPendingConnectionRequests) {
+
+            ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), registeredPlayerId, connectionRequest.getConnectionRequestStatus());
+            allPendingConnectionRequestResponses.add(connectionRequestResponseDTO);
+
+        }
+
+        return allPendingConnectionRequestResponses;
 
     }
 

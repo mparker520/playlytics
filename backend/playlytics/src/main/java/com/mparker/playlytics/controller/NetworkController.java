@@ -43,16 +43,6 @@ public class NetworkController {
 
     }
 
-    // GET ASSOCIATIONS
-
-    @GetMapping("/network/{registeredPlayerId}/associations")
-    public ResponseEntity<Set<GhostPlayerResponseDTO>> getAssociations(
-            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
-
-        Set<GhostPlayerResponseDTO> allAssociations = networkService.getAllAssociations(registeredPlayerId);
-        return ResponseEntity.ok(allAssociations);
-
-    }
 
     // GET SENT CONNECTION REQUESTS
 
@@ -76,10 +66,41 @@ public class NetworkController {
 
     }
 
+
+    // GET ASSOCIATIONS
+
+    @GetMapping("/network/{registeredPlayerId}/associations")
+    public ResponseEntity<Set<GhostPlayerResponseDTO>> getAssociations(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+
+        Set<GhostPlayerResponseDTO> allAssociations = networkService.getAllAssociations(registeredPlayerId);
+        return ResponseEntity.ok(allAssociations);
+
+    }
+
+
     //</editor-fold>
 
 
     //<editor-fold desc = "POST Mappings">
+
+
+    // TODO: FIX Create ConnectionRequest
+    @PostMapping("/network/{registeredPlayerId}/send-connection-request/{peerId}")
+    public ResponseEntity<ConnectionRequestResponseDTO> sendConnectionRequest(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("peerId") Long peerId) {
+
+        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, peerId);
+
+        return ResponseEntity.ok(connectionRequestResponseDTO);
+
+    }
+
+
+    //  TODO: Confirm ConnectionRequest / Create Confirmed Connection
+
+
 
 
     // Create Association
@@ -89,33 +110,17 @@ public class NetworkController {
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("ghostPlayerId") Long ghostPlayerId) {
 
-            GhostPlayerResponseDTO ghostPlayerResponseDTO = networkService.addAssociation(registeredPlayerId, ghostPlayerId);
-            return ResponseEntity.ok(ghostPlayerResponseDTO);
+        GhostPlayerResponseDTO ghostPlayerResponseDTO = networkService.addAssociation(registeredPlayerId, ghostPlayerId);
+        return ResponseEntity.ok(ghostPlayerResponseDTO);
 
     }
-
-
-    // Create ConnectionRequest
-    @PostMapping("/network/{registeredPlayerId}/send-connection-request/{recipientId}")
-    public ResponseEntity<ConnectionRequestResponseDTO> sendConnectionRequest(
-            @PathVariable("registeredPlayerId") Long registeredPlayerId,
-            @PathVariable("recipientId") Long recipientId) {
-
-        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, recipientId);
-
-        return ResponseEntity.ok(connectionRequestResponseDTO);
-
-    }
-
-
-    // Confirm ConnectionRequest / Create Confirmed Connection
-
 
     //</editor-fold>
 
 
     //<editor-fold desc = "DELETE Mappings">
     // TODO: Remove Confirmed Connection
+
 
     // Remove Association with GhostPlayer
 
@@ -129,7 +134,7 @@ public class NetworkController {
     }
 
 
-    // Remove Confirmed Connection / Dissolve Connection Request
+    //  TODO: Remove Confirmed Connection / Dissolve Connection Request
 
 
     // Delete Sent ConnectionRequest

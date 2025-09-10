@@ -45,15 +45,28 @@ public class NetworkService {
     //<editor-fold desc = "Create Connection Request">
 
     @Transactional
-    public ConnectionRequestResponseDTO createConnectionRequest(Long registeredPlayerId, Long recipientId) {
+    public ConnectionRequestResponseDTO createConnectionRequest(Long registeredPlayerId, Long peerId) {
 
         RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(recipientId);
+        RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(peerId);
 
-        ConnectionRequest connectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
-        connectionRequestRepository.save(connectionRequest);
+        ConnectionRequest existingConnectionRequest = null;
 
-        return new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
+
+        if((connectionRequestRepository.existsBySender_IdAndRecipient_Id(registeredPlayerId, peerId) || connectionRequestRepository.existsBySender_IdAndRecipient_Id(peerId, registeredPlayerId)) )  {
+            existingConnectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, peerId, peerId, registeredPlayerId);
+        }
+
+        if(existingConnectionRequest != null && existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+            return new ConnectionRequestResponseDTO(existingConnectionRequest.getSender().getId(), existingConnectionRequest.getRecipient().getId(), existingConnectionRequest.getConnectionRequestStatus());
+        }
+
+        else {
+            ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
+            connectionRequestRepository.save(newConnectionRequest);
+            return new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
+        }
+
 
     }
 

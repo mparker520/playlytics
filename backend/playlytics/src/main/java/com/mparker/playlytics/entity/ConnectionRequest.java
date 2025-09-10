@@ -140,6 +140,14 @@ public class ConnectionRequest {
         return sender;
     }
 
-// </editor-fold>
+    public void setRecipient(RegisteredPlayer recipient) {
+        this.recipient = recipient;
+    }
+
+    public void setSender(RegisteredPlayer sender) {
+        this.sender = sender;
+    }
+
+    // </editor-fold>
 
 }

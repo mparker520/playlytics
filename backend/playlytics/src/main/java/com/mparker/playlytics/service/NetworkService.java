@@ -3,12 +3,15 @@ package com.mparker.playlytics.service;
 // Imports
 
 
+import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.entity.ConfirmedConnection;
 import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
+import com.mparker.playlytics.repository.ConfirmedConnectionRepository;
 import com.mparker.playlytics.repository.ConnectionRequestRepository;
 import com.mparker.playlytics.repository.GhostPlayerRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Service
@@ -28,12 +30,14 @@ public class NetworkService {
     private final RegisteredPlayerRepository registeredPlayerRepository;
     private final GhostPlayerRepository ghostPlayerRepository;
     private final ConnectionRequestRepository connectionRequestRepository;
+    private final ConfirmedConnectionRepository confirmedConnectionRepository;
 
 
-    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, ConnectionRequestRepository connectionRequestRepository) {
+    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, ConnectionRequestRepository connectionRequestRepository, ConfirmedConnectionRepository confirmedConnectionRepository) {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.connectionRequestRepository = connectionRequestRepository;
+        this.confirmedConnectionRepository = confirmedConnectionRepository;
     }
 
     //</editor-fold>
@@ -75,6 +79,51 @@ public class NetworkService {
         }
 
         return allPendingConnectionRequestResponses;
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Cancel Sent ConnectionRequest">
+
+    @Transactional
+    public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
+
+        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+        if(connectionRequest.getSender().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+
+            connectionRequestRepository.delete(connectionRequest);
+
+
+        }
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "View All Connections">
+
+    @Transactional(readOnly = true)
+    public Set<ConfirmedConnectionResponseDTO> getAllConnections(Long registeredPlayerId) {
+
+        Set<ConfirmedConnection> allConnections = confirmedConnectionRepository.getAllByPeerA_Id(registeredPlayerId);
+        allConnections.addAll(confirmedConnectionRepository.getAllByPeerB_Id(registeredPlayerId));
+
+        Set<ConfirmedConnectionResponseDTO> allConnectionResponses = new HashSet<>();
+
+        for (ConfirmedConnection confirmedConnection : allConnections) {
+
+            Long peerAId = confirmedConnection.getPeerA().getId();
+            Long peerBId = confirmedConnection.getPeerB().getId();
+            ConnectionRequestStatus connectionRequestStatus = confirmedConnection.getConnectionRequest().getConnectionRequestStatus();
+
+           ConfirmedConnectionResponseDTO connectionRequestResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequestStatus);
+            allConnectionResponses.add(connectionRequestResponseDTO);
+
+        }
+
+
+        return allConnectionResponses;
 
     }
 
@@ -131,21 +180,6 @@ public class NetworkService {
 
     //</editor-fold>
 
-    //<editor-fold desc = "Cancel Sent ConnectionRequest">
 
-    @Transactional
-    public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
-
-        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
-        if(connectionRequest.getSender().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
-
-            connectionRequestRepository.delete(connectionRequest);
-
-
-        }
-
-    }
-
-    //</editor-fold>
 
 }

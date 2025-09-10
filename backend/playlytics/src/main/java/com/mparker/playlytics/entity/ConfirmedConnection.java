@@ -41,7 +41,7 @@ public class ConfirmedConnection {
     @JoinColumn(name = "peer_a", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer peerAId;
+    private RegisteredPlayer peerA;
 
 
     // Maps to Registered Player
@@ -51,14 +51,14 @@ public class ConfirmedConnection {
     @JoinColumn(name = "peer_b", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
-    private RegisteredPlayer peerBId;
+    private RegisteredPlayer peerB;
 
 
     // Maps to a ConnectionRequest if ConnectionRequest Status is APPROVED
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "connection_request", nullable = false, updatable = false, unique = true)
     @NotNull
-    private ConnectionRequest connectionRequestId;
+    private ConnectionRequest connectionRequest;
 
     // </editor-fold>
 
@@ -106,16 +106,16 @@ public class ConfirmedConnection {
         return creationTimestamp;
     }
 
-    public RegisteredPlayer getPeerAId() {
-        return peerAId;
+    public RegisteredPlayer getPeerA() {
+        return peerA;
     }
 
-    public RegisteredPlayer getPeerBId() {
-        return peerBId;
+    public RegisteredPlayer getPeerB() {
+        return peerB;
     }
 
-    public ConnectionRequest getConnectionRequestId() {
-        return connectionRequestId;
+    public ConnectionRequest getConnectionRequest() {
+        return connectionRequest;
     }
 
 

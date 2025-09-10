@@ -1,6 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.entity.ConnectionRequest;
@@ -38,6 +39,15 @@ public class NetworkController {
     // Discover Networking Opportunities
 
     // GET CONFIRMED CONNECTIONS
+
+    @GetMapping("/network/{registeredPlayerId}/connections")
+    public ResponseEntity<Set<ConfirmedConnectionResponseDTO>> getAllConnections(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+
+        Set<ConfirmedConnectionResponseDTO> allConnections = networkService.getAllConnections(registeredPlayerId);
+        return ResponseEntity.ok(allConnections);
+
+    }
 
     // GET ASSOCIATIONS
 

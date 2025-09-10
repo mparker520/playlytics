@@ -97,6 +97,19 @@ public class ConnectionRequest {
 
     // </editor-fold >
 
+    //<editor-fold desc = "Constructors">
+
+    public ConnectionRequest() {
+    }
+
+    public ConnectionRequest(RegisteredPlayer sender, RegisteredPlayer recipient, ConnectionRequestStatus connectionRequestStatus) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.connectionRequestStatus = connectionRequestStatus;
+    }
+
+//</editor-fold>
+
     // <editor-fold desc="Getters and Setter">
 
     public Long getId() {

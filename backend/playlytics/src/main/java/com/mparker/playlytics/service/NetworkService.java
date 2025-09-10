@@ -42,6 +42,23 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc = "Create Connection Request">
+
+    @Transactional
+    public ConnectionRequestResponseDTO createConnectionRequest(Long registeredPlayerId, Long recipientId) {
+
+        RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(recipientId);
+
+        ConnectionRequest connectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
+        connectionRequestRepository.save(connectionRequest);
+
+        return new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = " View Sent Connection Requests">
 
     @Transactional(readOnly = true)

@@ -4,16 +4,9 @@ package com.mparker.playlytics.controller;
 import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
-import com.mparker.playlytics.entity.ConnectionRequest;
-import com.mparker.playlytics.entity.GhostPlayer;
-import com.mparker.playlytics.repository.ConnectionRequestRepository;
-import com.mparker.playlytics.service.GameInventoryService;
 import com.mparker.playlytics.service.NetworkService;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Set;
 
 
@@ -36,6 +29,7 @@ public class NetworkController {
 
     //<editor-fold desc = "GET Mappings">
 
+    // TODO:
     // Discover Networking Opportunities
 
     // GET CONFIRMED CONNECTIONS
@@ -100,7 +94,19 @@ public class NetworkController {
 
     }
 
+
     // Create ConnectionRequest
+    @PostMapping("/network/{registeredPlayerId}/send-connection-request/{recipientId}")
+    public ResponseEntity<ConnectionRequestResponseDTO> sendConnectionRequest(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("recipientId") Long recipientId) {
+
+        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, recipientId);
+
+        return ResponseEntity.ok(connectionRequestResponseDTO);
+
+    }
+
 
     // Confirm ConnectionRequest / Create Confirmed Connection
 

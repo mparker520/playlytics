@@ -64,6 +64,8 @@ public class GhostPlayer extends Player {
 
     // <editor-fold desc="Getters and Setters">
 
+
+
     public String getIdentifierEmail() {
         return identifierEmail;
     }

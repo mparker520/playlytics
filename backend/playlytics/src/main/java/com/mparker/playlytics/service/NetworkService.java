@@ -4,6 +4,7 @@ package com.mparker.playlytics.service;
 
 
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
+import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
@@ -58,6 +59,30 @@ public class NetworkService {
     }
 
     //</editor-fold>
+
+    //<editor-fold desc = " View All Associations">
+
+    @Transactional(readOnly = true)
+    public Set<GhostPlayerResponseDTO> getAllAssociations(Long registeredPlayerId) {
+
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        Set<GhostPlayer> allAssociations = registeredPlayer.getAssociations();
+
+        Set<GhostPlayerResponseDTO> allAssociationResponses = new HashSet<>();
+
+        for (GhostPlayer ghostPlayer : allAssociations) {
+
+            GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+            allAssociationResponses.add(ghostPlayerResponseDTO);
+        }
+
+        return allAssociationResponses;
+
+    }
+
+    //</editor-fold>
+
+
 
     //<editor-fold desc = "Remove Associations">
 

@@ -2,7 +2,9 @@ package com.mparker.playlytics.controller;
 
 // Imports
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
+import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.entity.ConnectionRequest;
+import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.repository.ConnectionRequestRepository;
 import com.mparker.playlytics.service.GameInventoryService;
 import com.mparker.playlytics.service.NetworkService;
@@ -38,6 +40,15 @@ public class NetworkController {
     // GET CONFIRMED CONNECTIONS
 
     // GET ASSOCIATIONS
+
+    @GetMapping("/network/{registeredPlayerId}/associations")
+    public ResponseEntity<Set<GhostPlayerResponseDTO>> getAssociations(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+
+        Set<GhostPlayerResponseDTO> allAssociations = networkService.getAllAssociations(registeredPlayerId);
+        return ResponseEntity.ok(allAssociations);
+
+    }
 
     // GET SENT CONNECTION REQUESTS
 

@@ -73,28 +73,10 @@ public class RegisteredPlayer extends Player {
         return loginEmail;
     }
 
-    public void setLoginEmail(String loginEmail) {
-        this.loginEmail = loginEmail;
-    }
-
-
-    // May Update this for Security
-    public String getPassword() {
-        return password;
-    }
-
-    // May Update this for Security
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Set<GhostPlayer> getAssociations() {
         return associations;
     }
 
-    public GhostPlayer getGhostPlayer() {
-        return ghostPlayer;
-    }
 
     // </editor-fold>
 

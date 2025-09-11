@@ -28,6 +28,9 @@ public class ConnectionRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Version
+    private Integer version;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "connection_request_status", nullable = false)
     @NotNull
@@ -117,7 +120,6 @@ public class ConnectionRequest {
         this.connectionRequestStatus = connectionRequestStatus;
     }
 
-
     public RegisteredPlayer getRecipient() {
         return recipient;
     }
@@ -126,13 +128,6 @@ public class ConnectionRequest {
         return sender;
     }
 
-    public void setRecipient(RegisteredPlayer recipient) {
-        this.recipient = recipient;
-    }
-
-    public void setSender(RegisteredPlayer sender) {
-        this.sender = sender;
-    }
 
     // </editor-fold>
 

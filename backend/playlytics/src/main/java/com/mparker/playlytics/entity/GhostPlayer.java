@@ -74,16 +74,8 @@ public class GhostPlayer extends Player {
         this.identifierEmail = identifierEmail;
     }
 
-    public GhostStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(GhostStatus status) {
         this.status = status;
-    }
-
-    public RegisteredPlayer getLinkedRegisteredPlayer() {
-        return linkedRegisteredPlayer;
     }
 
     public void setLinkedRegisteredPlayer(RegisteredPlayer linkedRegisteredPlayer) {

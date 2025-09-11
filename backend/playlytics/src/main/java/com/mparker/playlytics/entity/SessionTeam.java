@@ -98,24 +98,8 @@ public class SessionTeam {
         return id;
     }
 
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
-    }
-
     public Set<SessionParticipant> getTeamMembers() {
         return teamMembers;
-    }
-
-    public void setTeamMembers(Set<SessionParticipant> teamMembers) {
-        this.teamMembers = teamMembers;
-    }
-
-    public GamePlaySession getGamePlaySession() {
-        return gamePlaySession;
     }
 
     public void setGamePlaySession(GamePlaySession gamePlaySession) {

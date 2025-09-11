@@ -103,18 +103,6 @@ public class SessionParticipant {
         return id;
     }
 
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
-    }
-
-    public SessionTeam getSessionTeam() {
-        return sessionTeam;
-    }
-
     public void setSessionTeam(SessionTeam sessionTeam) {
         this.sessionTeam = sessionTeam;
     }

@@ -134,21 +134,8 @@ public class GamePlaySession {
         return sessionDateTime;
     }
 
-    public void setSessionDateTime(Instant sessionDateTime) {
-        this.sessionDateTime = sessionDateTime;
-    }
-
     public ScoringModel getScoringModel() {
         return scoringModel;
-    }
-
-    public void setScoringModel(ScoringModel scoringModel) {
-        this.scoringModel = scoringModel;
-    }
-
-
-    public Player getCreator() {
-        return creator;
     }
 
     public void setCreator(Player creator) {
@@ -159,25 +146,15 @@ public class GamePlaySession {
         return sessionTeams;
     }
 
-    public void setSessionTeams(Set<SessionTeam> sessionTeams) {
-        this.sessionTeams = sessionTeams;
-    }
-
     public Set<SessionParticipant> getSessionParticipants() {
         return sessionParticipants;
-    }
-
-    public void setSessionParticipants(Set<SessionParticipant> sessionParticipants) {
-        this.sessionParticipants = sessionParticipants;
     }
 
     public Game getGame() {
         return game;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
+
 
 
     // </editor-fold>

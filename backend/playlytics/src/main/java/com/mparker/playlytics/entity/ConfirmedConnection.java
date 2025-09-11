@@ -108,10 +108,10 @@ public class ConfirmedConnection {
 
     //<editor-fold desc="Getters">
 
+
     public ConfirmedConnectionId getId() {
         return id;
     }
-
 
     public RegisteredPlayer getPeerA() {
         return peerA;

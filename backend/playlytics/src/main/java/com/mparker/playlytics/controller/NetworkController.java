@@ -85,6 +85,21 @@ public class NetworkController {
     //</editor-fold>
 
 
+    //<editor-fold desc = "PATCH mappings">
+
+    @PatchMapping("/network/{registeredPlayerId}/decline-connection-request/{connectionRequestId}")
+    public ResponseEntity<Void> declineConnectionRequest(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("connectionRequestId") Long connectionRequestId
+    ) {
+
+        networkService.declineConnectionRequest(registeredPlayerId, connectionRequestId);
+        return ResponseEntity.noContent().build();
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = "POST Mappings">
 
 
@@ -131,6 +146,7 @@ public class NetworkController {
 
 
     //<editor-fold desc = "DELETE Mappings">
+
     // Remove Confirmed Connection
 
     @DeleteMapping("/network/{registeredPlayerId}/remove-connection/{peerAId}/{peerBId}")
@@ -156,7 +172,7 @@ public class NetworkController {
     }
 
 
-    //  TODO: Remove Confirmed Connection / Dissolve Connection Request
+    //  TODO: Block player and prevent from future requests sent or appearing in discovery
 
 
     // Delete Sent ConnectionRequest

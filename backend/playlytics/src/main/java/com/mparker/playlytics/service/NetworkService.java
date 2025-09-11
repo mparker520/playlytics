@@ -117,6 +117,22 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc = "Decline Connection Request">
+
+    @Transactional
+    public void declineConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
+        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+
+        if (registeredPlayerId.equals(connectionRequest.getRecipient().getId())) {
+
+            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.DECLINED);
+
+        }
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = " View Sent Connection Requests">
 
     @Transactional(readOnly = true)

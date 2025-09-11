@@ -7,6 +7,8 @@ import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -31,6 +33,7 @@ public class NetworkController {
 
     // TODO:
     // Discover Networking Opportunities
+
 
     // GET CONFIRMED CONNECTIONS
 
@@ -98,13 +101,13 @@ public class NetworkController {
     }
 
 
-    //  TODO: Confirm ConnectionRequest / Create Confirmed Connection
+    //  Confirm ConnectionRequest / Create Confirmed Connection
     @PostMapping("/network/{registeredPlayerId}/confirm-connection/{connectionRequestId}")
-    public ResponseEntity<ConfirmedConnectionResponseDTO> confirmConnection(
+    public ResponseEntity<Optional<ConfirmedConnectionResponseDTO>> confirmConnection(
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("connectionRequestId") Long connectionRequestId) {
 
-        ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = networkService.confirmConnection(registeredPlayerId, connectionRequestId);
+        Optional<ConfirmedConnectionResponseDTO> confirmedConnectionResponseDTO = networkService.confirmConnection(registeredPlayerId, connectionRequestId);
 
         return ResponseEntity.ok(confirmedConnectionResponseDTO);
 
@@ -128,8 +131,18 @@ public class NetworkController {
 
 
     //<editor-fold desc = "DELETE Mappings">
-    // TODO: Remove Confirmed Connection
+    // Remove Confirmed Connection
 
+    @DeleteMapping("/network/{registeredPlayerId}/remove-connection/{peerAId}/{peerBId}")
+    public ResponseEntity<Void> removeConnection(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("peerAId") Long peerAId,
+            @PathVariable("peerBId") Long peerBId) {
+
+        networkService.removeConnection(registeredPlayerId, peerAId, peerBId);
+        return ResponseEntity.noContent().build();
+
+    }
 
     // Remove Association with GhostPlayer
 

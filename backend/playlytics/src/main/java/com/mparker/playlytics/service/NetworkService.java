@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -72,38 +73,45 @@ public class NetworkService {
     //<editor-fold desc = "Confirm Connection">
 
     @Transactional
-    public ConfirmedConnectionResponseDTO confirmConnection(Long registeredPlayerId, Long connectionRequestId) {
+    public Optional<ConfirmedConnectionResponseDTO> confirmConnection(Long registeredPlayerId, Long connectionRequestId) {
 
         ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
 
         Long senderId = connectionRequest.getSender().getId();
         Long recipientId = connectionRequest.getRecipient().getId();
 
-        Long peerAId;
-        Long peerBId;
+        if (registeredPlayerId.equals(recipientId)) {
 
-        if (senderId < recipientId) {
-            peerAId = senderId;
-            peerBId = recipientId;
+            Long peerAId;
+            Long peerBId;
+
+            if (senderId < recipientId) {
+                peerAId = senderId;
+                peerBId = recipientId;
+            }
+            else {
+                peerAId = recipientId;
+                peerBId = senderId;
+            }
+
+            // Create Confirmed Connection
+            ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+            RegisteredPlayer peerA = registeredPlayerRepository.getReferenceById(peerAId);
+            RegisteredPlayer peerB = registeredPlayerRepository.getReferenceById(peerBId);
+            ConfirmedConnection confirmedConnection = new ConfirmedConnection(confirmedConnectionId, peerA, peerB, connectionRequest);
+
+            // Save Confirmed Connection
+            confirmedConnectionRepository.save(confirmedConnection);
+
+            // Update Status of Linked ConnectionRequest to Accepted
+            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.ACCEPTED);
+
+            ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequest.getConnectionRequestStatus());
+            return Optional.of(confirmedConnectionResponseDTO);
+
         }
-        else {
-            peerAId = recipientId;
-            peerBId = senderId;
-        }
 
-        // Create Confirmed Connection
-        ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
-        RegisteredPlayer peerA = registeredPlayerRepository.getReferenceById(peerAId);
-        RegisteredPlayer peerB = registeredPlayerRepository.getReferenceById(peerBId);
-        ConfirmedConnection confirmedConnection = new ConfirmedConnection(confirmedConnectionId, peerA, peerB, connectionRequest);
-
-        // Save Confirmed Connection
-        confirmedConnectionRepository.save(confirmedConnection);
-
-        // Update Status of Linked ConnectionRequest to Accepted
-        connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.ACCEPTED);
-
-        return new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequest.getConnectionRequestStatus());
+        return Optional.empty();
 
     }
 
@@ -191,6 +199,27 @@ public class NetworkService {
 
 
         return allConnectionResponses;
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Remove Connection">
+
+    @Transactional
+    public void removeConnection(Long registeredPlayerId, Long peerAId, Long peerBId) {
+
+        if (registeredPlayerId.equals(peerAId) || registeredPlayerId.equals(peerBId)) {
+
+            ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+            ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceById(confirmedConnectionId);
+
+            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(confirmedConnection.getConnectionRequest().getId());
+
+            confirmedConnectionRepository.delete(confirmedConnection);
+            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+
+        }
 
     }
 

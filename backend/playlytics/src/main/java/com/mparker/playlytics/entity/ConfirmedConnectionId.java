@@ -36,4 +36,16 @@ public class ConfirmedConnectionId implements Serializable {
 
     // </editor-fold>
 
+    // <editor-fold desc="Constructors">
+
+    public ConfirmedConnectionId() {
+    }
+
+    public ConfirmedConnectionId(Long registeredPlayerAId, Long registeredPlayerBId) {
+        this.registeredPlayerAId = registeredPlayerAId;
+        this.registeredPlayerBId = registeredPlayerBId;
+    }
+
+    // </editor-fold>
+
 }

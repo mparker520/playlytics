@@ -59,6 +59,8 @@ public class RegisteredPlayer extends Player {
 
     // <editor-fold desc = "Getters and Setters">
 
+
+
     public String getDisplayName() {
         return displayName;
     }

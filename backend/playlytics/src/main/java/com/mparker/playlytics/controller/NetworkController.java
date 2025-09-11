@@ -85,7 +85,7 @@ public class NetworkController {
     //<editor-fold desc = "POST Mappings">
 
 
-    // TODO: FIX Create ConnectionRequest
+    //  Create ConnectionRequest
     @PostMapping("/network/{registeredPlayerId}/send-connection-request/{peerId}")
     public ResponseEntity<ConnectionRequestResponseDTO> sendConnectionRequest(
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
@@ -99,7 +99,16 @@ public class NetworkController {
 
 
     //  TODO: Confirm ConnectionRequest / Create Confirmed Connection
+    @PostMapping("/network/{registeredPlayerId}/confirm-connection/{connectionRequestId}")
+    public ResponseEntity<ConfirmedConnectionResponseDTO> confirmConnection(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("connectionRequestId") Long connectionRequestId) {
 
+        ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = networkService.confirmConnection(registeredPlayerId, connectionRequestId);
+
+        return ResponseEntity.ok(confirmedConnectionResponseDTO);
+
+    }
 
 
 

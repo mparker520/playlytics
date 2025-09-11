@@ -6,10 +6,7 @@ package com.mparker.playlytics.service;
 import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
-import com.mparker.playlytics.entity.ConfirmedConnection;
-import com.mparker.playlytics.entity.ConnectionRequest;
-import com.mparker.playlytics.entity.GhostPlayer;
-import com.mparker.playlytics.entity.RegisteredPlayer;
+import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
 import com.mparker.playlytics.repository.ConfirmedConnectionRepository;
 import com.mparker.playlytics.repository.ConnectionRequestRepository;
@@ -67,6 +64,46 @@ public class NetworkService {
             return new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
         }
 
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Confirm Connection">
+
+    @Transactional
+    public ConfirmedConnectionResponseDTO confirmConnection(Long registeredPlayerId, Long connectionRequestId) {
+
+        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+
+        Long senderId = connectionRequest.getSender().getId();
+        Long recipientId = connectionRequest.getRecipient().getId();
+
+        Long peerAId;
+        Long peerBId;
+
+        if (senderId < recipientId) {
+            peerAId = senderId;
+            peerBId = recipientId;
+        }
+        else {
+            peerAId = recipientId;
+            peerBId = senderId;
+        }
+
+        // Create Confirmed Connection
+        ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+        RegisteredPlayer peerA = registeredPlayerRepository.getReferenceById(peerAId);
+        RegisteredPlayer peerB = registeredPlayerRepository.getReferenceById(peerBId);
+        ConfirmedConnection confirmedConnection = new ConfirmedConnection(confirmedConnectionId, peerA, peerB, connectionRequest);
+
+        // Save Confirmed Connection
+        confirmedConnectionRepository.save(confirmedConnection);
+
+        // Update Status of Linked ConnectionRequest to Accepted
+        connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.ACCEPTED);
+
+        return new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequest.getConnectionRequestStatus());
 
     }
 

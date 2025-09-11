@@ -96,6 +96,20 @@ public class ConfirmedConnection {
     // </editor-fold >
 
 
+    //<editor-fold desc = "Constructor">
+
+    public ConfirmedConnection() {
+    }
+
+    public ConfirmedConnection(ConfirmedConnectionId id, RegisteredPlayer peerA, RegisteredPlayer peerB, ConnectionRequest connectionRequest) {
+        this.id = id;
+        this.peerA = peerA;
+        this.peerB = peerB;
+        this.connectionRequest = connectionRequest;
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc="Getters">
 
     public ConfirmedConnectionId getId() {

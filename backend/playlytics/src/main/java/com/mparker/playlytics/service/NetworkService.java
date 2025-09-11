@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -236,6 +237,57 @@ public class NetworkService {
             connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
 
         }
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Get Available GhostPlayers">
+
+    @Transactional(readOnly = true)
+    public Optional<Set<GhostPlayerResponseDTO>> getUnassociatedGhostPlayerByEmail(Long registeredPlayerId, String identifierEmail) {
+
+        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail);
+        boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer);
+
+        if (isAssociate) {
+            return Optional.empty();
+        }
+        else {
+
+            GhostPlayerResponseDTO ghostPlayerResponseDTO =  new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+            Set<GhostPlayerResponseDTO> ghostPlayerResponseDTOSet = new HashSet<>();
+            ghostPlayerResponseDTOSet.add(ghostPlayerResponseDTO);
+            return Optional.of(ghostPlayerResponseDTOSet);
+
+        }
+
+
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Set<GhostPlayerResponseDTO>> getAllUnassociatedGhostPlayers(Long registeredPlayerId) {
+
+        Set<GhostPlayerResponseDTO> ghostPlayerResponseDTOSet = new HashSet<>();
+
+        List<GhostPlayer> allGhostPlayers = ghostPlayerRepository.findAll();
+        for (GhostPlayer ghostPlayer : allGhostPlayers) {
+
+            if (!registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer)) {
+
+                GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+                ghostPlayerResponseDTOSet.add(ghostPlayerResponseDTO);
+
+            }
+        }
+
+        if (ghostPlayerResponseDTOSet.isEmpty()) {
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(ghostPlayerResponseDTOSet);
+        }
+
 
     }
 

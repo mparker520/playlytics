@@ -29,6 +29,7 @@ public class ConnectionRequest {
     private Long id;
 
     @Version
+    @Column(nullable = false)
     private Integer version;
 
     @Enumerated(EnumType.STRING)

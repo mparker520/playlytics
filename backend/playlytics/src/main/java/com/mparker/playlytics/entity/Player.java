@@ -27,6 +27,7 @@ public class Player {
     private Long id;
 
     @Version
+    @Column(nullable = false)
     private Integer version;
 
     @Column(name = "first_name", nullable = false, length = 255)

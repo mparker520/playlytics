@@ -8,6 +8,7 @@ import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,7 +33,26 @@ public class NetworkController {
     //<editor-fold desc = "GET Mappings">
 
     // TODO:
-    // Discover Networking Opportunities
+    // Discover GhostPlayers
+
+    @GetMapping("/network/{registeredPlayerId}/discover-ghost-players")
+    public ResponseEntity<Optional<Set<GhostPlayerResponseDTO>>> discoverUnassociatedGhostPlayers(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @RequestParam(value = "identifierEmail", required = false) String identifierEmail){
+
+        Optional<Set<GhostPlayerResponseDTO>> availableGhostPlayers;
+
+        if(identifierEmail != null) {
+            availableGhostPlayers = networkService.getUnassociatedGhostPlayerByEmail(registeredPlayerId, identifierEmail);
+        }
+       else {
+            availableGhostPlayers = networkService.getAllUnassociatedGhostPlayers(registeredPlayerId);
+       }
+
+        return ResponseEntity.ok(availableGhostPlayers);
+
+    }
+
 
 
     // GET CONFIRMED CONNECTIONS
@@ -98,6 +118,10 @@ public class NetworkController {
 
     }
 
+
+    // TODO: BLOCK
+
+
     //</editor-fold>
 
     //<editor-fold desc = "POST Mappings">
@@ -143,7 +167,6 @@ public class NetworkController {
     }
 
     //</editor-fold>
-
 
     //<editor-fold desc = "DELETE Mappings">
 

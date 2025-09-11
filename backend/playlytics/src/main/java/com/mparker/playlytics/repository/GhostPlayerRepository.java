@@ -16,4 +16,7 @@ public interface GhostPlayerRepository extends JpaRepository<GhostPlayer, Long> 
     GhostPlayer getReferenceByLinkedRegisteredPlayer_Id(Long registeredPlayerId);
 
     Set<GhostPlayer> findAllByCreator_Id(Long creatorId);
+
+    GhostPlayer getReferenceByIdentifierEmail(String identifierEmail);
+
 }

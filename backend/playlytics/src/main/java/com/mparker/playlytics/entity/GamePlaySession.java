@@ -39,13 +39,6 @@ public class GamePlaySession {
     @NotNull
     private ScoringModel scoringModel;
 
-    @CreationTimestamp
-    @Column(name = "creation_timestamp", updatable = false)
-    private Instant creationTimestamp;
-
-    @UpdateTimestamp
-    @Column(name = "update_timestamp")
-    private Instant updateTimestamp;
 
     // </editor-fold >
 
@@ -151,15 +144,6 @@ public class GamePlaySession {
 
     public void setScoringModel(ScoringModel scoringModel) {
         this.scoringModel = scoringModel;
-    }
-
-    public Instant getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
-
-    public Instant getUpdateTimestamp() {
-        return updateTimestamp;
     }
 
 

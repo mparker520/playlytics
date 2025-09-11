@@ -22,9 +22,6 @@ public class OwnedGame {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CreationTimestamp
-    @Column(name = "creation_timestamp", nullable = false, updatable = false)
-    private Instant creationTimestamp;
 
     // </editor-fold>
 
@@ -99,9 +96,6 @@ public class OwnedGame {
         return id;
     }
 
-    public Instant getCreationTimestamp() {
-        return creationTimestamp;
-    }
 
     public RegisteredPlayer getRegisteredPlayer() {
         return registeredPlayer;

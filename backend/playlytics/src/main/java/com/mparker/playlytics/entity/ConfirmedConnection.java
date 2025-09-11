@@ -23,10 +23,6 @@ public class ConfirmedConnection {
     @EmbeddedId
     private ConfirmedConnectionId id;
 
-    @CreationTimestamp
-    @Column(name = "creation_timestamp", nullable = false, updatable = false)
-    @NotNull
-    private Instant creationTimestamp;
 
     // </editor-fold >
 
@@ -116,9 +112,6 @@ public class ConfirmedConnection {
         return id;
     }
 
-    public Instant getCreationTimestamp() {
-        return creationTimestamp;
-    }
 
     public RegisteredPlayer getPeerA() {
         return peerA;

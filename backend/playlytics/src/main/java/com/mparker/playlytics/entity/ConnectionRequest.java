@@ -33,13 +33,6 @@ public class ConnectionRequest {
     @NotNull
     private ConnectionRequestStatus connectionRequestStatus;
 
-    @CreationTimestamp
-    @Column(name = "creation_timestamp", nullable = false, updatable = false)
-    private Instant creationTimestamp;
-
-    @UpdateTimestamp
-    @Column(name = "update_timestamp")
-    private Instant updateTimestamp;
 
     // </editor-fold >
 
@@ -124,13 +117,6 @@ public class ConnectionRequest {
         this.connectionRequestStatus = connectionRequestStatus;
     }
 
-    public Instant getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
-    public Instant getUpdateTimestamp() {
-        return updateTimestamp;
-    }
 
     public RegisteredPlayer getRecipient() {
         return recipient;

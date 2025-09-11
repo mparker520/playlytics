@@ -41,13 +41,6 @@ public class Player {
     private byte[] avatar;
 
 
-    @CreationTimestamp
-    @Column(name = "creation_timestamp", updatable = false)
-    private Instant creationTimestamp;
-
-    @UpdateTimestamp
-    @Column(name = "update_timestamp")
-    private Instant updateTimestamp;
 
     // </editor-fold>
 
@@ -128,17 +121,6 @@ public class Player {
         this.avatar = avatar;
     }
 
-    public Instant getCreationTimestamp() {
-        return creationTimestamp;
-    }
-
-    public Instant getUpdateTimestamp() {
-        return updateTimestamp;
-    }
-
-    public void setUpdateTimestamp(Instant updateTimestamp) {
-        this.updateTimestamp = updateTimestamp;
-    }
 
 
     // </editor-fold>

@@ -3,13 +3,11 @@ package com.mparker.playlytics.service;
 // Imports
 
 
-import com.mparker.playlytics.dto.BlockedRelationshipResponseDTO;
-import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
-import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
-import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.*;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
 import com.mparker.playlytics.repository.*;
+import jdk.jfr.Registered;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +36,76 @@ public class NetworkService {
         this.confirmedConnectionRepository = confirmedConnectionRepository;
         this.blockedRelationshipRepository = blockedRelationshipRepository;
     }
+
+    //</editor-fold>
+
+
+    //<editor-fold desc = "Get Available Peer By Email or DisplayName">
+
+    @Transactional(readOnly = true)
+    public Optional<Set<RegisteredPlayerResponseDTO>> getAvailablePeersByFilter(Long registeredPlayerId, String filter) {
+
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter);
+
+        boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
+        boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
+
+        if (peer == null || isConnection || blockExists) {
+            return Optional.empty();
+        }
+
+        else {
+
+            Set<RegisteredPlayerResponseDTO> registeredPlayerResponseDTOSet = new HashSet<>();
+            RegisteredPlayerResponseDTO registeredPlayerResponseDTO = new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
+            registeredPlayerResponseDTOSet.add(registeredPlayerResponseDTO);
+            return Optional.of(registeredPlayerResponseDTOSet);
+
+        }
+
+
+    }
+
+    //</editor-fold>
+
+
+    //<editor-fold desc = "Get All Available Peers">
+
+    @Transactional(readOnly = true)
+    public Optional<Set<RegisteredPlayerResponseDTO>> getAllAvailablePeers(Long registeredPlayerId) {
+
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        Set<RegisteredPlayerResponseDTO> registeredPlayerResponseDTOSet = new HashSet<>();
+
+
+        List<RegisteredPlayer> allAvailableRegisteredPlayers = registeredPlayerRepository.findAll();
+
+        for (RegisteredPlayer peer : allAvailableRegisteredPlayers) {
+
+            boolean connectionExists = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
+            boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
+
+            if (!connectionExists || !blockExists) {
+
+                RegisteredPlayerResponseDTO registeredPlayerResponseDTO = new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
+                registeredPlayerResponseDTOSet.add(registeredPlayerResponseDTO);
+
+            }
+        }
+
+        if (registeredPlayerResponseDTOSet.isEmpty()) {
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(registeredPlayerResponseDTOSet);
+        }
+
+
+
+    }
+
+
 
     //</editor-fold>
 
@@ -312,9 +380,10 @@ public class NetworkService {
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail);
         boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer);
 
-        if (isAssociate) {
+        if (ghostPlayer == null || isAssociate) {
             return Optional.empty();
         }
+
         else {
 
             GhostPlayerResponseDTO ghostPlayerResponseDTO =  new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());

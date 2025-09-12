@@ -1,10 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
-import com.mparker.playlytics.dto.BlockedRelationshipResponseDTO;
-import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
-import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
-import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.*;
 import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +30,28 @@ public class NetworkController {
 
     // TODO: Discover RegisteredPlayers
 
+    @GetMapping("/network/{registeredPlayerId/discover-players")
+    public ResponseEntity<Optional<Set<RegisteredPlayerResponseDTO>>> discoverPeers(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @RequestParam(value = "filter", required = false) String filter){
+
+        Optional<Set<RegisteredPlayerResponseDTO>> availableRegisteredPlayersDTO;
+
+        if(filter != null) {
+
+            availableRegisteredPlayersDTO = networkService.getAvailablePeersByFilter(registeredPlayerId, filterl);
+
+        }
+
+        else {
+
+            availableRegisteredPlayersDTO = networkService.getAllAvailablePeers(registeredPlayerId);
+
+        }
+
+        return ResponseEntity.ok(availableRegisteredPlayersDTO);
+
+    }
 
 
 

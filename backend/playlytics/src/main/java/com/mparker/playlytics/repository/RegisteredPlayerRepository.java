@@ -13,4 +13,5 @@ public interface RegisteredPlayerRepository extends JpaRepository<RegisteredPlay
 
     boolean existsByIdAndAssociations(Long registeredPlayerId, GhostPlayer ghostPlayer);
 
+    RegisteredPlayer getReferenceByLoginEmailOrDisplayName(String filter);
 }

@@ -15,4 +15,6 @@ public interface ConfirmedConnectionRepository extends JpaRepository<ConfirmedCo
 
     Collection<? extends ConfirmedConnection> getAllByPeerB_Id(Long registeredPlayerId);
 
+    ConfirmedConnection getReferenceByConnectionRequest_Id(Long id);
+
 }

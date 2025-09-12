@@ -3,15 +3,13 @@ package com.mparker.playlytics.service;
 // Imports
 
 
+import com.mparker.playlytics.dto.BlockedRelationshipResponseDTO;
 import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
-import com.mparker.playlytics.repository.ConfirmedConnectionRepository;
-import com.mparker.playlytics.repository.ConnectionRequestRepository;
-import com.mparker.playlytics.repository.GhostPlayerRepository;
-import com.mparker.playlytics.repository.RegisteredPlayerRepository;
+import com.mparker.playlytics.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,13 +28,15 @@ public class NetworkService {
     private final GhostPlayerRepository ghostPlayerRepository;
     private final ConnectionRequestRepository connectionRequestRepository;
     private final ConfirmedConnectionRepository confirmedConnectionRepository;
+    private final BlockedRelationshipRepository blockedRelationshipRepository;
 
 
-    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, ConnectionRequestRepository connectionRequestRepository, ConfirmedConnectionRepository confirmedConnectionRepository) {
+    public NetworkService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, ConnectionRequestRepository connectionRequestRepository, ConfirmedConnectionRepository confirmedConnectionRepository, BlockedRelationshipRepository blockedRelationshipRepository) {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.connectionRequestRepository = connectionRequestRepository;
         this.confirmedConnectionRepository = confirmedConnectionRepository;
+        this.blockedRelationshipRepository = blockedRelationshipRepository;
     }
 
     //</editor-fold>
@@ -44,27 +44,39 @@ public class NetworkService {
     //<editor-fold desc = "Create Connection Request">
 
     @Transactional
-    public ConnectionRequestResponseDTO createConnectionRequest(Long registeredPlayerId, Long peerId) {
+    public Optional<ConnectionRequestResponseDTO> createConnectionRequest(Long registeredPlayerId, Long peerId) {
 
         RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(registeredPlayerId);
         RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(peerId);
 
-        ConnectionRequest existingConnectionRequest = null;
-
-
-        if((connectionRequestRepository.existsBySender_IdAndRecipient_Id(registeredPlayerId, peerId) || connectionRequestRepository.existsBySender_IdAndRecipient_Id(peerId, registeredPlayerId)) )  {
-            existingConnectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, peerId, peerId, registeredPlayerId);
-        }
-
-        if(existingConnectionRequest != null && existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
-            return new ConnectionRequestResponseDTO(existingConnectionRequest.getSender().getId(), existingConnectionRequest.getRecipient().getId(), existingConnectionRequest.getConnectionRequestStatus());
+        if (blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(sender, recipient, recipient, sender)) {
+            return Optional.empty();
         }
 
         else {
-            ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
-            connectionRequestRepository.save(newConnectionRequest);
-            return new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
+            ConnectionRequest existingConnectionRequest = null;
+
+
+            if((connectionRequestRepository.existsBySender_IdAndRecipient_Id(registeredPlayerId, peerId) || connectionRequestRepository.existsBySender_IdAndRecipient_Id(peerId, registeredPlayerId)) )  {
+                existingConnectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, peerId, peerId, registeredPlayerId);
+            }
+
+            if(existingConnectionRequest != null && existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(existingConnectionRequest.getSender().getId(), existingConnectionRequest.getRecipient().getId(), existingConnectionRequest.getConnectionRequestStatus());
+                return Optional.of(connectionRequestResponseDTO);
+            }
+
+            else {
+                ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
+                connectionRequestRepository.save(newConnectionRequest);
+
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
+                return Optional.of(connectionRequestResponseDTO);
+
+            }
         }
+
+
 
 
     }
@@ -129,6 +141,39 @@ public class NetworkService {
             connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.DECLINED);
 
         }
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Block Player">
+    @Transactional
+    public BlockedRelationshipResponseDTO blockRegisteredPlayer(Long registeredPlayerId, Long blockedPlayerId) {
+
+        // Change existing Requests to BLOCKED
+        if (connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId)){
+
+            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId);
+
+            if (connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
+
+                ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceByConnectionRequest_Id(connectionRequest.getId());
+                confirmedConnectionRepository.delete(confirmedConnection);
+
+            }
+
+            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.BLOCKED);
+
+        }
+
+        // Create Blocked Entity
+        RegisteredPlayer blocker = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        RegisteredPlayer blocked = registeredPlayerRepository.getReferenceById(blockedPlayerId);
+        BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(registeredPlayerId, blockedPlayerId);
+        BlockedRelationship blockedRelationship = new BlockedRelationship(blockedRelationshipId, blocker, blocked);
+        blockedRelationshipRepository.save(blockedRelationship);
+
+        return new BlockedRelationshipResponseDTO(registeredPlayerId, blockedPlayerId, true);
 
     }
 

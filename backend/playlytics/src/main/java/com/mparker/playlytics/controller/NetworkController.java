@@ -1,6 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.BlockedRelationshipResponseDTO;
 import com.mparker.playlytics.dto.ConfirmedConnectionResponseDTO;
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
@@ -32,7 +33,11 @@ public class NetworkController {
 
     //<editor-fold desc = "GET Mappings">
 
-    // TODO:
+    // TODO: Discover RegisteredPlayers
+
+
+
+
     // Discover GhostPlayers
 
     @GetMapping("/network/{registeredPlayerId}/discover-ghost-players")
@@ -104,7 +109,6 @@ public class NetworkController {
 
     //</editor-fold>
 
-
     //<editor-fold desc = "PATCH mappings">
 
     @PatchMapping("/network/{registeredPlayerId}/decline-connection-request/{connectionRequestId}")
@@ -119,7 +123,17 @@ public class NetworkController {
     }
 
 
-    // TODO: BLOCK
+    // BLOCK Player
+    @PostMapping("/network/{registeredPlayerId}/block-registered-player/{blockedPlayerId}")
+    public ResponseEntity<BlockedRelationshipResponseDTO> blockRegisteredPlayer(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("blockedPlayerId") Long blockedPlayerId) {
+
+        BlockedRelationshipResponseDTO blockedRelationshipResponseDTO = networkService.blockRegisteredPlayer(registeredPlayerId, blockedPlayerId);
+        return ResponseEntity.ok(blockedRelationshipResponseDTO);
+
+    }
+
 
 
     //</editor-fold>
@@ -129,11 +143,11 @@ public class NetworkController {
 
     //  Create ConnectionRequest
     @PostMapping("/network/{registeredPlayerId}/send-connection-request/{peerId}")
-    public ResponseEntity<ConnectionRequestResponseDTO> sendConnectionRequest(
+    public ResponseEntity<Optional<ConnectionRequestResponseDTO>> sendConnectionRequest(
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("peerId") Long peerId) {
 
-        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, peerId);
+        Optional<ConnectionRequestResponseDTO> connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, peerId);
 
         return ResponseEntity.ok(connectionRequestResponseDTO);
 
@@ -194,8 +208,6 @@ public class NetworkController {
         return ResponseEntity.noContent().build();
     }
 
-
-    //  TODO: Block player and prevent from future requests sent or appearing in discovery
 
 
     // Delete Sent ConnectionRequest

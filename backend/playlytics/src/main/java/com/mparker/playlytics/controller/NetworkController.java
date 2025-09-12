@@ -8,8 +8,6 @@ import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -222,6 +220,19 @@ public class NetworkController {
         return ResponseEntity.noContent().build();
 
     }
+
+    // Remove Block
+    @DeleteMapping("/network/{registeredPlayerId}/remove-blocked-relationship/{blockerId}/{blockedId}")
+    public ResponseEntity<Void> removeBlock(
+            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @PathVariable("blockerId") Long blockerId,
+            @PathVariable("blockedId") Long blockedId){
+
+        networkService.removeBlock(registeredPlayerId, blockerId, blockedId);
+        return ResponseEntity.noContent().build();
+
+    }
+
 
     //</editor-fold>
 

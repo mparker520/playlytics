@@ -179,6 +179,23 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc = "Remove Block">
+
+    @Transactional
+    public void removeBlock(Long registeredPlayerId, Long blockerId, Long blockedId) {
+
+        BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(blockerId, blockedId);
+        BlockedRelationship blockedRelationship = blockedRelationshipRepository.getReferenceById(blockedRelationshipId);
+
+        if (registeredPlayerId.equals(blockerId)) {
+            blockedRelationshipRepository.delete(blockedRelationship);
+        }
+
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = " View Sent Connection Requests">
 
     @Transactional(readOnly = true)

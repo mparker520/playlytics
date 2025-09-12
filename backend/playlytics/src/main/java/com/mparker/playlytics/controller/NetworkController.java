@@ -30,7 +30,7 @@ public class NetworkController {
 
     // TODO: Discover RegisteredPlayers
 
-    @GetMapping("/network/{registeredPlayerId/discover-players")
+    @GetMapping("/network/{registeredPlayerId}/discover-players")
     public ResponseEntity<Optional<Set<RegisteredPlayerResponseDTO>>> discoverPeers(
             @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "filter", required = false) String filter){
@@ -39,7 +39,7 @@ public class NetworkController {
 
         if(filter != null) {
 
-            availableRegisteredPlayersDTO = networkService.getAvailablePeersByFilter(registeredPlayerId, filterl);
+            availableRegisteredPlayersDTO = networkService.getAvailablePeersByFilter(registeredPlayerId, filter);
 
         }
 

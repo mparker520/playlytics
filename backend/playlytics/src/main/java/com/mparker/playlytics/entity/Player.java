@@ -66,6 +66,9 @@ public class Player {
         // If same in memory, equal is true
         if (this == o) return true;
 
+        // If Object is null, equal is false
+        if (o == null) return false;
+
         // If the instances of this and object are not equal, false
         if (!(o instanceof Player that)) return false;
 

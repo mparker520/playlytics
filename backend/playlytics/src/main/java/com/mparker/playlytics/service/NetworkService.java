@@ -11,10 +11,7 @@ import jdk.jfr.Registered;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class NetworkService {
@@ -46,12 +43,12 @@ public class NetworkService {
     public Optional<Set<RegisteredPlayerResponseDTO>> getAvailablePeersByFilter(Long registeredPlayerId, String filter) {
 
         RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter);
+        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter, filter);
 
         boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
         boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
 
-        if (peer == null || isConnection || blockExists) {
+        if (peer == null || isConnection || blockExists || Objects.equals(registeredPlayer.getId(), peer.getId())) {
             return Optional.empty();
         }
 
@@ -79,14 +76,14 @@ public class NetworkService {
         Set<RegisteredPlayerResponseDTO> registeredPlayerResponseDTOSet = new HashSet<>();
 
 
-        List<RegisteredPlayer> allAvailableRegisteredPlayers = registeredPlayerRepository.findAll();
+        List<RegisteredPlayer> allAvailableRegisteredPlayers = registeredPlayerRepository.findAllByIdNot(registeredPlayerId);
 
         for (RegisteredPlayer peer : allAvailableRegisteredPlayers) {
 
             boolean connectionExists = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
             boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
 
-            if (!connectionExists || !blockExists) {
+            if (!connectionExists && !blockExists) {
 
                 RegisteredPlayerResponseDTO registeredPlayerResponseDTO = new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
                 registeredPlayerResponseDTOSet.add(registeredPlayerResponseDTO);

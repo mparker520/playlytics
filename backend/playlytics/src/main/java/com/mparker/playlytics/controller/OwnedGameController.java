@@ -2,7 +2,6 @@ package com.mparker.playlytics.controller;
 
 // Imports
 import com.mparker.playlytics.dto.OwnedGameResponseDTO;
-import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GameInventoryService;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 
@@ -34,7 +31,7 @@ public class OwnedGameController {
     public ResponseEntity<List<OwnedGameResponseDTO>> getOwnedGames(
             @AuthenticationPrincipal CustomUserDetails principal,
             @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
-            @RequestParam(value = "gameTitle", required = false) String gameTitle) throws AccessDeniedException {
+            @RequestParam(value = "gameTitle", required = false) String gameTitle)  {
 
         if (gameTitle == null) {
             List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(registeredPlayerId, principal.getAuthenticatedUserId());
@@ -42,7 +39,7 @@ public class OwnedGameController {
         }
 
         else {
-            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(registeredPlayerId, gameTitle);
+            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(registeredPlayerId, gameTitle, principal.getAuthenticatedUserId());
             return ResponseEntity.ok(ownedGamesByName);
         }
 
@@ -52,12 +49,13 @@ public class OwnedGameController {
 
     //<editor-fold desc = "POST Mapping">
 
-
+    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
     @PostMapping("/registered-players/{registeredPlayerId}/owned-games/{gameId}")
     public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
-            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("gameId") Long gameId)  {
-        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registeredPlayerId, gameId);
+        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registeredPlayerId, gameId, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(ownedGameResponseDTO);
 
     }
@@ -65,12 +63,13 @@ public class OwnedGameController {
     //</editor-fold>
 
     //<editor-fold desc = "DELETE Mappings">
-
+    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
     @DeleteMapping("/registered-players/{registeredPlayerId}/owned-games/{ownedGameId}")
     public ResponseEntity<Void> deleteOwnedGame(
-            @PathVariable ("registeredPlayerId") Long registeredPlayerId,
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @P("registeredPlayerId") @PathVariable ("registeredPlayerId") Long registeredPlayerId,
             @PathVariable ("ownedGameId") Long ownedGameId) {
-        gameInventoryService.deleteByIdAndPlayerId(ownedGameId, registeredPlayerId);
+        gameInventoryService.deleteByIdAndPlayerId(registeredPlayerId, ownedGameId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
     }
 

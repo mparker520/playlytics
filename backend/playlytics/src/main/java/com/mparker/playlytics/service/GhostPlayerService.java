@@ -112,26 +112,6 @@ public class GhostPlayerService {
 
     //</editor-fold>
 
-   /* // <editor-fold desc = "Lookup GhostPlayer">
-
-    @Transactional(readOnly = true)
-    public GhostPlayerResponseDTO findByIdentifierEmail(String identifierEmail) throws NotFoundException {
-
-        String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(identifierEmailNormalized);
-
-        if(ghostPlayer != null) {
-            return createGhostPlayerResponseDTO(ghostPlayer);
-        }
-
-        else {
-            throw new NotFoundException("No Ghost Player by identifierEmail: " + identifierEmail  + " found.");
-        }
-
-    }
-
-    //</editor-fold> */
-
     //<editor-fold desc = "Update GhostPlayer">
 
     @Transactional

@@ -39,17 +39,6 @@ public class GhostPlayerController {
     }
     //</editor-fold>
 
-   /* //<editor-fold desc = "GET Mapping">
-
-    @GetMapping("/ghost-players/{identifierEmail}")
-    public ResponseEntity<GhostPlayerResponseDTO> getGhostPlayer(
-            @PathVariable ("identifierEmail") String identifierEmail) {
-        GhostPlayerResponseDTO  ghostPlayerResponseDTO = ghostPlayerService.findByIdentifierEmail(identifierEmail);
-        return ResponseEntity.ok(ghostPlayerResponseDTO);
-    }
-
-    //</editor-fold> */
-
     //<editor-fold desc = "PATCH Mapping">
 
     @PatchMapping("/ghost-players/{ghostPlayerId}")
@@ -64,8 +53,5 @@ public class GhostPlayerController {
     }
 
     //</editor-fold>
-
-
-
 
 }

@@ -7,10 +7,14 @@ import com.mparker.playlytics.dto.GhostPlayerUpdateDTO;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.enums.GhostStatus;
+import com.mparker.playlytics.exception.CustomAccessDeniedException;
+import com.mparker.playlytics.exception.ExistingResourceException;
 import com.mparker.playlytics.repository.GhostPlayerRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 
 @Service
@@ -29,86 +33,115 @@ public class GhostPlayerService {
 
     //</editor-fold>
 
-    //<editor-fold desc = "GhostPlayer Helper Methods">
-
-    private GhostPlayerResponseDTO createGhostPlayerResponseDTO(GhostPlayer ghostPlayer) {
-
-        String firstName = ghostPlayer.getFirstName();
-        String lastName = ghostPlayer.getLastName();
-        byte[] avatar = ghostPlayer.getAvatar();
-        String identifierEmail = ghostPlayer.getIdentifierEmail();
-        Long creatorId = ghostPlayer.getCreator().getId();
-
-
-        return new GhostPlayerResponseDTO(firstName, lastName, avatar, identifierEmail, creatorId);
-
-    }
-
-    //</editor-fold>
-
     // <editor-fold desc = "Create GhostPlayer">
 
     // Create GhostPlayer (Method for RegisteredPlayer to create GhostPlayer from Scratch)
     @Transactional()
-    public GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO) {
-
-        // Initialize Fields from DTO
-        String firstName = ghostPlayerDTO.firstName();
-        String lastName = ghostPlayerDTO.lastName();
-        byte[] avatar = ghostPlayerDTO.avatar();
+    public GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO, Long authUserId) throws ExistingResourceException, CustomAccessDeniedException {
 
         String identifierEmail = ghostPlayerDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase();
-        GhostStatus status = GhostStatus.NEW;
 
-        Long registeredPlayerId = ghostPlayerDTO.registeredPlayerId();
-        RegisteredPlayer registeredPlayer;
-
-        if (registeredPlayerId != null) {
-            registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        if (ghostPlayerRepository.existsByIdentifierEmail(identifierEmail)) {
+            throw new ExistingResourceException("Ghost player with email " + identifierEmail + "already exists");
         }
+
+        else if (registeredPlayerRepository.existsByLoginEmail(identifierEmail)) {
+            throw new ExistingResourceException("Registered player with email " + identifierEmail + "already exists.  Please send Connection Request");
+        }
+
         else {
-            registeredPlayer = null;
+
+            Long linkedRegisteredPlayerId = ghostPlayerDTO.linkedRegisteredPlayerId();
+
+            if(linkedRegisteredPlayerId == null) {
+
+                // Initialize Fields from DTO
+
+                Long creatorId = ghostPlayerDTO.creatorId();
+
+                if(Objects.equals(creatorId, authUserId)) {
+
+                    RegisteredPlayer creator;
+                    if (creatorId != null) {
+                        creator = registeredPlayerRepository.getReferenceById(creatorId);
+                    }
+                    else {
+                        creator = null;
+                    }
+
+
+                    String firstName = ghostPlayerDTO.firstName();
+                    String lastName = ghostPlayerDTO.lastName();
+                    byte[] avatar = ghostPlayerDTO.avatar();
+                    GhostStatus status = GhostStatus.NEW;
+
+
+                    // Create GhostPlayer
+                    GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, identifierEmail, status, null, creator);
+
+                    // Save GhostPlayer
+                    ghostPlayerRepository.save(ghostPlayer);
+
+                    // Add Association to Creator
+                    if (creator != null) {
+                        creator.getAssociations().add(ghostPlayer);
+                        registeredPlayerRepository.save(creator);
+                    }
+
+                    // Return GhostPlayerDTO
+                    return createGhostPlayerResponseDTO(ghostPlayer);
+
+                }
+                else {
+                    throw new CustomAccessDeniedException("You Do Not Have Permission to Create Ghost Player on Behalf of Another User");
+                }
+
+            }
+
+            else {
+
+                throw new ExistingResourceException("A New Ghost Player Cannot  Be Created That Has an Existing Registered Player");
+
+            }
+
         }
 
-        Long creatorId = ghostPlayerDTO.creatorId();
-        RegisteredPlayer creator;
-        if (creatorId != null) {
-            creator = registeredPlayerRepository.getReferenceById(creatorId);
-        }
-        else {
-            creator = null;
-        }
-
-        // Create GhostPlayer
-        GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, identifierEmail, status, registeredPlayer, creator);
-
-        // Save GhostPlayer
-        ghostPlayerRepository.save(ghostPlayer);
-
-        // Add Association to Creator
-        if (creator != null) {
-            creator.getAssociations().add(ghostPlayer);
-            registeredPlayerRepository.save(creator);
-        }
-
-        // Return GhostPlayerDTO
-        return createGhostPlayerResponseDTO(ghostPlayer);
 
     }
 
 
     //</editor-fold>
 
+   /* // <editor-fold desc = "Lookup GhostPlayer">
+
+    @Transactional(readOnly = true)
+    public GhostPlayerResponseDTO findByIdentifierEmail(String identifierEmail) throws NotFoundException {
+
+        String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(identifierEmailNormalized);
+
+        if(ghostPlayer != null) {
+            return createGhostPlayerResponseDTO(ghostPlayer);
+        }
+
+        else {
+            throw new NotFoundException("No Ghost Player by identifierEmail: " + identifierEmail  + " found.");
+        }
+
+    }
+
+    //</editor-fold> */
+
     //<editor-fold desc = "Update GhostPlayer">
 
     @Transactional
-    public GhostPlayerResponseDTO updateGhostPlayer(Long ghostPlayerId, Long currentPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+    public GhostPlayerResponseDTO updateGhostPlayer(Long ghostPlayerId, GhostPlayerUpdateDTO ghostPlayerUpdateDTO, Long authUserId) throws CustomAccessDeniedException {
 
         // Retrieve GhostPlayer from GhostPlayerRepository
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
 
         // If Current Player is Creator of GhostPlayer, Allow for Update
-        if (ghostPlayer.getCreator().getId().equals(currentPlayerId)) {
+        if (ghostPlayer.getCreator().getId().equals(authUserId) && !ghostPlayer.getStatus().equals(GhostStatus.UPGRADED)) {
 
             if (ghostPlayerUpdateDTO.firstName() != null) {
                 ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName());
@@ -126,34 +159,32 @@ public class GhostPlayerService {
                 ghostPlayer.setIdentifierEmail(ghostPlayerUpdateDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase());
             }
 
-            if (ghostPlayerUpdateDTO.status() != null) {
-                ghostPlayer.setStatus(ghostPlayerUpdateDTO.status());
-            }
-
-            if (ghostPlayerUpdateDTO.registeredPlayerId() != null) {
-                ghostPlayer.setLinkedRegisteredPlayer(registeredPlayerRepository.getReferenceById(ghostPlayerUpdateDTO.registeredPlayerId()));
-            }
-
-            ghostPlayerRepository.save(ghostPlayer);
-
+            return createGhostPlayerResponseDTO(ghostPlayer);
 
         }
 
-        return createGhostPlayerResponseDTO(ghostPlayer);
+        else {
+            throw new CustomAccessDeniedException("You Do Not Have Permission to Update This Ghost Player");
+        }
+
+
 
     }
 
     //</editor-fold>
 
-    // <editor-fold desc = "Lookup GhostPlayer">
+    //<editor-fold desc = "GhostPlayer Helper Methods">
 
-    @Transactional(readOnly = true)
-    public GhostPlayerResponseDTO findByIdentifierEmail(String identifierEmail) {
+    private GhostPlayerResponseDTO createGhostPlayerResponseDTO(GhostPlayer ghostPlayer) {
 
-        String identifierEmailNormalized = identifierEmail.replaceAll("\\s+", "").toLowerCase();
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(identifierEmailNormalized);
+        String firstName = ghostPlayer.getFirstName();
+        String lastName = ghostPlayer.getLastName();
+        byte[] avatar = ghostPlayer.getAvatar();
+        String identifierEmail = ghostPlayer.getIdentifierEmail();
+        Long creatorId = ghostPlayer.getCreator().getId();
 
-        return createGhostPlayerResponseDTO(ghostPlayer);
+
+        return new GhostPlayerResponseDTO(firstName, lastName, avatar, identifierEmail, creatorId);
 
     }
 

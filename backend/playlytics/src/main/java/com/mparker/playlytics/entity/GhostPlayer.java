@@ -50,13 +50,13 @@ public class GhostPlayer extends Player {
     public GhostPlayer() {
     }
 
-    public GhostPlayer(String firstName, String lastName, byte[] avatar, String identifierEmail, GhostStatus status, RegisteredPlayer registeredPlayer, RegisteredPlayer creator) {
+    public GhostPlayer(String firstName, String lastName, byte[] avatar, String identifierEmail, GhostStatus status, RegisteredPlayer linkedRegisteredPlayer, RegisteredPlayer creator) {
 
         super(firstName, lastName, avatar);
 
         this.identifierEmail = identifierEmail;
         this.status = status;
-        this.linkedRegisteredPlayer = registeredPlayer;
+        this.linkedRegisteredPlayer = linkedRegisteredPlayer;
         this.creator = creator;
     }
 
@@ -76,6 +76,10 @@ public class GhostPlayer extends Player {
 
     public void setStatus(GhostStatus status) {
         this.status = status;
+    }
+
+    public GhostStatus getStatus() {
+        return status;
     }
 
     public void setLinkedRegisteredPlayer(RegisteredPlayer linkedRegisteredPlayer) {

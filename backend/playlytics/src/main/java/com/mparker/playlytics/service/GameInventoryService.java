@@ -10,6 +10,9 @@ import com.mparker.playlytics.repository.OwnedGameRepository;
 import com.mparker.playlytics.repository.RegisteredPlayerRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+
+import java.nio.channels.AcceptPendingException;
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,11 +87,21 @@ public class GameInventoryService {
 
     // Returns all RegisteredPlayer's OwnedGames
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long registeredPlayerId) {
+    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long registeredPlayerId, Long authUserId) throws AccessDeniedException {
 
-        List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(registeredPlayerId);
+        if(!registeredPlayerId.equals(authUserId)) {
+            throw new AccessDeniedException("Forbidden");
+        }
 
-        return getOwnedGamesDTOList(ownedGamesList);
+        else {
+
+            List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(registeredPlayerId);
+
+            return getOwnedGamesDTOList(ownedGamesList);
+
+        }
+
+
 
     }
 

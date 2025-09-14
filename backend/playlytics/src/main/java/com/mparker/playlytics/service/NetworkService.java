@@ -43,7 +43,7 @@ public class NetworkService {
     public Optional<Set<RegisteredPlayerResponseDTO>> getAvailablePeersByFilter(Long registeredPlayerId, String filter) {
 
         RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter, filter);
+        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter.replaceAll("\\s+", "").toLowerCase(), filter);
 
         boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
         boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
@@ -374,7 +374,7 @@ public class NetworkService {
     @Transactional(readOnly = true)
     public Optional<Set<GhostPlayerResponseDTO>> getUnassociatedGhostPlayerByEmail(Long registeredPlayerId, String identifierEmail) {
 
-        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail);
+        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail.replaceAll("\\s+", "").toLowerCase());
         boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer);
 
         if (ghostPlayer == null || isAssociate) {

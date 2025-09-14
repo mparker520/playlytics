@@ -77,6 +77,9 @@ public class RegisteredPlayer extends Player {
         return associations;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
     // </editor-fold>
 

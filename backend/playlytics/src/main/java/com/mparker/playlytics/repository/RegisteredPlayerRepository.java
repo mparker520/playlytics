@@ -15,4 +15,9 @@ public interface RegisteredPlayerRepository extends JpaRepository<RegisteredPlay
     List<RegisteredPlayer> findAllByIdNot(Long id);
 
     RegisteredPlayer getReferenceByLoginEmailOrDisplayName(String loginEmail, String displayName);
+
+    boolean existsByLoginEmail(String username);
+
+    RegisteredPlayer getReferenceByLoginEmail(String username);
+
 }

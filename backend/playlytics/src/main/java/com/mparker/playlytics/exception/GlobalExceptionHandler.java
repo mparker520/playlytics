@@ -45,4 +45,12 @@ public class GlobalExceptionHandler {
 
     }
 
+    @ExceptionHandler(SessionParticipantTeamMismatchException.class)
+    public ResponseEntity<ExceptionDetailDTO> handleSessionParticipantTeamMismatchException(SessionParticipantTeamMismatchException ex) {
+
+        ExceptionDetailDTO exceptionDetail = new ExceptionDetailDTO("SESSION_PARTICIPANTS__TEAM_MISMATCH", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDetail);
+
+    }
+
 }

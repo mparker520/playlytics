@@ -7,6 +7,9 @@ import com.mparker.playlytics.dto.SessionParticipantDTO;
 import com.mparker.playlytics.dto.SessionTeamDTO;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ScoringModel;
+import com.mparker.playlytics.exception.CustomAccessDeniedException;
+import com.mparker.playlytics.exception.NotFoundException;
+import com.mparker.playlytics.exception.SessionParticipantTeamMismatchException;
 import com.mparker.playlytics.repository.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
@@ -25,12 +28,18 @@ public class GamePlaySessionService {
     private final SessionParticipantRepository sessionParticipantRepository;
     private final PlayerRepository playerRepository;
     private final GameRepository gameRepository;
+    private final RegisteredPlayerRepository registeredPlayerRepository;
+    private final ConfirmedConnectionRepository confirmedConnectionRepository;
+    private final GhostPlayerRepository ghostPlayerRepository;
 
-    public GamePlaySessionService(final GamePlaySessionRepository gamePlaySessionRepository, final SessionParticipantRepository sessionParticipantRepository, final PlayerRepository playerRepository, final GameRepository gameRepository) {
+    public GamePlaySessionService(final GamePlaySessionRepository gamePlaySessionRepository, final SessionParticipantRepository sessionParticipantRepository, final PlayerRepository playerRepository, final GameRepository gameRepository, RegisteredPlayerRepository registeredPlayerRepository, ConfirmedConnectionRepository confirmedConnectionRepository, GhostPlayerRepository ghostPlayerRepository) {
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
         this.playerRepository = playerRepository;
         this.gameRepository = gameRepository;
+        this.registeredPlayerRepository = registeredPlayerRepository;
+        this.confirmedConnectionRepository = confirmedConnectionRepository;
+        this.ghostPlayerRepository = ghostPlayerRepository;
     }
 
 
@@ -40,13 +49,13 @@ public class GamePlaySessionService {
 
     // Assemble GamePlaySession
     @Transactional
-    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO) {
+    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) {
 
         // Create GamePlaySession
-        GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO);
+        GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO, authUserId);
 
         // Create SessionParticipants from sessionParticipantDTO Set
-        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet());
+        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet(), authUserId);
 
         // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
         if (gamePlaySession.getScoringModel() == ScoringModel.TEAM && gamePlaySessionDTO.sessionTeamDTOSet().size() > 1) {
@@ -73,58 +82,252 @@ public class GamePlaySessionService {
 
     //</editor-fold>
 
+    // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
+
+    // <editor-fold desc = "Lookup GamePlaySession">
+
+
+    // List of all GamePlaySessions for a RegisteredPlayer
+    @Transactional (readOnly = true)
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long registeredPlayerId, Long authUserId) throws CustomAccessDeniedException{
+
+        if(registeredPlayerId.equals(authUserId)) {
+
+            Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+
+            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
+            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+            }
+
+            return gamePlaySessionResponseDTOSet;
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have authorization to view Game Play Sessions in which you did not participate.");
+        }
+
+    }
+
+    // List of all GamePlaySessions for a RegisteredPlayer by Game Title
+    @Transactional (readOnly = true)
+    public Set<GamePlaySessionResponseDTO> findAllByPlayerIdAndGameName(Long registeredPlayerId, String gameTitle, Long authUserId) throws CustomAccessDeniedException, NotFoundException{
+
+        if (registeredPlayerId.equals(authUserId)) {
+
+            Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
+
+            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+                String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
+                if (gamePlaySessionName.equals(gameTitle)) {
+                    gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+                }
+            }
+
+            if (!gamePlaySessionResponseDTOSet.isEmpty()) {
+                return gamePlaySessionResponseDTOSet;
+            }
+
+            else {
+                throw new NotFoundException("No Game Play Sessions found for given Game Title.");
+            }
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have authorization to view Game Play Sessions in which you did not participate.");
+        }
+
+
+    }
+
+    // List of all GamePlaySessions for a RegisteredPlayer by Date
+    // TODO: Fix time conversion
+    @Transactional (readOnly = true)
+    public Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
+
+        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
+        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+            Instant gamePlaySessionDateTime = gamePlaySession.getSessionDateTime();
+
+            if (gamePlaySessionDateTime.equals(sessionDateTime)) {
+                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+            }
+        }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
+
+
+
+    //</editor-fold>
+
+    // <editor-fold desc = "Delete GamePlaySession">
+
+    // Delete Game by Checking that Current User was a SessionParticipant in the GamePlaySession
+    @Transactional
+    public void deleteByIdAndPlayerId(Long sessionId, Long authUserId) throws CustomAccessDeniedException {
+
+            boolean authUserIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(sessionId, authUserId);
+
+            if(authUserIsParticipant) {
+                gamePlaySessionRepository.deleteById(sessionId);
+            }
+
+            else {
+                throw new CustomAccessDeniedException("You do not have permission to delete this Game Play Session Because You were Not a Participant");
+            }
+
+    }
+
+
+    //</editor-fold>
+
     // <editor-fold desc = "Helper Methods for Assembling a GamePlaySession">
 
     // Create GamePlaySession Helper Method
-    private GamePlaySession createGpSession(GamePlaySessionDTO gamePlaySessionDTO) {
+    private GamePlaySession createGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        Instant sessionDateTime = gamePlaySessionDTO.sessionDateTime();
-        ScoringModel scoringModel = gamePlaySessionDTO.scoringModel();
         Long creatorId = gamePlaySessionDTO.creatorId();
-        Long gameId = gamePlaySessionDTO.gameId();
-        Player creator = playerRepository.getReferenceById(creatorId);
-        Game game = gameRepository.getReferenceById(gameId);
-        return new GamePlaySession(sessionDateTime, scoringModel, creator, game);
+
+        if(creatorId.equals(authUserId)) {
+
+            Long gameId = gamePlaySessionDTO.gameId();
+
+            if (gameRepository.existsById(gameId)) {
+
+                Instant sessionDateTime = gamePlaySessionDTO.sessionDateTime();
+                ScoringModel scoringModel = gamePlaySessionDTO.scoringModel();
+                Player creator = playerRepository.getReferenceById(creatorId);
+                Game game = gameRepository.getReferenceById(gameId);
+
+                return new GamePlaySession(sessionDateTime, scoringModel, creator, game);
+
+            }
+
+            else {
+                throw new NotFoundException("Board Game Not Found.");
+            }
+
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("You are not authorized to create a Game Play Session on another user's behalf");
+        }
+
 
     }
 
     // Create SessionParticipants Helper Method
-    private Set<SessionParticipant> createSessionParticipantsSet(Set<SessionParticipantDTO> sessionParticipantsDTOSet) {
+    private Set<SessionParticipant> createSessionParticipantsSet(Set<SessionParticipantDTO> sessionParticipantsDTOSet, Long authUserId) throws CustomAccessDeniedException, SessionParticipantTeamMismatchException {
+
         Set<SessionParticipant> sessionParticipantsSet = new HashSet<>();
 
-        for (SessionParticipantDTO sessionParticipantDTO : sessionParticipantsDTOSet) {
-            int result = sessionParticipantDTO.result();
-            Long playerId = sessionParticipantDTO.playerId();
-            Player player = playerRepository.getReferenceById(playerId);
+        RegisteredPlayer authorizedUser = registeredPlayerRepository.getReferenceById(authUserId);
 
-            SessionParticipant sessionParticipant = new SessionParticipant(result, player);
-            sessionParticipantsSet.add(sessionParticipant);
+        boolean authorizedIsParticipant = sessionParticipantsDTOSet.stream().anyMatch(sessionParticipantDTO -> sessionParticipantDTO.playerId().equals(authorizedUser.getId()));
+
+        if (authorizedIsParticipant) {
+
+            for (SessionParticipantDTO sessionParticipantDTO : sessionParticipantsDTOSet) {
+
+                Long peerId = sessionParticipantDTO.playerId();
+
+
+                if (playerRepository.existsById(peerId)) {
+
+                    int result = sessionParticipantDTO.result();
+                    Player peer = playerRepository.getReferenceById(peerId);
+
+
+                    if(peer.getClass().equals(RegisteredPlayer.class)) {
+
+                        RegisteredPlayer registeredPeer = (RegisteredPlayer) peer;
+
+                        if (confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(authorizedUser, registeredPeer, registeredPeer, authorizedUser)) {
+                            SessionParticipant sessionParticipant = new SessionParticipant(result, registeredPeer);
+                            sessionParticipantsSet.add(sessionParticipant);
+                        }
+
+                        else {
+                            throw new CustomAccessDeniedException("You are not a connection with one of the listed Session Participants.");
+                        }
+
+                    }
+
+                    else {
+
+                        if(authorizedUser.getAssociations().contains(ghostPlayerRepository.getReferenceById(peerId))) {
+                            SessionParticipant sessionParticipant = new SessionParticipant(result, peer);
+                            sessionParticipantsSet.add(sessionParticipant);
+                        }
+
+                        else {
+                            throw new CustomAccessDeniedException("You are not associated with one of the listed Session Participants.");
+                        }
+
+                    }
+
+
+                }
+
+                else {
+                    throw new NotFoundException("No Player Found");
+                }
+
+            }
+
+            return sessionParticipantsSet;
+
+
         }
 
-        return sessionParticipantsSet;
+        else {
+
+            throw new SessionParticipantTeamMismatchException("You must be a Session Participant in the Game Play Session");
+
+        }
+
+
+
 
     }
 
     // Create SessionTeams Helper Method
-    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) {
+    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) throws SessionParticipantTeamMismatchException {
 
         Set<SessionTeam> sessionTeamsSet = new HashSet<>();
 
+
         for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
 
-            int result = sessionTeamDTO.result();
+            int teamResult = sessionTeamDTO.result();
             String teamName = sessionTeamDTO.teamName();
 
             // Constructor for SessionTeam
-            SessionTeam sessionTeam = new SessionTeam(result, teamName);
+            SessionTeam sessionTeam = new SessionTeam(teamResult, teamName);
 
             for (Long playerId : sessionTeamDTO.playerIds()) {
 
                 for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
-                    if (sessionParticipant.getPlayer().getId().equals(playerId)) {
+                    if (sessionParticipant.getPlayer().getId().equals(playerId) && sessionParticipant.getResult() == teamResult) {
                         sessionParticipant.setSessionTeam(sessionTeam);
                         sessionTeam.getTeamMembers().add(sessionParticipant);
                     }
+
+                    else {
+                        throw new SessionParticipantTeamMismatchException("Game Session Participants do not match the Session Team Memebers or the Sessions Participants results do not match that of the Team.");
+                    }
+
                 }
 
             }
@@ -132,6 +335,7 @@ public class GamePlaySessionService {
             sessionTeamsSet.add(sessionTeam);
 
         }
+
 
         return sessionTeamsSet;
 
@@ -177,86 +381,5 @@ public class GamePlaySessionService {
 
     // </editor-fold>
 
-    // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
-
-    // <editor-fold desc = "Lookup GamePlaySession">
-
-
-    // List of all GamePlaySessions for a RegisteredPlayer
-    @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long registeredPlayerId) {
-
-        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
-        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-            gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-        }
-
-        return gamePlaySessionResponseDTOSet;
-
-    }
-
-    // List of all GamePlaySessions for a RegisteredPlayer by Game Title
-    @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByPlayerIdAndGameName(Long registeredPlayerId, String gameTitle) {
-
-        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(registeredPlayerId);
-
-        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-            String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
-            if (gamePlaySessionName.equals(gameTitle)) {
-                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-            }
-        }
-
-        return gamePlaySessionResponseDTOSet;
-
-    }
-
-    // List of all GamePlaySessions for a RegisteredPlayer by Date
-    // TODO: Fix time conversion
-    @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
-
-        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
-        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-            Instant gamePlaySessionDateTime = gamePlaySession.getSessionDateTime();
-
-            if (gamePlaySessionDateTime.equals(sessionDateTime)) {
-                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-            }
-        }
-
-        return gamePlaySessionResponseDTOSet;
-
-    }
-
-
-
-    //</editor-fold>
-
-    // <editor-fold desc = "Delete GamePlaySession">
-
-    // Delete Game by Checking that Current User was a SessionParticipant in the GamePlaySession
-    @Transactional
-    public void deleteByIdAndPlayerId(Long sessionId, Long registeredPlayerId) {
-
-            boolean playerIsParticipant = sessionParticipantRepository.existsByGamePlaySession_IdAndPlayer_Id(sessionId, registeredPlayerId);
-
-            if(playerIsParticipant) {
-                gamePlaySessionRepository.deleteById(sessionId);
-            }
-
-    }
-
-
-    //</editor-fold>
 
 }

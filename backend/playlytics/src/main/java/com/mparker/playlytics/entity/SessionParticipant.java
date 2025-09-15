@@ -123,6 +123,10 @@ public class SessionParticipant {
         this.gamePlaySession = gamePlaySession;
     }
 
-// </editor-fold>
+    public int getResult() {
+        return result;
+    }
+
+    // </editor-fold>
 
 }

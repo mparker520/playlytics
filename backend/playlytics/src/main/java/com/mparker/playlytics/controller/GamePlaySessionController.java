@@ -3,8 +3,12 @@ package com.mparker.playlytics.controller;
 // Imports
 import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
+import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
@@ -23,32 +27,35 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
- //<editor-fold desc = "GET Mapping">
+     //<editor-fold desc = "GET Mapping">
+    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
     @GetMapping("/registered-players/{registeredPlayerId}/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
-            @PathVariable("registeredPlayerId") Long registeredPlayerId,
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @P("registeredPlayerId")@PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
 
         if (gameTitle == null) {
-            Set<GamePlaySessionResponseDTO> allOwnedGames = gamePlaySessionService.findAllByPlayerId(registeredPlayerId);
-            return ResponseEntity.ok(allOwnedGames);
+            Set<GamePlaySessionResponseDTO> allGamePlaySessions = gamePlaySessionService.findAllByPlayerId(registeredPlayerId, principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(allGamePlaySessions);
         }
 
         else {
-            Set<GamePlaySessionResponseDTO> ownedGamesByName = gamePlaySessionService.findAllByPlayerIdAndGameName(registeredPlayerId, gameTitle);
-            return ResponseEntity.ok(ownedGamesByName);
+            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByPlayerIdAndGameName(registeredPlayerId, gameTitle, principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(allGamePlaySessionsByTitle);
         }
 
     }
 
     //</editor-fold>
 
-  //<editor-fold desc = "POST Mapping">
+    //<editor-fold desc = "POST Mapping">
 
     @PostMapping("/game-play-sessions")
     public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
+            @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
-        GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO);
+        GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(gamePlaySessionResponseDTO);
 
     }
@@ -59,11 +66,12 @@ public class GamePlaySessionController {
 
     @DeleteMapping("/game-play-sessions/{sessionId}")
     public ResponseEntity<String> deleteGamePlaySession(
-            @PathVariable ("sessionId") Long sessionId,
-            // TODO: Update to auth context
-            @RequestParam("registeredPlayerId") Long registeredPlayerId) {
-        gamePlaySessionService.deleteByIdAndPlayerId(sessionId, registeredPlayerId);
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable ("sessionId") Long sessionId) {
+
+        gamePlaySessionService.deleteByIdAndPlayerId(sessionId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
+
     }
 
     //</editor-fold>

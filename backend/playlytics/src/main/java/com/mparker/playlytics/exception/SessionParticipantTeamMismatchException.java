@@ -5,10 +5,10 @@ package com.mparker.playlytics.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.FORBIDDEN)
+@ResponseStatus(HttpStatus.CONFLICT)
 
-public class CustomAccessDeniedException extends RuntimeException {
-    public CustomAccessDeniedException(String message) {
+public class SessionParticipantTeamMismatchException extends RuntimeException {
+    public SessionParticipantTeamMismatchException(String message) {
 
         super(message);
 

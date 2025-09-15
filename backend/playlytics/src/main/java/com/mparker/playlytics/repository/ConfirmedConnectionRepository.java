@@ -4,6 +4,7 @@ package com.mparker.playlytics.repository;
 
 import com.mparker.playlytics.entity.ConfirmedConnection;
 import com.mparker.playlytics.entity.ConfirmedConnectionId;
+import com.mparker.playlytics.entity.Player;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,6 +19,6 @@ public interface ConfirmedConnectionRepository extends JpaRepository<ConfirmedCo
 
     ConfirmedConnection getReferenceByConnectionRequest_Id(Long id);
 
-    boolean existsByPeerAAndPeerBOrPeerAAndPeerB(RegisteredPlayer registeredPlayer, RegisteredPlayer peer, RegisteredPlayer peer1, RegisteredPlayer registeredPlayer1);
+    boolean existsByPeerAAndPeerBOrPeerAAndPeerB(RegisteredPlayer registeredPlayer, Player peer, Player peer1, RegisteredPlayer registeredPlayer1);
 
 }

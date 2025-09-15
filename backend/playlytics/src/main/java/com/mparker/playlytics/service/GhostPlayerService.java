@@ -85,7 +85,6 @@ public class GhostPlayerService {
                     // Add Association to Creator
                     if (creator != null) {
                         creator.getAssociations().add(ghostPlayer);
-                        registeredPlayerRepository.save(creator);
                     }
 
                     // Return GhostPlayerDTO

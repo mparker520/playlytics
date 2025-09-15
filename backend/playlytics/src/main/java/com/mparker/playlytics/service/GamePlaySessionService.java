@@ -232,7 +232,7 @@ public class GamePlaySessionService {
 
         Set<SessionParticipant> sessionParticipantsSet = new HashSet<>();
 
-        RegisteredPlayer authorizedUser = registeredPlayerRepository.getReferenceById(authUserId);
+        RegisteredPlayer authorizedUser = registeredPlayerRepository.getById(authUserId);
 
         boolean authorizedIsParticipant = sessionParticipantsDTOSet.stream().anyMatch(sessionParticipantDTO -> sessionParticipantDTO.playerId().equals(authorizedUser.getId()));
 
@@ -246,61 +246,40 @@ public class GamePlaySessionService {
                 if (playerRepository.existsById(peerId)) {
 
                     int result = sessionParticipantDTO.result();
-                    Player peer = playerRepository.getReferenceById(peerId);
+                    Player peer = playerRepository.getById((peerId));
 
 
-                    if(peer.getClass().equals(RegisteredPlayer.class)) {
 
-                        RegisteredPlayer registeredPeer = (RegisteredPlayer) peer;
 
-                        if (confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(authorizedUser, registeredPeer, registeredPeer, authorizedUser)) {
-                            SessionParticipant sessionParticipant = new SessionParticipant(result, registeredPeer);
-                            sessionParticipantsSet.add(sessionParticipant);
-                        }
-
-                        else {
-                            throw new CustomAccessDeniedException("You are not a connection with one of the listed Session Participants.");
-                        }
-
+                    if (confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(authorizedUser, peer, peer, authorizedUser) || authorizedUser.getAssociations().contains(ghostPlayerRepository.getReferenceById(peerId))) {
+                        SessionParticipant sessionParticipant = new SessionParticipant(result, peer);
+                        sessionParticipantsSet.add(sessionParticipant);
+                    } else {
+                        throw new CustomAccessDeniedException("Player is not in your network.");
                     }
 
-                    else {
+                } else {
 
-                        if(authorizedUser.getAssociations().contains(ghostPlayerRepository.getReferenceById(peerId))) {
-                            SessionParticipant sessionParticipant = new SessionParticipant(result, peer);
-                            sessionParticipantsSet.add(sessionParticipant);
-                        }
-
-                        else {
-                            throw new CustomAccessDeniedException("You are not associated with one of the listed Session Participants.");
-                        }
-
-                    }
-
-
-                }
-
-                else {
                     throw new NotFoundException("No Player Found");
+
                 }
 
             }
 
             return sessionParticipantsSet;
 
-
         }
 
         else {
-
             throw new SessionParticipantTeamMismatchException("You must be a Session Participant in the Game Play Session");
-
         }
 
-
-
-
     }
+
+
+
+
+
 
     // Create SessionTeams Helper Method
     private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) throws SessionParticipantTeamMismatchException {

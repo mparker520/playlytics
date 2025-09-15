@@ -11,10 +11,12 @@ import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.exception.SessionParticipantTeamMismatchException;
 import com.mparker.playlytics.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -242,20 +244,45 @@ public class GamePlaySessionService {
 
                 Long peerId = sessionParticipantDTO.playerId();
 
-
+                // Check that Player exists
                 if (playerRepository.existsById(peerId)) {
 
                     int result = sessionParticipantDTO.result();
                     Player peer = playerRepository.getById((peerId));
 
 
+                   // If Peer is a Registered Player, Check If Self or Confirmed Connection
+                    if(Hibernate.getClass(peer) == RegisteredPlayer.class) {
 
 
-                    if (confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(authorizedUser, peer, peer, authorizedUser) || authorizedUser.getAssociations().contains(ghostPlayerRepository.getReferenceById(peerId))) {
-                        SessionParticipant sessionParticipant = new SessionParticipant(result, peer);
-                        sessionParticipantsSet.add(sessionParticipant);
-                    } else {
-                        throw new CustomAccessDeniedException("Player is not in your network.");
+                        if (confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(authorizedUser, peer, peer, authorizedUser) || peerId.equals(authUserId)) {
+                            SessionParticipant sessionParticipant = new SessionParticipant(result, peer);
+                            sessionParticipantsSet.add(sessionParticipant);
+
+                        } else {
+                            throw new CustomAccessDeniedException("Player is not in your network.");
+                        }
+
+                    }
+                    // If Peer is Ghost Player, Check Association
+
+                    else {
+
+                        Optional<GhostPlayer> ghostPlayer = ghostPlayerRepository.findById(peerId);
+                        if(ghostPlayer.isPresent()) {
+                            GhostPlayer existingGhostPlayer = ghostPlayer.get();
+                            if(authorizedUser.getAssociations().contains(existingGhostPlayer)) {
+                                SessionParticipant sessionParticipant = new SessionParticipant(result, existingGhostPlayer);
+                                sessionParticipantsSet.add(sessionParticipant);
+                            }
+                            else {
+                                throw new CustomAccessDeniedException("Player is not in your network.");
+                            }
+                        }
+                        else {
+                            throw new NotFoundException("No Ghost Player Found.");
+                        }
+
                     }
 
                 } else {
@@ -284,40 +311,61 @@ public class GamePlaySessionService {
     // Create SessionTeams Helper Method
     private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) throws SessionParticipantTeamMismatchException {
 
+        // Session Teams to be Returned
         Set<SessionTeam> sessionTeamsSet = new HashSet<>();
 
-
+        // All Team Members
+        Set<Long> sessionTeamMemberIds = new HashSet<>();
         for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
+            sessionTeamMemberIds.addAll(sessionTeamDTO.playerIds());
+        }
 
-            int teamResult = sessionTeamDTO.result();
-            String teamName = sessionTeamDTO.teamName();
-
-            // Constructor for SessionTeam
-            SessionTeam sessionTeam = new SessionTeam(teamResult, teamName);
-
-            for (Long playerId : sessionTeamDTO.playerIds()) {
-
-                for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
-                    if (sessionParticipant.getPlayer().getId().equals(playerId) && sessionParticipant.getResult() == teamResult) {
-                        sessionParticipant.setSessionTeam(sessionTeam);
-                        sessionTeam.getTeamMembers().add(sessionParticipant);
-                    }
-
-                    else {
-                        throw new SessionParticipantTeamMismatchException("Game Session Participants do not match the Session Team Memebers or the Sessions Participants results do not match that of the Team.");
-                    }
-
-                }
-
-            }
-
-            sessionTeamsSet.add(sessionTeam);
-
+        Set<Long> sessionParticipantsIds = new HashSet<>();
+        for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
+            sessionParticipantsIds.add(sessionParticipant.getPlayer().getId());
         }
 
 
-        return sessionTeamsSet;
 
+        // Check that All Session Participants are Listed as Team Members
+        if(sessionTeamMemberIds.equals(sessionParticipantsIds)) {
+
+                // For Each Session Team
+                for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
+
+                    // Create Team with Result and Name
+                    int teamResult = sessionTeamDTO.result();
+                    String teamName = sessionTeamDTO.teamName();
+                    SessionTeam sessionTeam = new SessionTeam(teamResult, teamName);
+
+
+                    // For Each Team Member
+                    for (Long teamMemberId : sessionTeamDTO.playerIds()) {
+                        for(SessionParticipant sessionParticipant : sessionParticipantsSet) {
+                            if(sessionParticipant.getPlayer().getId().equals(teamMemberId)) {
+
+                                if (sessionParticipant.getResult() == teamResult) {
+                                    sessionParticipant.setSessionTeam(sessionTeam);
+                                    sessionTeam.getTeamMembers().add(sessionParticipant);
+                                }
+                                else {
+                                    throw new SessionParticipantTeamMismatchException("Session Participant Result is Not the Same as Team's Result.");
+                                }
+
+                            }
+                        }
+                    }
+
+                    sessionTeamsSet.add(sessionTeam);
+            }
+
+                return sessionTeamsSet;
+
+        }
+
+        else {
+            throw new SessionParticipantTeamMismatchException("Game Session Participants do not match the Session Team Members.");
+        }
     }
 
     // Attach GamePlaySession and SessionParticipants Helper Method

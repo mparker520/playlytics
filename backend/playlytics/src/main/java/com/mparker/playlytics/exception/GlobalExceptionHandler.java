@@ -41,15 +41,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionDetailDTO> handleExistingResourceException(ExistingResourceException ex) {
 
         ExceptionDetailDTO exceptionDetail = new ExceptionDetailDTO("RESOURCE_NOT_FOUND", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDetail);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionDetail);
 
     }
 
     @ExceptionHandler(SessionParticipantTeamMismatchException.class)
     public ResponseEntity<ExceptionDetailDTO> handleSessionParticipantTeamMismatchException(SessionParticipantTeamMismatchException ex) {
 
-        ExceptionDetailDTO exceptionDetail = new ExceptionDetailDTO("SESSION_PARTICIPANTS__TEAM_MISMATCH", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionDetail);
+        ExceptionDetailDTO exceptionDetail = new ExceptionDetailDTO("SESSION_PARTICIPANTS_TEAM_MISMATCH", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionDetail);
 
     }
 

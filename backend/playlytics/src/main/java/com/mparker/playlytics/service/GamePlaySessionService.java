@@ -125,7 +125,7 @@ public class GamePlaySessionService {
             for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
                 GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
                 String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
-                if (gamePlaySessionName.equals(gameTitle)) {
+                if (gamePlaySessionName.contains(gameTitle)) {
                     gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
                 }
             }

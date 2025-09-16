@@ -6,6 +6,9 @@ package com.mparker.playlytics.service;
 import com.mparker.playlytics.dto.*;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
+import com.mparker.playlytics.exception.CustomAccessDeniedException;
+import com.mparker.playlytics.exception.ExistingResourceException;
+import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
 import jdk.jfr.Registered;
 import org.springframework.stereotype.Service;
@@ -40,34 +43,36 @@ public class NetworkService {
     //<editor-fold desc = "Get Available Peer By Email or DisplayName">
 
     @Transactional(readOnly = true)
-    public Optional<Set<RegisteredPlayerResponseDTO>> getAvailablePeersByFilter(Long registeredPlayerId, String filter) {
+    public RegisteredPlayerResponseDTO getAvailablePeersByFilter(Long registeredPlayerId, String filter, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter.replaceAll("\\s+", "").toLowerCase(), filter);
+        if (registeredPlayerId.equals(authUserId)) {
 
-        boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
-        boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
 
-        if (peer == null || isConnection || blockExists || Objects.equals(registeredPlayer.getId(), peer.getId())) {
-            return Optional.empty();
+            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+            RegisteredPlayer peer = registeredPlayerRepository.getReferenceByLoginEmailOrDisplayName(filter.replaceAll("\\s+", "").toLowerCase(), filter);
+
+            boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
+            boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
+
+            if (peer == null || isConnection || blockExists || Objects.equals(registeredPlayer.getId(), peer.getId())) {
+                throw new NotFoundException("No registered players available for connection by that filter.");
+            }
+
+            else {
+                return new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
+            }
+
         }
 
         else {
-
-            Set<RegisteredPlayerResponseDTO> registeredPlayerResponseDTOSet = new HashSet<>();
-            RegisteredPlayerResponseDTO registeredPlayerResponseDTO = new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
-            registeredPlayerResponseDTOSet.add(registeredPlayerResponseDTO);
-            return Optional.of(registeredPlayerResponseDTOSet);
-
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
         }
-
 
     }
 
     //</editor-fold>
 
-
-    //<editor-fold desc = "Get All Available Peers">
+   /* //<editor-fold desc = "Get All Available Peers">
 
     @Transactional(readOnly = true)
     public Optional<Set<RegisteredPlayerResponseDTO>> getAllAvailablePeers(Long registeredPlayerId) {
@@ -104,45 +109,57 @@ public class NetworkService {
 
 
 
-    //</editor-fold>
+    //</editor-fold>*/
 
     //<editor-fold desc = "Create Connection Request">
 
     @Transactional
-    public Optional<ConnectionRequestResponseDTO> createConnectionRequest(Long registeredPlayerId, Long peerId) {
+    public ConnectionRequestResponseDTO createConnectionRequest(Long registeredPlayerId, Long peerId, Long authUserId) throws CustomAccessDeniedException, ExistingResourceException, NotFoundException {
 
-        RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(peerId);
+        ConnectionRequestResponseDTO connectionRequestResponseDTO = null;
 
-        if (blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(sender, recipient, recipient, sender)) {
-            return Optional.empty();
-        }
+        if (registeredPlayerId.equals(authUserId)) {
 
-        else {
-            ConnectionRequest existingConnectionRequest = null;
-
-
-            if((connectionRequestRepository.existsBySender_IdAndRecipient_Id(registeredPlayerId, peerId) || connectionRequestRepository.existsBySender_IdAndRecipient_Id(peerId, registeredPlayerId)) )  {
-                existingConnectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, peerId, peerId, registeredPlayerId);
-            }
-
-            if(existingConnectionRequest != null && existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
-                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(existingConnectionRequest.getSender().getId(), existingConnectionRequest.getRecipient().getId(), existingConnectionRequest.getConnectionRequestStatus());
-                return Optional.of(connectionRequestResponseDTO);
+            if (registeredPlayerId.equals(peerId)) {
+                throw new NotFoundException("You cannot connect with yourself.");
             }
 
             else {
-                ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
-                connectionRequestRepository.save(newConnectionRequest);
 
-                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
-                return Optional.of(connectionRequestResponseDTO);
+                RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+                RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(peerId);
 
+                if (blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(sender, recipient, recipient, sender)) {
+                    throw new CustomAccessDeniedException("You do not have access to this Resource.");
+                }
+
+                else {
+
+                    if(connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(registeredPlayerId, peerId, peerId, registeredPlayerId) )  {
+                        Set<ConnectionRequest> existingConnectionRequestsSet = connectionRequestRepository.findAllBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, peerId, peerId, registeredPlayerId);
+
+                        for (ConnectionRequest existingConnectionRequest : existingConnectionRequestsSet) {
+                            if(existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING) || existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
+                                throw new ExistingResourceException("You already have a pending or accepted connection request with this player.");
+                            }
+
+                            else {
+                                ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
+                                connectionRequestRepository.save(newConnectionRequest);
+
+                                connectionRequestResponseDTO =  new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
+
+                            }
+                        }
+                    }
+                }
             }
+            return connectionRequestResponseDTO;
         }
 
-
-
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
+        }
 
     }
 
@@ -151,45 +168,56 @@ public class NetworkService {
     //<editor-fold desc = "Confirm Connection">
 
     @Transactional
-    public Optional<ConfirmedConnectionResponseDTO> confirmConnection(Long registeredPlayerId, Long connectionRequestId) {
+    public ConfirmedConnectionResponseDTO confirmConnection(Long registeredPlayerId, Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException{
 
-        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+        if (registeredPlayerId.equals(authUserId)) {
+            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
 
-        Long senderId = connectionRequest.getSender().getId();
-        Long recipientId = connectionRequest.getRecipient().getId();
+            Long senderId = connectionRequest.getSender().getId();
+            Long recipientId = connectionRequest.getRecipient().getId();
 
-        if (registeredPlayerId.equals(recipientId)) {
+            if (registeredPlayerId.equals(recipientId)) {
 
-            Long peerAId;
-            Long peerBId;
+                Long peerAId;
+                Long peerBId;
 
-            if (senderId < recipientId) {
-                peerAId = senderId;
-                peerBId = recipientId;
+                if (senderId < recipientId) {
+                    peerAId = senderId;
+                    peerBId = recipientId;
+                }
+                else {
+                    peerAId = recipientId;
+                    peerBId = senderId;
+                }
+
+                // Create Confirmed Connection
+                ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+                RegisteredPlayer peerA = registeredPlayerRepository.getReferenceById(peerAId);
+                RegisteredPlayer peerB = registeredPlayerRepository.getReferenceById(peerBId);
+                ConfirmedConnection confirmedConnection = new ConfirmedConnection(confirmedConnectionId, peerA, peerB, connectionRequest);
+
+                // Save Confirmed Connection
+                confirmedConnectionRepository.save(confirmedConnection);
+
+                // Update Status of Linked ConnectionRequest to Accepted
+                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.ACCEPTED);
+
+                return new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequest.getConnectionRequestStatus());
+
             }
+
             else {
-                peerAId = recipientId;
-                peerBId = senderId;
+                throw new CustomAccessDeniedException("You cannot confirm a connection request that you sent.");
             }
-
-            // Create Confirmed Connection
-            ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
-            RegisteredPlayer peerA = registeredPlayerRepository.getReferenceById(peerAId);
-            RegisteredPlayer peerB = registeredPlayerRepository.getReferenceById(peerBId);
-            ConfirmedConnection confirmedConnection = new ConfirmedConnection(confirmedConnectionId, peerA, peerB, connectionRequest);
-
-            // Save Confirmed Connection
-            confirmedConnectionRepository.save(confirmedConnection);
-
-            // Update Status of Linked ConnectionRequest to Accepted
-            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.ACCEPTED);
-
-            ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequest.getConnectionRequestStatus());
-            return Optional.of(confirmedConnectionResponseDTO);
 
         }
 
-        return Optional.empty();
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
+        }
+
+
+
 
     }
 
@@ -198,14 +226,26 @@ public class NetworkService {
     //<editor-fold desc = "Decline Connection Request">
 
     @Transactional
-    public void declineConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
-        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+    public void declineConnectionRequest(Long registeredPlayerId, Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException {
 
-        if (registeredPlayerId.equals(connectionRequest.getRecipient().getId())) {
+        if (registeredPlayerId.equals(authUserId)) {
 
-            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.DECLINED);
+            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+            if (registeredPlayerId.equals(connectionRequest.getRecipient().getId())) {
 
+                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.DECLINED);
+
+            }
+            else {
+                throw new CustomAccessDeniedException("You do not have access to this Resource.");
+            }
         }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
+        }
+
+
 
     }
 
@@ -213,32 +253,44 @@ public class NetworkService {
 
     //<editor-fold desc = "Block Player">
     @Transactional
-    public BlockedRelationshipResponseDTO blockRegisteredPlayer(Long registeredPlayerId, Long blockedPlayerId) {
+    public BlockedRelationshipResponseDTO blockRegisteredPlayer(Long registeredPlayerId, Long blockedPlayerId, Long authUserId) throws CustomAccessDeniedException {
 
-        // Change existing Requests to BLOCKED
-        if (connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId)){
+        if (registeredPlayerId.equals(authUserId)) {
 
-            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId);
+            // Change existing Requests to BLOCKED
+            if (connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId)){
 
-            if (connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
+                ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(registeredPlayerId, blockedPlayerId, blockedPlayerId, registeredPlayerId);
 
-                ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceByConnectionRequest_Id(connectionRequest.getId());
-                confirmedConnectionRepository.delete(confirmedConnection);
+                if (connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
+
+                    ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceByConnectionRequest_Id(connectionRequest.getId());
+                    confirmedConnectionRepository.delete(confirmedConnection);
+
+                }
+
+                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.BLOCKED);
 
             }
 
-            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.BLOCKED);
+            // Create Blocked Entity
+            RegisteredPlayer blocker = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+            RegisteredPlayer blocked = registeredPlayerRepository.getReferenceById(blockedPlayerId);
+            BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(registeredPlayerId, blockedPlayerId);
+            BlockedRelationship blockedRelationship = new BlockedRelationship(blockedRelationshipId, blocker, blocked);
+            blockedRelationshipRepository.save(blockedRelationship);
 
+            return new BlockedRelationshipResponseDTO(registeredPlayerId, blockedPlayerId, true);
         }
 
-        // Create Blocked Entity
-        RegisteredPlayer blocker = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        RegisteredPlayer blocked = registeredPlayerRepository.getReferenceById(blockedPlayerId);
-        BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(registeredPlayerId, blockedPlayerId);
-        BlockedRelationship blockedRelationship = new BlockedRelationship(blockedRelationshipId, blocker, blocked);
-        blockedRelationshipRepository.save(blockedRelationship);
+        else  {
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
+        }
 
-        return new BlockedRelationshipResponseDTO(registeredPlayerId, blockedPlayerId, true);
+
+
+
+
 
     }
 
@@ -247,14 +299,26 @@ public class NetworkService {
     //<editor-fold desc = "Remove Block">
 
     @Transactional
-    public void removeBlock(Long registeredPlayerId, Long blockerId, Long blockedId) {
+    public void removeBlock(Long registeredPlayerId, Long blockerId, Long blockedId, Long authUserId) throws CustomAccessDeniedException {
 
-        BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(blockerId, blockedId);
-        BlockedRelationship blockedRelationship = blockedRelationshipRepository.getReferenceById(blockedRelationshipId);
+        if (registeredPlayerId.equals(authUserId)) {
 
-        if (registeredPlayerId.equals(blockerId)) {
-            blockedRelationshipRepository.delete(blockedRelationship);
+            if (registeredPlayerId.equals(blockerId)) {
+                BlockedRelationshipId blockedRelationshipId = new BlockedRelationshipId(blockerId, blockedId);
+                BlockedRelationship blockedRelationship = blockedRelationshipRepository.getReferenceById(blockedRelationshipId);
+                blockedRelationshipRepository.delete(blockedRelationship);
+            }
+
+            else {
+                throw new CustomAccessDeniedException("You do not have access to this Resource.");
+            }
+
         }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this Resource.");
+        }
+
 
 
     }
@@ -264,19 +328,26 @@ public class NetworkService {
     //<editor-fold desc = " View Sent Connection Requests">
 
     @Transactional(readOnly = true)
-    public Set<ConnectionRequestResponseDTO> getAllSentConnectionRequests(Long registeredPlayerId) {
+    public Set<ConnectionRequestResponseDTO> getAllSentConnectionRequests(Long registeredPlayerId, Long authUserId) throws CustomAccessDeniedException {
 
-        Set<ConnectionRequest> allSentConnectionRequests = connectionRequestRepository.getAllBySender_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
-        Set<ConnectionRequestResponseDTO> allSentConnectionRequestResponses = new HashSet<>();
+        if (registeredPlayerId.equals(authUserId)) {
+            Set<ConnectionRequest> allSentConnectionRequests = connectionRequestRepository.getAllBySender_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
+            Set<ConnectionRequestResponseDTO> allSentConnectionRequestResponses = new HashSet<>();
 
-        for (ConnectionRequest connectionRequest : allSentConnectionRequests) {
+            for (ConnectionRequest connectionRequest : allSentConnectionRequests) {
 
-            ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(registeredPlayerId, connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
-            allSentConnectionRequestResponses.add(connectionRequestResponseDTO);
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(registeredPlayerId, connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
+                allSentConnectionRequestResponses.add(connectionRequestResponseDTO);
+
+            }
+
+            return allSentConnectionRequestResponses;
 
         }
 
-        return allSentConnectionRequestResponses;
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
 
     }
 
@@ -285,19 +356,27 @@ public class NetworkService {
     //<editor-fold desc = " View Pending Connection Requests">
 
     @Transactional(readOnly = true)
-    public Set<ConnectionRequestResponseDTO> getAllPendingConnectionRequests(Long registeredPlayerId) {
+    public Set<ConnectionRequestResponseDTO> getAllPendingConnectionRequests(Long registeredPlayerId, Long authUserId) throws CustomAccessDeniedException {
 
-        Set<ConnectionRequest> allPendingConnectionRequests = connectionRequestRepository.getAllByRecipient_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
-        Set<ConnectionRequestResponseDTO> allPendingConnectionRequestResponses = new HashSet<>();
+        if(registeredPlayerId.equals(authUserId)) {
+            Set<ConnectionRequest> allPendingConnectionRequests = connectionRequestRepository.getAllByRecipient_IdAndConnectionRequestStatus(registeredPlayerId, ConnectionRequestStatus.PENDING);
+            Set<ConnectionRequestResponseDTO> allPendingConnectionRequestResponses = new HashSet<>();
 
-        for (ConnectionRequest connectionRequest : allPendingConnectionRequests) {
+            for (ConnectionRequest connectionRequest : allPendingConnectionRequests) {
 
-            ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), registeredPlayerId, connectionRequest.getConnectionRequestStatus());
-            allPendingConnectionRequestResponses.add(connectionRequestResponseDTO);
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), registeredPlayerId, connectionRequest.getConnectionRequestStatus());
+                allPendingConnectionRequestResponses.add(connectionRequestResponseDTO);
 
+            }
+
+            return allPendingConnectionRequestResponses;
         }
 
-        return allPendingConnectionRequestResponses;
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
+
+
 
     }
 
@@ -306,15 +385,27 @@ public class NetworkService {
     //<editor-fold desc = "Cancel Sent ConnectionRequest">
 
     @Transactional
-    public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId) {
+    public void cancelConnectionRequest(Long registeredPlayerId, Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException {
 
-        ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
-        if(connectionRequest.getSender().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+        if (registeredPlayerId.equals(authUserId)) {
 
-            connectionRequestRepository.delete(connectionRequest);
+            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
+            if(connectionRequest.getSender().getId().equals(registeredPlayerId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
 
+                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+
+            }
+
+            else {
+                throw new CustomAccessDeniedException("You do not have access to this resource.");
+            }
 
         }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
+
 
     }
 
@@ -323,26 +414,42 @@ public class NetworkService {
     //<editor-fold desc = "View All Connections">
 
     @Transactional(readOnly = true)
-    public Set<ConfirmedConnectionResponseDTO> getAllConnections(Long registeredPlayerId) {
+    public Set<ConfirmedConnectionResponseDTO> getAllConnections(Long registeredPlayerId, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        Set<ConfirmedConnection> allConnections = confirmedConnectionRepository.getAllByPeerA_Id(registeredPlayerId);
-        allConnections.addAll(confirmedConnectionRepository.getAllByPeerB_Id(registeredPlayerId));
+        if (registeredPlayerId.equals(authUserId)) {
 
-        Set<ConfirmedConnectionResponseDTO> allConnectionResponses = new HashSet<>();
+            Set<ConfirmedConnection> allConnections = confirmedConnectionRepository.getAllByPeerA_Id(registeredPlayerId);
+            allConnections.addAll(confirmedConnectionRepository.getAllByPeerB_Id(registeredPlayerId));
 
-        for (ConfirmedConnection confirmedConnection : allConnections) {
+            Set<ConfirmedConnectionResponseDTO> allConnectionResponses = new HashSet<>();
 
-            Long peerAId = confirmedConnection.getPeerA().getId();
-            Long peerBId = confirmedConnection.getPeerB().getId();
-            ConnectionRequestStatus connectionRequestStatus = confirmedConnection.getConnectionRequest().getConnectionRequestStatus();
+            for (ConfirmedConnection confirmedConnection : allConnections) {
 
-           ConfirmedConnectionResponseDTO connectionRequestResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequestStatus);
-            allConnectionResponses.add(connectionRequestResponseDTO);
+                Long peerAId = confirmedConnection.getPeerA().getId();
+                Long peerBId = confirmedConnection.getPeerB().getId();
+                ConnectionRequestStatus connectionRequestStatus = confirmedConnection.getConnectionRequest().getConnectionRequestStatus();
+
+                ConfirmedConnectionResponseDTO connectionRequestResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequestStatus);
+                allConnectionResponses.add(connectionRequestResponseDTO);
+
+            }
+
+            if(!allConnectionResponses.isEmpty()) {
+                return allConnectionResponses;
+            }
+            else {
+                throw new NotFoundException("No confirmed Connections!");
+            }
+
+
 
         }
 
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
 
-        return allConnectionResponses;
+
 
     }
 
@@ -351,19 +458,26 @@ public class NetworkService {
     //<editor-fold desc = "Remove Connection">
 
     @Transactional
-    public void removeConnection(Long registeredPlayerId, Long peerAId, Long peerBId) {
+    public void removeConnection(Long registeredPlayerId, Long peerAId, Long peerBId, Long authUserId) throws CustomAccessDeniedException {
 
-        if (registeredPlayerId.equals(peerAId) || registeredPlayerId.equals(peerBId)) {
+        if (registeredPlayerId.equals(authUserId)) {
 
-            ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
-            ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceById(confirmedConnectionId);
+            if (registeredPlayerId.equals(peerAId) || registeredPlayerId.equals(peerBId)) {
 
-            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(confirmedConnection.getConnectionRequest().getId());
+                ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+                ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceById(confirmedConnectionId);
 
-            confirmedConnectionRepository.delete(confirmedConnection);
-            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+                ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(confirmedConnection.getConnectionRequest().getId());
 
+                confirmedConnectionRepository.delete(confirmedConnection);
+                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+
+            }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");}
         }
+
 
     }
 
@@ -372,28 +486,33 @@ public class NetworkService {
     //<editor-fold desc = "Get Available GhostPlayers">
 
     @Transactional(readOnly = true)
-    public Optional<Set<GhostPlayerResponseDTO>> getUnassociatedGhostPlayerByEmail(Long registeredPlayerId, String identifierEmail) {
+    public GhostPlayerResponseDTO getUnassociatedGhostPlayerByEmail(Long registeredPlayerId, String identifierEmail, Long authUserId) throws CustomAccessDeniedException, NotFoundException{
 
-        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail.replaceAll("\\s+", "").toLowerCase());
-        boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer);
+        if(registeredPlayerId.equals(authUserId)) {
 
-        if (ghostPlayer == null || isAssociate) {
-            return Optional.empty();
+            GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail.replaceAll("\\s+", "").toLowerCase());
+            boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayer);
+
+            if (ghostPlayer == null || isAssociate) {
+                throw new NotFoundException("No ghost players available for connection by that filter.");
+            }
+
+            else {
+
+                return new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+
+            }
         }
 
         else {
-
-            GhostPlayerResponseDTO ghostPlayerResponseDTO =  new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
-            Set<GhostPlayerResponseDTO> ghostPlayerResponseDTOSet = new HashSet<>();
-            ghostPlayerResponseDTOSet.add(ghostPlayerResponseDTO);
-            return Optional.of(ghostPlayerResponseDTOSet);
-
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
         }
-
 
     }
 
-    @Transactional(readOnly = true)
+    //</editor-fold>
+
+   /* @Transactional(readOnly = true)
     public Optional<Set<GhostPlayerResponseDTO>> getAllUnassociatedGhostPlayers(Long registeredPlayerId) {
 
         Set<GhostPlayerResponseDTO> ghostPlayerResponseDTOSet = new HashSet<>();
@@ -419,18 +538,44 @@ public class NetworkService {
 
     }
 
-    //</editor-fold>
+    //</editor-fold> */
 
     //<editor-fold desc = "Add Association">
 
     @Transactional
-    public GhostPlayerResponseDTO addAssociation(Long registeredPlayerId, Long ghostPlayerId) {
+    public GhostPlayerResponseDTO addAssociation(Long registeredPlayerId, Long ghostPlayerId, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
-        registeredPlayer.getAssociations().add(ghostPlayer);
+        if (registeredPlayerId.equals(authUserId)) {
 
-        return new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+            Optional <GhostPlayer> ghostPlayer = ghostPlayerRepository.findById(ghostPlayerId);
+            if (ghostPlayer.isPresent()) {
+
+                GhostPlayer ghostPlayerExists = ghostPlayer.get();
+                boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(registeredPlayerId, ghostPlayerExists);
+
+                if (!isAssociate) {
+                    RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+                    registeredPlayer.getAssociations().add(ghostPlayerExists);
+
+                    return new GhostPlayerResponseDTO(ghostPlayerExists.getFirstName(), ghostPlayerExists.getLastName(), ghostPlayerExists.getAvatar(), ghostPlayerExists.getIdentifierEmail(), ghostPlayerExists.getCreator().getId());
+
+                }
+                else {
+                    throw new NotFoundException("No ghost players available for connection by that filter.");
+                }
+
+            }
+
+            else {
+                throw new NotFoundException("No ghost players available for connection by that filter.");
+            }
+
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
 
     }
 
@@ -439,20 +584,28 @@ public class NetworkService {
     //<editor-fold desc = " View All Associations">
 
     @Transactional(readOnly = true)
-    public Set<GhostPlayerResponseDTO> getAllAssociations(Long registeredPlayerId) {
+    public Set<GhostPlayerResponseDTO> getAllAssociations(Long registeredPlayerId, Long authUserId) {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-        Set<GhostPlayer> allAssociations = registeredPlayer.getAssociations();
+        if (registeredPlayerId.equals(authUserId)) {
+            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+            Set<GhostPlayer> allAssociations = registeredPlayer.getAssociations();
 
-        Set<GhostPlayerResponseDTO> allAssociationResponses = new HashSet<>();
+            Set<GhostPlayerResponseDTO> allAssociationResponses = new HashSet<>();
 
-        for (GhostPlayer ghostPlayer : allAssociations) {
+            for (GhostPlayer ghostPlayer : allAssociations) {
 
-            GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
-            allAssociationResponses.add(ghostPlayerResponseDTO);
+                GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+                allAssociationResponses.add(ghostPlayerResponseDTO);
+            }
+
+            return allAssociationResponses;
         }
 
-        return allAssociationResponses;
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
+
+
 
     }
 
@@ -461,12 +614,20 @@ public class NetworkService {
     //<editor-fold desc = "Remove Associations">
 
     @Transactional
-    public void removeAssociation(Long registeredPlayerId, Long ghostPlayerId) {
+    public void removeAssociation(Long registeredPlayerId, Long ghostPlayerId, Long authUserId) throws CustomAccessDeniedException{
 
-       RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
-       GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
+        if (registeredPlayerId.equals(authUserId)) {
+            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+            GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
 
-        registeredPlayer.getAssociations().remove(ghostPlayer);
+            registeredPlayer.getAssociations().remove(ghostPlayer);
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("You do not have access to this resource.");
+        }
+
 
     }
 

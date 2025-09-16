@@ -94,6 +94,10 @@ public class GhostPlayer extends Player {
         this.creator = creator;
     }
 
+    public RegisteredPlayer getLinkedRegisteredPlayer() {
+        return linkedRegisteredPlayer;
+    }
+
     // </editor-fold>
 
 }

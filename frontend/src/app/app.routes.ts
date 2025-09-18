@@ -5,20 +5,25 @@ import {AnalyticsComponent} from './components/analytics-component/analytics-com
 import {SessionsComponent} from './components/sessions-component/sessions-component';
 import {ConnectionsComponent} from './components/connections-component/connections-component';
 import {InventoryComponent} from './components/inventory-component/inventory-component';
-
+import {LoginComponent} from './components/login-component/login-component';
+import {AccountCreationComponent} from './components/account-creation-component/account-creation-component';
+import {AuthGuardService} from './services/auth-guard-service';
 
 export const routes: Routes = [
 
 
   {path: '', component: ShellComponent ,
       children: [
-              {path: '', component: HomeComponent},
-              {path: 'analytics', component: AnalyticsComponent},
-              {path: 'sessions', component: SessionsComponent},
-              {path: 'connections', component: ConnectionsComponent},
-              {path: 'inventory', component: InventoryComponent}
+              {path: 'login', component: LoginComponent},
+              {path: 'sign-up', component: AccountCreationComponent},
+              {path: '', component: HomeComponent, canActivate: [AuthGuardService] },
+              {path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuardService]},
+              {path: 'sessions', component: SessionsComponent, canActivate: [AuthGuardService]},
+              {path: 'connections', component: ConnectionsComponent, canActivate: [AuthGuardService]},
+              {path: 'inventory', component: InventoryComponent, canActivate: [AuthGuardService]},
+              {path: 'logout', component: LoginComponent}
       ]
   },
-{path: '**', redirectTo: ' '}
+{path: '**', redirectTo: ''}
 
 ];

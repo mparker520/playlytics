@@ -1,8 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
-
-import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
+import com.mparker.playlytics.dto.RegisteredPlayerDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:4200")
 public class RegisteredPlayerController {
 
     //<editor-fold desc = "Constructor">
@@ -27,11 +26,27 @@ public class RegisteredPlayerController {
 
     //</editor-fold>
 
+
+    //<editor-fold desc = "POST Mapping">
+
+
+    @PostMapping("/create-account")
+    public ResponseEntity<RegisteredPlayerResponseDTO> createRegisteredPlayer(
+            @RequestBody RegisteredPlayerDTO registeredPlayerDTO) {
+
+        RegisteredPlayerResponseDTO registeredPlayerResponseDTO = registeredPlayerService.createRegisteredPlayer(registeredPlayerDTO);
+        return ResponseEntity.ok(registeredPlayerResponseDTO);
+
+    }
+
+    //</editor-fold>
+
+
     //<editor-fold desc = "PATCH Mapping">
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/registered-players")
-    public ResponseEntity<RegisteredPlayerUpdateDTO> updateGhostPlayer(
+    public ResponseEntity<RegisteredPlayerUpdateDTO> updateRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
 

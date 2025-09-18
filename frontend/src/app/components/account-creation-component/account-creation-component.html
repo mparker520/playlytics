@@ -1,1 +1,24 @@
-<p>account-creation-component works!</p>
+<section>
+  <h2>Create an Account with PlayLytics!</h2>
+  <form (ngSubmit)="createAccount()" >
+
+    <label for = "loginEmail">Email Address</label>
+    <input [(ngModel)]="loginEmail" type = "text" id = "loginEmail" name = "loginEmail" placeholder="Email Address">
+
+    <label for = "password">Password</label>
+    <input [(ngModel)]="password" type = password id = "password" name = "password" placeholder="Enter Your Password">
+
+    <label for = "firstname">First Name</label>
+    <input [(ngModel)]="firstName" type = text id = "firstName" name = "firstName" placeholder="Enter Your First Name">
+
+    <label for = "lastName">First Name</label>
+    <input [(ngModel)]="lastName" type = text id = "lastName" name = "lastName" placeholder="Enter Your Last Name">
+
+    <label for = "displayName">First Name</label>
+    <input [(ngModel)]="displayName" type = text id = "displayName" name = "displayName" placeholder="Enter a Fun Display Name">
+
+
+    <button type = "submit" id = "createAccountSubmitButton">Create Account!</button>
+
+  </form>
+</section>

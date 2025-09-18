@@ -1,13 +1,12 @@
 package com.mparker.playlytics.service;
 
 // Imports
+import com.mparker.playlytics.dto.RegisteredPlayerDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
-import com.mparker.playlytics.entity.GamePlaySession;
-import com.mparker.playlytics.entity.GhostPlayer;
-import com.mparker.playlytics.entity.RegisteredPlayer;
-import com.mparker.playlytics.entity.SessionParticipant;
+import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.GhostStatus;
+import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +29,36 @@ public class RegisteredPlayerService {
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Create Registered Player">
+
+    public RegisteredPlayerResponseDTO createRegisteredPlayer(RegisteredPlayerDTO registeredPlayerDTO) throws CustomAccessDeniedException {
+
+        String loginEmail = registeredPlayerDTO.loginEmail().replaceAll("\\s+", "").toLowerCase();
+
+        if (!registeredPlayerRepository.existsByLoginEmail(loginEmail)) {
+
+            String password = registeredPlayerDTO.password();
+            String firstName = registeredPlayerDTO.firstName();
+            String lastName = registeredPlayerDTO.lastName();
+            String displayName = registeredPlayerDTO.displayName();
+            byte[] avatar = registeredPlayerDTO.avatar();
+
+            RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, ("{noop}" + password));
+            registeredPlayerRepository.save(registeredPlayer);
+
+            return new RegisteredPlayerResponseDTO(firstName, lastName, avatar, loginEmail, displayName);
+
+        }
+
+        else {
+            throw new CustomAccessDeniedException("An Account with that login email already exists");
+        }
+
     }
 
     //</editor-fold>

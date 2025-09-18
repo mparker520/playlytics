@@ -48,11 +48,11 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/login", "/create-account").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf(c -> c .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/login"))
+                        .ignoringRequestMatchers("/login", "/create-account"))
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(f -> f.disable())
                 .httpBasic(b -> b.disable());

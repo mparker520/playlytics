@@ -57,8 +57,17 @@ public class RegisteredPlayer extends Player {
 
     // </editor-fold>
 
-    // <editor-fold desc = "Getters and Setters">
+    public RegisteredPlayer(String firstName, String lastName, byte[] avatar, String displayName, String loginEmail, String password) {
+        super(firstName, lastName, avatar);
+        this.displayName = displayName;
+        this.loginEmail = loginEmail;
+        this.password = password;
+    }
 
+    public RegisteredPlayer() {
+    }
+
+    // <editor-fold desc = "Getters and Setters">
 
 
     public String getDisplayName() {

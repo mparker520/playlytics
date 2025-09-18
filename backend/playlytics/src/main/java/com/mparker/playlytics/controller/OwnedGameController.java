@@ -26,20 +26,20 @@ public class OwnedGameController {
     //</editor-fold>
 
     //<editor-fold desc = "GET Mapping">
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/registered-players/{registeredPlayerId}/owned-games")
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/owned-games")
     public ResponseEntity<List<OwnedGameResponseDTO>> getOwnedGames(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "gameTitle", required = false) String gameTitle)  {
 
         if (gameTitle == null) {
-            List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(registeredPlayerId, principal.getAuthenticatedUserId());
+            List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allOwnedGames);
         }
 
         else {
-            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(registeredPlayerId, gameTitle, principal.getAuthenticatedUserId());
+            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(gameTitle, principal.getAuthenticatedUserId());
             return ResponseEntity.ok(ownedGamesByName);
         }
 
@@ -49,13 +49,12 @@ public class OwnedGameController {
 
     //<editor-fold desc = "POST Mapping">
 
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PostMapping("/registered-players/{registeredPlayerId}/owned-games/{gameId}")
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/owned-games/{gameId}")
     public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("gameId") Long gameId)  {
-        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(registeredPlayerId, gameId, principal.getAuthenticatedUserId());
+        OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(gameId, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(ownedGameResponseDTO);
 
     }

@@ -13,15 +13,21 @@ public class CustomUserDetails implements UserDetails {
     String username;
     String password;
     Long authenticatedUserId;
+    String email;
+    String firstName;
+    String displayName;
 
 
     public CustomUserDetails() {
     }
 
-    public CustomUserDetails(String username, String password, Long authenticatedUserId) {
+    public CustomUserDetails(String username, String password, Long authenticatedUserId, String email, String firstName, String displayName) {
         this.username = username;
         this.password = password;
         this.authenticatedUserId = authenticatedUserId;
+        this.email = email;
+        this.firstName = firstName;
+        this.displayName = displayName;
     }
 
     @Override
@@ -42,6 +48,18 @@ public class CustomUserDetails implements UserDetails {
 
     public Long getAuthenticatedUserId() {
             return authenticatedUserId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
 }

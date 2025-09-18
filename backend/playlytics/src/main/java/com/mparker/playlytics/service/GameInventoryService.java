@@ -36,18 +36,13 @@ public class GameInventoryService {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Add OwnedGame to RegisteredPlayer Inventory">
+    // <editor-fold desc = "Add OwnedGame to  Inventory">
 
     @Transactional
-    public OwnedGameResponseDTO saveOwnedGame(Long registeredPlayerId, Long gameId, Long authUserId) throws AccessDeniedException, NotFoundException {
+    public OwnedGameResponseDTO saveOwnedGame(Long gameId, Long authUserId) throws AccessDeniedException, NotFoundException {
 
-        if(!registeredPlayerId.equals(authUserId)) {
-            throw new AccessDeniedException("You Do Not Have Access to This Resource");
-        }
 
-        else {
-
-            RegisteredPlayer player = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+            RegisteredPlayer player = registeredPlayerRepository.getReferenceById(authUserId);
             Optional<Game> game = gameRepository.findById(gameId);
 
             // Check that Game Exists by Id
@@ -74,48 +69,18 @@ public class GameInventoryService {
             }
 
 
-        }
-
 
     }
 
     // </editor-fold>
 
-    // <editor-fold desc = "View OwnedGames in RegisteredPlayer Inventory">
+    // <editor-fold desc = "View All Owned Games">
 
-
-    // View OwnedGames Helper Method to Create List of OwnedGameResponseDTOs
-
-    private List<OwnedGameResponseDTO> getOwnedGamesDTOList(List<OwnedGame> ownedGamesList) {
-
-        List<OwnedGameResponseDTO> ownedGamesResponseDTOList = new ArrayList<>();
-
-        for (OwnedGame ownedGame : ownedGamesList) {
-
-            Long gameId = ownedGame.getGame().getId();
-            String gameName = ownedGame.getGame().getGameTitle();
-
-            OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(gameId, gameName);
-            ownedGamesResponseDTOList.add(ownedGamesResponseDTO);
-
-        }
-
-        return ownedGamesResponseDTOList;
-
-    }
-
-
-    // Returns all RegisteredPlayer's OwnedGames
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long registeredPlayerId, Long authUserId) throws AccessDeniedException {
+    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long authUserId) throws AccessDeniedException {
 
-        if(!registeredPlayerId.equals(authUserId)) {
-            throw new AccessDeniedException("You Do Not Have Access to This Resource");
-        }
 
-        else {
-
-            List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(registeredPlayerId);
+            List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(authUserId);
 
             if(ownedGamesList.isEmpty()) {
                 throw new NotFoundException("You Do Not Have Any Games in Your Inventory!");
@@ -125,34 +90,32 @@ public class GameInventoryService {
                 return getOwnedGamesDTOList(ownedGamesList);
             }
 
-        }
 
     }
 
+    // </editor-fold>
 
-    // Returns RegisteredPlayer's OwnedGames by Game Title
+    //<editor-fold desc = "View OwnedGames by Title">
+
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(Long registeredPlayerId, String gameName, Long authUserId) throws AccessDeniedException, NotFoundException {
+    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(String gameName, Long authUserId) throws AccessDeniedException, NotFoundException {
 
-        if(!registeredPlayerId.equals(authUserId)) {
-            throw new AccessDeniedException("You Do Not Have Access to This Resource");
-        }
 
-        else {
-            List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(registeredPlayerId, gameName);
+
+
+            List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(authUserId, gameName);
 
             if(ownedGamesByNameList.isEmpty()) {
                 throw new NotFoundException("No Games By That Name Found in Inventory");
             }
             return getOwnedGamesDTOList(ownedGamesByNameList);
-        }
+
 
     }
 
+    //</editor-fold>
 
-    // </editor-fold>
-
-    // <editor-fold desc = "Remove OwnedGame from RegisteredPlayer Inventory">
+    // <editor-fold desc = "Remove OwnedGame from  Inventory">
 
 
     // Delete OwnedGame by OwnedGame_Id and current Player_Id
@@ -178,5 +141,27 @@ public class GameInventoryService {
 
 
     // </editor-fold>
+
+    // <editor-fold desc = "Helper Methods">
+
+    private List<OwnedGameResponseDTO> getOwnedGamesDTOList(List<OwnedGame> ownedGamesList) {
+
+        List<OwnedGameResponseDTO> ownedGamesResponseDTOList = new ArrayList<>();
+
+        for (OwnedGame ownedGame : ownedGamesList) {
+
+            Long gameId = ownedGame.getGame().getId();
+            String gameName = ownedGame.getGame().getGameTitle();
+
+            OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(gameId, gameName);
+            ownedGamesResponseDTOList.add(ownedGamesResponseDTO);
+
+        }
+
+        return ownedGamesResponseDTOList;
+
+    }
+
+    //</editor-fold>
 
 }

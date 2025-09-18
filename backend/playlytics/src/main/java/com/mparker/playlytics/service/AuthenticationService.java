@@ -1,51 +1,44 @@
 package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.entity.RegisteredPlayer;
-import com.mparker.playlytics.repository.RegisteredPlayerRepository;
-import com.mparker.playlytics.security.CustomUserDetails;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class AuthenticationService implements UserDetailsService {
+
+public class AuthenticationService {
+
+    //<editor-fold desc = "Constructor">
 
 
-    //<editor-fold desc = "Constructors and Dependencies">
+    private final AuthenticationManager authenticationManager;
 
-    private final RegisteredPlayerRepository registeredPlayerRepository;
 
-    public AuthenticationService(RegisteredPlayerRepository registeredPlayerRepository) {
-
-        this.registeredPlayerRepository = registeredPlayerRepository;
-
+    public AuthenticationService(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
     //</editor-fold>
 
+    //<editor-fold desc = "login Method">
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public Authentication login(String username, String password) {
 
-        if(registeredPlayerRepository.existsByLoginEmail(username)) {
-
-
-            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceByLoginEmail(username);
-
-            String password = registeredPlayer.getPassword();
-            Long authenticatedUserId = registeredPlayer.getId();
-
-
-            return   new CustomUserDetails(username, password, authenticatedUserId);
-
-        }
-
-        else throw new UsernameNotFoundException(username);
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+        return authenticationManager.authenticate(token);
 
     }
+
+    //<editor-fold>
+
 
 
 }

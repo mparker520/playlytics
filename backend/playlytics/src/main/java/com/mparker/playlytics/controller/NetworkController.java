@@ -7,9 +7,7 @@ import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -29,114 +27,115 @@ public class NetworkController {
 
     //</editor-fold>
 
-
     //<editor-fold desc = "GET Mappings">
 
-    // Discover RegisteredPlayers
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/network/{registeredPlayerId}/discover-players")
+    //<editor-fold desc = "GET All Available RegisteredPlayers for Connection by Filter">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/discover-players")
     public ResponseEntity<RegisteredPlayerResponseDTO> discoverPeers(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "filter") String filter){
 
         RegisteredPlayerResponseDTO availableRegisteredPlayersDTO;
-        availableRegisteredPlayersDTO = networkService.getAvailablePeersByFilter(registeredPlayerId, filter, principal.getAuthenticatedUserId());
+        availableRegisteredPlayersDTO = networkService.getAvailablePeersByFilter(filter, principal.getAuthenticatedUserId());
 
 
         return ResponseEntity.ok(availableRegisteredPlayersDTO);
 
     }
 
+    //</editor-fold>
 
+    //<editor-fold desc = "GET All Available GhostPlayers for Association by Filter">
 
-    // Discover GhostPlayers
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/network/{registeredPlayerId}/discover-ghost-players")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/discover-ghost-players")
     public ResponseEntity<GhostPlayerResponseDTO> discoverUnassociatedGhostPlayers(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "identifierEmail") String identifierEmail){
 
         GhostPlayerResponseDTO availableGhostPlayers;
-        availableGhostPlayers = networkService.getUnassociatedGhostPlayerByEmail(registeredPlayerId, identifierEmail, principal.getAuthenticatedUserId());
+        availableGhostPlayers = networkService.getUnassociatedGhostPlayerByEmail(identifierEmail, principal.getAuthenticatedUserId());
 
         return ResponseEntity.ok(availableGhostPlayers);
 
     }
 
+    //</editor-fold>
+
+    //<editor-fold desc = "GET All Confirmed Connections">
 
 
-    // GET CONFIRMED CONNECTIONS
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/network/{registeredPlayerId}/connections")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/connections")
     public ResponseEntity<Set<ConfirmedConnectionResponseDTO>> getAllConnections(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
-        Set<ConfirmedConnectionResponseDTO> allConnections = networkService.getAllConnections(registeredPlayerId, principal.getAuthenticatedUserId());
+        Set<ConfirmedConnectionResponseDTO> allConnections = networkService.getAllConnections(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(allConnections);
 
     }
 
+    //</editor-fold>
 
-    // GET SENT CONNECTION REQUESTS
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/network/{registeredPlayerId}/sent-connection-requests")
+    //<editor-fold desc = "GET All Sent ConnectionRequests">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/sent-connection-requests")
     public ResponseEntity<Set<ConnectionRequestResponseDTO>>  getSentConnectionRequests(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayer) {
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
-        Set<ConnectionRequestResponseDTO> allSentConnectionRequests = networkService.getAllSentConnectionRequests(registeredPlayer, principal.getAuthenticatedUserId());
+        Set<ConnectionRequestResponseDTO> allSentConnectionRequests = networkService.getAllSentConnectionRequests(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(allSentConnectionRequests);
 
     }
 
-    // GET PENDING CONNECTION REQUESTS
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("network/{registeredPlayerId}/pending-connection-requests")
-    public ResponseEntity<Set<ConnectionRequestResponseDTO>> getPendingConnectionRequests(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+    //</editor-fold>
 
-           Set<ConnectionRequestResponseDTO> allPendingConnectionRequests = networkService.getAllPendingConnectionRequests(registeredPlayerId, principal.getAuthenticatedUserId());
+    //<editor-fold desc = "GET All Pending ConnectionRequests">
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/pending-connection-requests")
+    public ResponseEntity<Set<ConnectionRequestResponseDTO>> getPendingConnectionRequests(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+           Set<ConnectionRequestResponseDTO> allPendingConnectionRequests = networkService.getAllPendingConnectionRequests(principal.getAuthenticatedUserId());
            return ResponseEntity.ok(allPendingConnectionRequests);
 
     }
 
+    //</editor-fold>
 
-    // GET ASSOCIATIONS
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/network/{registeredPlayerId}/associations")
+    //<editor-fold desc = "GET All Associations">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/associations")
     public ResponseEntity<Set<GhostPlayerResponseDTO>> getAssociations(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
-        Set<GhostPlayerResponseDTO> allAssociations = networkService.getAllAssociations(registeredPlayerId, principal.getAuthenticatedUserId());
+        Set<GhostPlayerResponseDTO> allAssociations = networkService.getAllAssociations(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(allAssociations);
 
     }
 
+    //</editor-fold>
 
     //</editor-fold>
 
     //<editor-fold desc = "PATCH mappings">
 
 
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PatchMapping("/network/{registeredPlayerId}/decline-connection-request/{connectionRequestId}")
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/decline-connection-request/{connectionRequestId}")
     public ResponseEntity<Void> declineConnectionRequest(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("connectionRequestId") Long connectionRequestId
     ) {
 
-        networkService.declineConnectionRequest(registeredPlayerId, connectionRequestId, principal.getAuthenticatedUserId());
+        networkService.declineConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
 
     }
-
-
 
 
     //</editor-fold>
@@ -144,123 +143,127 @@ public class NetworkController {
     //<editor-fold desc = "POST Mappings">
 
 
-    //  Create ConnectionRequest
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PostMapping("/network/{registeredPlayerId}/send-connection-request/{peerId}")
+    //<editor-fold desc = "Create Connection Request">
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/send-connection-request/{peerId}")
     public ResponseEntity <ConnectionRequestResponseDTO> sendConnectionRequest(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("peerId") Long peerId) {
 
-        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(registeredPlayerId, peerId, principal.getAuthenticatedUserId());
+        ConnectionRequestResponseDTO connectionRequestResponseDTO = networkService.createConnectionRequest(peerId, principal.getAuthenticatedUserId());
 
         return ResponseEntity.ok(connectionRequestResponseDTO);
 
     }
 
+    //</editor-fold>
 
-    //  Confirm ConnectionRequest / Create Confirmed Connection
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PostMapping("/network/{registeredPlayerId}/confirm-connection/{connectionRequestId}")
+    //<editor-fold desc = "Create Confirmed Connection">
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/confirm-connection/{connectionRequestId}")
     public ResponseEntity<ConfirmedConnectionResponseDTO> confirmConnection(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("connectionRequestId") Long connectionRequestId) {
 
-        ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = networkService.confirmConnection(registeredPlayerId, connectionRequestId, principal.getAuthenticatedUserId());
+        ConfirmedConnectionResponseDTO confirmedConnectionResponseDTO = networkService.confirmConnection(connectionRequestId, principal.getAuthenticatedUserId());
 
         return ResponseEntity.ok(confirmedConnectionResponseDTO);
 
     }
 
+    //</editor-fold>
 
-    // Create Association
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PostMapping("/network/{registeredPlayerId}/add-association/{ghostPlayerId}")
+    //<editor-fold desc = "Create Association">
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/add-association/{ghostPlayerId}")
     public ResponseEntity<GhostPlayerResponseDTO> addAssociation(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("ghostPlayerId") Long ghostPlayerId) {
 
-        GhostPlayerResponseDTO ghostPlayerResponseDTO = networkService.addAssociation(registeredPlayerId, ghostPlayerId, principal.getAuthenticatedUserId());
+        GhostPlayerResponseDTO ghostPlayerResponseDTO = networkService.addAssociation(ghostPlayerId, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(ghostPlayerResponseDTO);
 
     }
 
-    // REVERSE Sent ConnectionRequest
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PatchMapping("/network/{registeredPlayerId}/cancel-connection-requests/{connectionRequestId}")
+    //</editor-fold>
+
+    // <editor-fold desc = "Reverse Sent ConnectionRequest">
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/cancel-connection-request/{connectionRequestId}")
     public ResponseEntity<Void> removePendingConnectionRequests(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("connectionRequestId") Long connectionRequestId) {
 
-        networkService.cancelConnectionRequest(registeredPlayerId, connectionRequestId, principal.getAuthenticatedUserId());
+        networkService.cancelConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
 
         return ResponseEntity.noContent().build();
 
     }
 
-    // BLOCK Player
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @PostMapping("/network/{registeredPlayerId}/block-registered-player/{blockedPlayerId}")
+    //</editor-fold>
+
+    //<editor-fold desc = "Block Player">
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/block-registered-player/{blockedPlayerId}")
     public ResponseEntity<BlockedRelationshipResponseDTO> blockRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
             @PathVariable("blockedPlayerId") Long blockedPlayerId) {
 
-        BlockedRelationshipResponseDTO blockedRelationshipResponseDTO = networkService.blockRegisteredPlayer(registeredPlayerId, blockedPlayerId, principal.getAuthenticatedUserId());
+        BlockedRelationshipResponseDTO blockedRelationshipResponseDTO = networkService.blockRegisteredPlayer(blockedPlayerId, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(blockedRelationshipResponseDTO);
 
     }
 
+    //</editor-fold>
 
     //</editor-fold>
 
     //<editor-fold desc = "DELETE Mappings">
 
-    // Remove Confirmed Connection
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @DeleteMapping("/network/{registeredPlayerId}/remove-connection/{peerAId}/{peerBId}")
+    //<editor-fold desc = "Remove Confirmed Connection">
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/remove-connection/{peerId}")
     public ResponseEntity<Void> removeConnection(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
-            @PathVariable("peerAId") Long peerAId,
-            @PathVariable("peerBId") Long peerBId) {
+            @PathVariable("peerId") Long peerId) {
 
-        networkService.removeConnection(registeredPlayerId, peerAId, peerBId, principal.getAuthenticatedUserId());
+        networkService.removeConnection(peerId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
 
     }
 
-    // Remove Association with GhostPlayer
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @DeleteMapping("/network/{registeredPlayerId}/remove-association/{ghostPlayerId}")
+    //</editor-fold>
+
+    //<editor-fold desc = "Remove Association from GhostPlayer">
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/remove-association/{ghostPlayerId}")
     public ResponseEntity<Void> removeAssociation(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable ("registeredPlayerId") Long registeredPlayerId,
             @PathVariable ("ghostPlayerId") Long ghostPlayerId) {
 
-        networkService.removeAssociation(registeredPlayerId, ghostPlayerId, principal.getAuthenticatedUserId());
+        networkService.removeAssociation(ghostPlayerId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
     }
 
+    //</editor-fold>
 
-
-    // Remove Block
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @DeleteMapping("/network/{registeredPlayerId}/remove-blocked-relationship/{blockerId}/{blockedId}")
+    //<editor-fold desc = "Remove Block">
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/remove-blocked-relationship/{blockedId}")
     public ResponseEntity<Void> removeBlock(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId") @PathVariable("registeredPlayerId") Long registeredPlayerId,
-            @PathVariable("blockerId") Long blockerId,
             @PathVariable("blockedId") Long blockedId){
 
-        networkService.removeBlock(registeredPlayerId, blockerId, blockedId, principal.getAuthenticatedUserId());
+        networkService.removeBlock(blockedId, principal.getAuthenticatedUserId());
         return ResponseEntity.noContent().build();
 
     }
 
+    //</editor-fold>
 
     //</editor-fold>
 

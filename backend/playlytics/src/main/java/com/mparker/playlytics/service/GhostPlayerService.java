@@ -33,9 +33,8 @@ public class GhostPlayerService {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Create GhostPlayer">
+    // <editor-fold desc = "Create New GhostPlayer">
 
-    // Create GhostPlayer (Method for RegisteredPlayer to create GhostPlayer from Scratch)
     @Transactional()
     public GhostPlayerResponseDTO createNewGhostPlayer(GhostPlayerDTO ghostPlayerDTO, Long authUserId) throws ExistingResourceException, CustomAccessDeniedException {
 
@@ -152,7 +151,7 @@ public class GhostPlayerService {
 
     //</editor-fold>
 
-    //<editor-fold desc = "GhostPlayer Helper Methods">
+    //<editor-fold desc = "Helper Method">
 
     private GhostPlayerResponseDTO createGhostPlayerResponseDTO(GhostPlayer ghostPlayer) {
 

@@ -30,7 +30,7 @@ public class RegisteredPlayerController {
     //<editor-fold desc = "PATCH Mapping">
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/registered-players}")
+    @PatchMapping("/registered-players")
     public ResponseEntity<RegisteredPlayerUpdateDTO> updateGhostPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {

@@ -1,15 +1,13 @@
-
-// Imports
-
 import { TestBed } from '@angular/core/testing';
-import { OwnedGameService } from './owned-game-service';
 
-describe('OwnedGame', () => {
-  let service: OwnedGameService;
+import { LoginService } from './login-service';
+
+describe('LoginService', () => {
+  let service: LoginService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(OwnedGameService);
+    service = TestBed.inject(LoginService);
   });
 
   it('should be created', () => {

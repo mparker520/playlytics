@@ -1,12 +1,14 @@
 <section>
   <h2>Sign in to PlayLytics</h2>
-<form>
+<form (ngSubmit)="login()" >
 
-  <label for = "userNameInput">User Name</label>
-  <input type = "text" id = "userNameInput" name = "userNameInput" placeholder="Enter Your Email">
+  <label for = "username">User Name</label>
+  <input [(ngModel)]="username" type = "text" id = "username" name = "username" placeholder="Enter Your Email">
 
   <label for = "password">Password</label>
-  <input type = text id = "password" name = "password" placeholder="Enter Your Password">
+  <input [(ngModel)]="password" type = text id = "password" name = "password" placeholder="Enter Your Password">
+
+  <button type = "submit" id = "loginSubmitButton">Login!</button>
 
 </form>
 </section>

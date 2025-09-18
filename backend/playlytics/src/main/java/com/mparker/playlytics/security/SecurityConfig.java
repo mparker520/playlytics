@@ -37,6 +37,8 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+
         http
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/login").permitAll()
@@ -47,6 +49,9 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(f -> f.disable())
                 .httpBasic(b -> b.disable());
+
+
+
         return http.build();
     }
 

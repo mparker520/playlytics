@@ -117,25 +117,18 @@ public class GameInventoryService {
 
     // <editor-fold desc = "Remove OwnedGame from  Inventory">
 
-
-    // Delete OwnedGame by OwnedGame_Id and current Player_Id
     @Transactional
-    public void deleteByIdAndPlayerId(Long registeredPlayerId, Long ownedGameId, Long authUserId) throws AccessDeniedException, NotFoundException {
+    public void deleteByIdAndPlayerId(Long ownedGameId, Long authUserId) throws AccessDeniedException, NotFoundException {
 
-        if(!registeredPlayerId.equals(authUserId)) {
-            throw new AccessDeniedException("You Do Not Have Access to This Resource");
-        }
 
-        else {
 
             if(!ownedGameRepository.existsById(ownedGameId)) {
                 throw new NotFoundException("No Game with that Id Found in Inventory");
             }
 
             else {
-                ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(ownedGameId, registeredPlayerId);
+                ownedGameRepository.deleteByIdAndRegisteredPlayer_Id(ownedGameId, authUserId);
             }
-        }
 
     }
 

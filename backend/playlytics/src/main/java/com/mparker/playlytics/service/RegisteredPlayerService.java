@@ -37,9 +37,9 @@ public class RegisteredPlayerService {
     //<editor-fold desc = "Update RegisteredPlayer">
 
     @Transactional
-    public RegisteredPlayerUpdateDTO updateRegisteredPlayer(Long registeredPlayerId, RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
+    public RegisteredPlayerUpdateDTO updateRegisteredPlayer(Long authUserId, RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
 
         if(registeredPlayerUpdateDTO.firstName() != null) {
             registeredPlayer.setFirstName(registeredPlayerUpdateDTO.firstName());
@@ -68,19 +68,19 @@ public class RegisteredPlayerService {
     //<editor-fold desc = "Delete RegisteredPlayer">
 
     @Transactional
-    public void deleteRegisteredPlayer(Long registeredPlayerId) {
+    public void deleteRegisteredPlayer(Long authUserId) {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(registeredPlayerId);
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
 
         // Convert to GhostPlayer
-        if (ghostPlayerRepository.existsByLinkedRegisteredPlayer_Id(registeredPlayerId)) {
+        if (ghostPlayerRepository.existsByLinkedRegisteredPlayer_Id(authUserId)) {
 
-                GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByLinkedRegisteredPlayer_Id(registeredPlayerId);
+                GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByLinkedRegisteredPlayer_Id(authUserId);
                 ghostPlayer.setStatus(GhostStatus.DEACTIVATED);
                 ghostPlayer.setLinkedRegisteredPlayer(null);
                 ghostPlayer.setCreator(null);
 
-               updatePlayerReferences(registeredPlayerId, ghostPlayer);
+               updatePlayerReferences(authUserId, ghostPlayer);
         }
 
         else {
@@ -92,12 +92,12 @@ public class RegisteredPlayerService {
 
             GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, email, GhostStatus.DEACTIVATED, null, null);
             ghostPlayerRepository.save(ghostPlayer);
-            updatePlayerReferences(registeredPlayerId, ghostPlayer);
+            updatePlayerReferences(authUserId, ghostPlayer);
         }
 
         // Remove row from table
 
-        registeredPlayerRepository.deleteById(registeredPlayerId);
+        registeredPlayerRepository.deleteById(authUserId);
     }
 
     //</editor-fold>

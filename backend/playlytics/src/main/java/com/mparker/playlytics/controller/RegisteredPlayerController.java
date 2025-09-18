@@ -5,8 +5,11 @@ package com.mparker.playlytics.controller;
 import com.mparker.playlytics.dto.GhostPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
+import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.RegisteredPlayerService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -26,12 +29,13 @@ public class RegisteredPlayerController {
 
     //<editor-fold desc = "PATCH Mapping">
 
-    @PatchMapping("/registered-players/{registeredPlayerId}")
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/registered-players}")
     public ResponseEntity<RegisteredPlayerUpdateDTO> updateGhostPlayer(
-            @PathVariable Long registeredPlayerId,
+            @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
 
-        RegisteredPlayerUpdateDTO registeredPlayerResponseDTO = registeredPlayerService.updateRegisteredPlayer(registeredPlayerId, registeredPlayerUpdateDTO);
+        RegisteredPlayerUpdateDTO registeredPlayerResponseDTO = registeredPlayerService.updateRegisteredPlayer(principal.getAuthenticatedUserId(), registeredPlayerUpdateDTO);
         return ResponseEntity.ok(registeredPlayerResponseDTO);
 
     }
@@ -40,11 +44,12 @@ public class RegisteredPlayerController {
 
     //<editor-fold desc = "DELETE Mapping">
 
-    @DeleteMapping("registered-players/{registeredPlayerId}")
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/registered-players")
     public ResponseEntity<Void> deleteRegisteredPlayer(
-            @PathVariable("registeredPlayerId") Long registeredPlayerId) {
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
-            registeredPlayerService.deleteRegisteredPlayer(registeredPlayerId);
+            registeredPlayerService.deleteRegisteredPlayer(principal.getAuthenticatedUserId());
             return ResponseEntity.noContent().build();
 
     }

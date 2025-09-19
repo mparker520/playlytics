@@ -4,6 +4,7 @@ package com.mparker.playlytics.controller;
 import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GameInventoryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -44,11 +45,11 @@ public class OwnedGameController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/owned-games/{gameId}")
-    public ResponseEntity<OwnedGameResponseDTO> createOwnedGame(
+    public ResponseEntity<OwnedGameResponseDTO> addOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("gameId") Long gameId)  {
         OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(gameId, principal.getAuthenticatedUserId());
-        return ResponseEntity.ok(ownedGameResponseDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ownedGameResponseDTO);
 
     }
 
@@ -58,12 +59,12 @@ public class OwnedGameController {
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/owned-games/{ownedGameId}")
-    public ResponseEntity<List<OwnedGameResponseDTO>> deleteOwnedGame(
+    public ResponseEntity<Void> deleteOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable ("ownedGameId") Long ownedGameId) {
             gameInventoryService.deleteByIdAndPlayerId(ownedGameId, principal.getAuthenticatedUserId());
-            List<OwnedGameResponseDTO> allOwnedGames    = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
-            return ResponseEntity.ok(allOwnedGames);
+            gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
+            return ResponseEntity.noContent().build();
     }
 
     //</editor-fold>

@@ -29,7 +29,7 @@ public class GameController {
 
     @GetMapping("/board-games")
     public ResponseEntity<Set<GameResponseDTO>> getBoardGames(
-            @RequestParam(value = "title") String title
+            @RequestParam(value = "databaseFilter") String title
     ) {
 
             Set <GameResponseDTO> boardGameResponseDTO = gameService.findByTitle(title);

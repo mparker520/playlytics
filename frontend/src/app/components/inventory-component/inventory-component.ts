@@ -4,6 +4,8 @@ import {AddOwnedGameComponent} from './add-owned-game-component/add-owned-game-c
 import {InventoryService} from '../../services/inventory-service';
 import {OwnedGameResponseDTO} from '../../dtos/owned-game-response-dto';
 import {Component, OnInit} from '@angular/core';
+import {GameResponseDTO} from '../../dtos/game-response-dto';
+import {GameService} from '../../services/game-service';
 
 @Component({
   selector: 'app-inventory-component',
@@ -20,11 +22,13 @@ export class InventoryComponent implements OnInit{
 
   //<editor-fold desc = "Constructor and Fields">
 
-  gameTitle: string = '';
+  inventoryFilter: string = '';
   ownedGames: OwnedGameResponseDTO[] = [];
 
+  games: GameResponseDTO[] = [];
 
-  constructor(private inventoryService: InventoryService) {
+
+  constructor(private inventoryService: InventoryService, private gameService: GameService) {
 
   }
 
@@ -49,15 +53,48 @@ export class InventoryComponent implements OnInit{
 
   handleDelete(id: number) {
       this.inventoryService.deleteOwnedGame(id).subscribe({
-        next: (response: OwnedGameResponseDTO[]) => {
-          this.ownedGames = response;
-        },
-        error: (error: any) => console.error("fail", error)
-
+        next: (deleteResponse: void) => {
+          this.inventoryService.getInventory().subscribe({
+            next: (updateResponse: OwnedGameResponseDTO[]) => {
+              this.ownedGames = updateResponse;
+            },
+            error: (error: any) => console.error("fail", error)
+          })
+        }
       })
   }
 
   //</editor-fold>
 
+  //<editor-fold desc = "Get Games from Database">
+
+  handleLookup(databaseFilter: string) {
+    console.log(databaseFilter);
+    this.gameService.getBoardGames(databaseFilter).subscribe({
+          next:(response: GameResponseDTO[]) => {
+            this.games = response;
+            console.log(this.games);
+          },
+
+          error: (error: any) => console.error("fail", error)
+    })
+  }
+
+  //</editor-fold>
+
+  //<editor-fold desc="Add Game to Inventory">
+  handleAdd(gameId: number) {
+      this.inventoryService.addOwnedGame(gameId).subscribe({
+        next: (addResponse: OwnedGameResponseDTO) => {
+          this.inventoryService.getInventory().subscribe({
+            next: (updateResponse: OwnedGameResponseDTO[]) => {
+              this.ownedGames = updateResponse;
+            },
+            error: (error: any) => console.error("fail", error)
+          })
+        }
+      })
+  }
+  //</editor-fold>
 
 }

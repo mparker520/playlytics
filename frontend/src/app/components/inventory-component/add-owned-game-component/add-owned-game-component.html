@@ -1,3 +1,14 @@
 <section>
   <h3>Add to Inventory</h3>
+
+<input type="text" placeholder="Enter Game Name" #searchBox>
+<button (click)="triggerLookup(searchBox.value)">Search Game Database</button>
+
+  <ul>
+    @for(game of games; track game.gameId) {
+      <li>{{ game.title }}</li>
+      <button (click)="triggerAdd(game.gameId)"  id={{game.gameId}}>Add to Inventory</button>
+    }
+  </ul>
+
 </section>

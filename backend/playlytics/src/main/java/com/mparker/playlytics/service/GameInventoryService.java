@@ -77,18 +77,14 @@ public class GameInventoryService {
     // <editor-fold desc = "View All Owned Games">
 
     @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long authUserId) throws AccessDeniedException {
+    public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long authUserId) throws NotFoundException {
 
 
             List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(authUserId);
 
-            if(ownedGamesList.isEmpty()) {
-                throw new NotFoundException("You Do Not Have Any Games in Your Inventory!");
-            }
 
-            else {
                 return getOwnedGamesDTOList(ownedGamesList);
-            }
+
 
 
     }

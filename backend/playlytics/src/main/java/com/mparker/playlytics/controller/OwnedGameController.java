@@ -58,11 +58,12 @@ public class OwnedGameController {
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/owned-games/{ownedGameId}")
-    public ResponseEntity<Void> deleteOwnedGame(
+    public ResponseEntity<List<OwnedGameResponseDTO>> deleteOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable ("ownedGameId") Long ownedGameId) {
-        gameInventoryService.deleteByIdAndPlayerId(ownedGameId, principal.getAuthenticatedUserId());
-        return ResponseEntity.noContent().build();
+            gameInventoryService.deleteByIdAndPlayerId(ownedGameId, principal.getAuthenticatedUserId());
+            List<OwnedGameResponseDTO> allOwnedGames    = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(allOwnedGames);
     }
 
     //</editor-fold>

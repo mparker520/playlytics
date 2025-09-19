@@ -13,9 +13,11 @@ export class LoginService {
   }
 
   public login(authRequestDTO: AuthRequestDTO) : Observable<any> {
-
-    return this.http.post('http://localhost:8080/login', authRequestDTO);
-
+    console.log(authRequestDTO.username + authRequestDTO.password)
+    return this.http.post('http://localhost:8080/login', authRequestDTO, {withCredentials: true});
   }
 
 }
+
+
+//    return this.http.post('http://localhost:8080/login', authRequestDTO);

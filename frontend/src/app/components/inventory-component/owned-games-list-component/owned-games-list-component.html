@@ -1,0 +1,11 @@
+
+<section>
+
+  <h3>Your Current Inventory</h3>
+  <ul>
+    @for(ownedGame of ownedGames; track ownedGame.id) {
+      <li>{{ ownedGame.title }}</li>
+    }
+  </ul>
+
+</section>

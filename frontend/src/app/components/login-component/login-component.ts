@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {LoginService} from '../../services/login-service';
 import {AuthService} from '../../services/auth-service';
-
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login-component',
@@ -18,7 +18,7 @@ export class LoginComponent {
   password: string = '';
 
 
-  constructor( private loginService: LoginService, private authService: AuthService) {
+  constructor( private loginService: LoginService, private authService: AuthService, private router: Router) {
 
   }
 
@@ -34,6 +34,7 @@ export class LoginComponent {
       next: (response) => {
         console.log('Login Success');
         this.authService.authenticated = true;
+        this.router.navigate(['/home']);
       },
       error: (error) => console.log('Failed to Authenticate')
 

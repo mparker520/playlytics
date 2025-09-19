@@ -32,7 +32,7 @@ public class OwnedGameController {
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(value = "gameTitle", required = false) String gameTitle)  {
 
-        if (gameTitle == null) {
+        if (gameTitle.isBlank()) {
             List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allOwnedGames);
         }

@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
 
 @Component({
   selector: 'app-owned-games-list-component',
@@ -7,7 +8,7 @@ import {Component, Input} from '@angular/core';
   styleUrl: './owned-games-list-component.css'
 })
 export class OwnedGamesListComponent {
-  @Input() ownedGames!: ({ id: number; title: string })[];
+  @Input() ownedGames!: OwnedGameResponseDTO[];
 
 
 }

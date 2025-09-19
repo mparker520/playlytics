@@ -21,7 +21,7 @@ export class AccountCreationService {
     avatar: Uint8Array<ArrayBufferLike> | undefined
   }): Observable<any>{
 
-    return this.http.post('http://localhost:8080/create-account', registeredPlayerDTO);
+    return this.http.post('/create-account', registeredPlayerDTO);
 
   }
 

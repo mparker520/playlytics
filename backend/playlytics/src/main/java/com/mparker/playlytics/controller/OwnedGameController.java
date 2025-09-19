@@ -12,6 +12,8 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class OwnedGameController {
 
     //<editor-fold desc = "Constructor">
@@ -29,18 +31,10 @@ public class OwnedGameController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/owned-games")
     public ResponseEntity<List<OwnedGameResponseDTO>> getOwnedGames(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(value = "gameTitle", required = false) String gameTitle)  {
+            @AuthenticationPrincipal CustomUserDetails principal)  {
 
-        if (gameTitle.isBlank()) {
             List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allOwnedGames);
-        }
-
-        else {
-            List<OwnedGameResponseDTO> ownedGamesByName = gameInventoryService.findByRegisteredPlayerIDAndTitle(gameTitle, principal.getAuthenticatedUserId());
-            return ResponseEntity.ok(ownedGamesByName);
-        }
 
     }
 

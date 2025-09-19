@@ -9,15 +9,31 @@ import {OwnedGameResponseDTO} from '../dtos/owned-game-response-dto';
 export class InventoryService {
 
 
+  //<editor-fold desc = "Constructor">
 
   constructor(private http: HttpClient) {
 
   }
 
-  public getInventory(gameTitle: string): Observable<any> {
+  //</editor-fold>
 
-    return this.http.get<OwnedGameResponseDTO[]>('http://localhost:8080/owned-games', { params: {gameTitle: gameTitle}, withCredentials: true});
+  //<editor-fold desc = "Get All Owned Games"
+  public getInventory(): Observable<OwnedGameResponseDTO[]> {
+
+    return this.http.get<OwnedGameResponseDTO[]>('/owned-games', {withCredentials: true});
 
   }
+
+  //</editor-fold>
+
+
+  //<editor-fold desc = "Delete OwnedGame">
+  public deleteOwnedGame(id: number): Observable<OwnedGameResponseDTO[]> {
+
+    return this.http.delete<OwnedGameResponseDTO[]>(`/owned-games/${id}`, {withCredentials: true});
+
+  }
+
+  //</editor-fold>
 
 }

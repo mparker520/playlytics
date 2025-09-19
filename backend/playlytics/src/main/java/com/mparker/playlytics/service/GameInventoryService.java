@@ -95,26 +95,6 @@ public class GameInventoryService {
 
     // </editor-fold>
 
-    //<editor-fold desc = "View OwnedGames by Title">
-
-    @Transactional(readOnly = true)
-    public List<OwnedGameResponseDTO> findByRegisteredPlayerIDAndTitle(String gameName, Long authUserId) throws AccessDeniedException, NotFoundException {
-
-
-
-
-            List<OwnedGame> ownedGamesByNameList = ownedGameRepository.findAllByRegisteredPlayer_IdAndGame_gameTitle(authUserId, gameName);
-
-            if(ownedGamesByNameList.isEmpty()) {
-                throw new NotFoundException("No Games By That Name Found in Inventory");
-            }
-            return getOwnedGamesDTOList(ownedGamesByNameList);
-
-
-    }
-
-    //</editor-fold>
-
     // <editor-fold desc = "Remove OwnedGame from  Inventory">
 
     @Transactional
@@ -143,7 +123,7 @@ public class GameInventoryService {
 
         for (OwnedGame ownedGame : ownedGamesList) {
 
-            Long gameId = ownedGame.getGame().getId();
+            Long gameId = ownedGame.getId();
             String gameName = ownedGame.getGame().getGameTitle();
 
             OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(gameId, gameName);

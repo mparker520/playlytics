@@ -51,8 +51,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/create-account").permitAll()
                         .anyRequest().authenticated()
                 )
-                .csrf(c -> c .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers("/login", "/create-account"))
+                .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .formLogin(f -> f.disable())
                 .httpBasic(b -> b.disable());

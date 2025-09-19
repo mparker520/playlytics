@@ -18,8 +18,9 @@ import {Component, OnInit} from '@angular/core';
 })
 export class InventoryComponent implements OnInit{
 
-  gameTitle: string = '';
+  //<editor-fold desc = "Constructor and Fields">
 
+  gameTitle: string = '';
   ownedGames: OwnedGameResponseDTO[] = [];
 
 
@@ -27,16 +28,36 @@ export class InventoryComponent implements OnInit{
 
   }
 
+  //</editor-fold>
+
+  //<editor-fold desc = "On Initiate">
+// TODO: Fix filtering of Games
   ngOnInit() : void {
 
-    this.inventoryService.getInventory(this.gameTitle).subscribe({
+    this.inventoryService.getInventory().subscribe({
       next: (response: OwnedGameResponseDTO[]) => {
         this.ownedGames = response;
-        console.log(response);
       },
-      error: (error) => console.error("fail", error)
+      error: (error: any) => console.error("fail", error)
     })
 
   }
+
+  //</editor-fold>
+
+  //<editor-fold desc = "Handle Delete">
+
+  handleDelete(id: number) {
+      this.inventoryService.deleteOwnedGame(id).subscribe({
+        next: (response: OwnedGameResponseDTO[]) => {
+          this.ownedGames = response;
+        },
+        error: (error: any) => console.error("fail", error)
+
+      })
+  }
+
+  //</editor-fold>
+
 
 }

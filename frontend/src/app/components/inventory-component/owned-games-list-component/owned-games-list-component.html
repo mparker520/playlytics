@@ -5,6 +5,7 @@
   <ul>
     @for(ownedGame of ownedGames; track ownedGame.gameId) {
       <li>{{ ownedGame.gameName }}</li>
+      <button (click)="triggerDelete(ownedGame.gameId)"  id={{ownedGame.gameId}}>Remove from Inventory</button>
     }
   </ul>
 

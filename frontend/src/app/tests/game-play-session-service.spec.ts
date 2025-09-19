@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GamePlaySessionService } from './game-play-session-service';
+import { GamePlaySessionService } from '../services/game-play-session-service';
 
 describe('GamePlaySessionService', () => {
   let service: GamePlaySessionService;

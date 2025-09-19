@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccountCreationComponent } from './account-creation-component';
+import { AccountCreationComponent } from '../components/account-creation-component/account-creation-component';
 
 describe('AccountCreationComponent', () => {
   let component: AccountCreationComponent;

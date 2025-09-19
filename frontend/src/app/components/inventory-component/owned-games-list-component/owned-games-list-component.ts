@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
 
 @Component({
@@ -9,6 +9,10 @@ import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
 })
 export class OwnedGamesListComponent {
   @Input() ownedGames!: OwnedGameResponseDTO[];
+  @Output() delete =  new EventEmitter<number>;
 
+  triggerDelete(id: number) {
+    this.delete.emit(id)
+  }
 
 }

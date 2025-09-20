@@ -4,7 +4,7 @@ import {AddAssociationComponent} from './add-association-component/add-associati
 import {AddGuestComponent} from './add-guest-component/add-guest-component';
 import {GhostPlayerResponseDTO} from '../../../dtos/ghost-player-response-dto';
 import {NetworkService} from '../../../services/network-service';
-import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
+
 
 @Component({
   selector: 'app-guest-players-component',
@@ -20,6 +20,8 @@ export class GuestPlayersComponent implements OnInit {
 
   //<editor-fold desc="Constructor and Fields">
   associations: GhostPlayerResponseDTO[] = [];
+  guestPlayer?: GhostPlayerResponseDTO;
+  databaseFilter: string = '';
 
   constructor(private networkService: NetworkService) {
 
@@ -43,7 +45,7 @@ export class GuestPlayersComponent implements OnInit {
 
   //</editor-fold>
 
-
+  //<editor-fold desc="Remove Associations">
   handleRemove(id: number) {
     this.networkService.removeAssociation(id).subscribe({
       next: (removeResponse: void) => {
@@ -52,6 +54,33 @@ export class GuestPlayersComponent implements OnInit {
             this.associations = updateResponse;
           },
           error: (error: any) => console.error("fail", error)
+        })
+      }
+    })
+  }
+  //</editor-fold>
+
+
+  //<editor-fold desc="Get Guest / Ghost Player from Database">
+  handleLookup(databaseFilter: string) {
+    this.networkService.getGuestPlayers(databaseFilter).subscribe({
+      next:(response: GhostPlayerResponseDTO) => {
+        this.guestPlayer = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+  }
+  //</editor-fold>
+
+
+  handleAdd(id: number) {
+        this.networkService.addAssociation(id).subscribe({
+          next: (updateResponse: GhostPlayerResponseDTO) => {
+            this.networkService.getAllAssociations().subscribe({
+              next: (updateResponse: GhostPlayerResponseDTO[]) => {
+                this.associations = updateResponse;
+              },
+              error: (error: any) => console.error("fail", error)
         })
       }
     })

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {GhostPlayerResponseDTO} from '../../../../dtos/ghost-player-response-dto';
 
 @Component({
   selector: 'app-add-association-component',
@@ -7,5 +8,16 @@ import { Component } from '@angular/core';
   styleUrl: './add-association-component.css'
 })
 export class AddAssociationComponent {
+  @Input() guestPlayer!: GhostPlayerResponseDTO;
+
+  @Output() lookup = new EventEmitter<string>;
+  triggerLookup(searchValue: string) {
+    this.lookup.emit(searchValue);
+  }
+
+  @Output() add = new EventEmitter<number>;
+  triggerAdd(id: number) {
+    this.add.emit(id)
+  }
 
 }

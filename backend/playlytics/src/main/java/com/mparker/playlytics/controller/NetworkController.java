@@ -50,8 +50,8 @@ public class NetworkController {
     //<editor-fold desc = "GET All Available GhostPlayers for Association by Filter">
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/discover-ghost-players")
-    public ResponseEntity<GhostPlayerResponseDTO> discoverUnassociatedGhostPlayers(
+    @GetMapping("/ghost-players")
+    public ResponseEntity<GhostPlayerResponseDTO> discoverGhostPlayers(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(value = "identifierEmail") String identifierEmail){
 
@@ -177,7 +177,7 @@ public class NetworkController {
     //<editor-fold desc = "Create Association">
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/add-association/{ghostPlayerId}")
+    @PostMapping("/associations/{ghostPlayerId}")
     public ResponseEntity<GhostPlayerResponseDTO> addAssociation(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("ghostPlayerId") Long ghostPlayerId) {
@@ -240,7 +240,7 @@ public class NetworkController {
 
     //<editor-fold desc = "Remove Association from GhostPlayer">
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/remove-association/{ghostPlayerId}")
+    @DeleteMapping("/associations/{ghostPlayerId}")
     public ResponseEntity<Void> removeAssociation(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable ("ghostPlayerId") Long ghostPlayerId) {

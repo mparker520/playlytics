@@ -20,9 +20,24 @@ export class NetworkService {
 }
   //</editor-fold>
 
+  //<editor-fold desc="Remove Association">
   public removeAssociation(id: number): Observable<void> {
-    return this.http.delete<void>(`/remove-association/${id}`, {withCredentials: true})
+    return this.http.delete<void>(`/associations/${id}`, {withCredentials: true})
   }
+  //</editor-fold>
 
+
+  //<editor-fold desc="Get Guest / Ghost Players for Connection">
+  public getGuestPlayers(identifierEmail: string): Observable<GhostPlayerResponseDTO> {
+
+    return this.http.get<GhostPlayerResponseDTO>("/ghost-players", {params: {identifierEmail}, withCredentials: true})
+
+  }
+  //</editor-fold>
+
+
+  public addAssociation(id: number): Observable<GhostPlayerResponseDTO> {
+    return this.http.post<GhostPlayerResponseDTO>(`/associations/${id}`, {withCredentials: true})
+  }
 
 }

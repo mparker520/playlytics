@@ -5,7 +5,7 @@
 </section>
 
 <section>
-  <app-add-association-component></app-add-association-component>
+  <app-add-association-component (add)="handleAdd($event)" (lookup)="handleLookup($event)" [guestPlayer]="guestPlayer"></app-add-association-component>
 </section>
 
 <section>

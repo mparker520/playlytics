@@ -69,10 +69,10 @@ public class NetworkController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/connections")
-    public ResponseEntity<Set<ConfirmedConnectionResponseDTO>> getAllConnections(
+    public ResponseEntity<Set<RegisteredPlayerResponseDTO>> getAllConnections(
             @AuthenticationPrincipal CustomUserDetails principal) {
 
-        Set<ConfirmedConnectionResponseDTO> allConnections = networkService.getAllConnections(principal.getAuthenticatedUserId());
+        Set<RegisteredPlayerResponseDTO> allConnections = networkService.getAllConnections(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(allConnections);
 
     }
@@ -208,7 +208,7 @@ public class NetworkController {
     //<editor-fold desc = "Block Player">
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/block-registered-player/{blockedPlayerId}")
+    @PostMapping("/block/{blockedPlayerId}")
     public ResponseEntity<BlockedRelationshipResponseDTO> blockRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("blockedPlayerId") Long blockedPlayerId) {
@@ -226,7 +226,7 @@ public class NetworkController {
 
     //<editor-fold desc = "Remove Confirmed Connection">
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/remove-connection/{peerId}")
+    @DeleteMapping("/connections/{peerId}")
     public ResponseEntity<Void> removeConnection(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("peerId") Long peerId) {

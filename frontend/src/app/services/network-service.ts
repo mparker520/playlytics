@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {GhostPlayerResponseDTO} from '../dtos/ghost-player-response-dto';
 import {Observable} from 'rxjs';
+import {RegisteredPlayerResponseDTO} from '../dtos/registered-player-response-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,6 @@ export class NetworkService {
   }
   //</editor-fold>
 
-
   //<editor-fold desc="Get Guest / Ghost Players for Connection">
   public getGuestPlayers(identifierEmail: string): Observable<GhostPlayerResponseDTO> {
 
@@ -35,9 +35,27 @@ export class NetworkService {
   }
   //</editor-fold>
 
-
+  //<editor-fold desc="Add Association">
   public addAssociation(id: number): Observable<GhostPlayerResponseDTO> {
     return this.http.post<GhostPlayerResponseDTO>(`/associations/${id}`, {withCredentials: true})
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Get All Connections">
+  public getAllConnections(): Observable<RegisteredPlayerResponseDTO[]> {
+        return this.http.get<RegisteredPlayerResponseDTO[]>('/connections', {withCredentials: true});
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Remove Connection">
+  public removeConnection(id: number): Observable<void> {
+        return this.http.delete<void>(`/connections/${id}`, {withCredentials: true})
+  }
+  //</editor-fold>
+
+  public blockRegisteredPlayer(id: number): Observable<void> {
+    return this.http.post<void>(`/block/${id}`, {withCredentials: true})
+  }
+
 
 }

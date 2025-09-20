@@ -56,7 +56,7 @@ public class NetworkService {
             }
 
             else {
-                return new RegisteredPlayerResponseDTO(peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
+                return new RegisteredPlayerResponseDTO(peer.getId(), peer.getFirstName(), peer.getLastName(), peer.getAvatar(), peer.getLoginEmail(), peer.getDisplayName());
             }
 
     }
@@ -231,7 +231,7 @@ public class NetworkService {
             // Change existing Requests to BLOCKED
             if (connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(authUserId, blockedPlayerId, blockedPlayerId, authUserId)){
 
-                ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(authUserId, blockedPlayerId, blockedPlayerId, authUserId);
+                ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientIdAndConnectionRequestStatus(authUserId, blockedPlayerId, blockedPlayerId, authUserId, ConnectionRequestStatus.ACCEPTED);
 
                 if (connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
 
@@ -347,32 +347,35 @@ public class NetworkService {
     //<editor-fold desc = "View All Connections">
 
     @Transactional(readOnly = true)
-    public Set<ConfirmedConnectionResponseDTO> getAllConnections(Long authUserId) throws CustomAccessDeniedException, NotFoundException {
+    public Set<RegisteredPlayerResponseDTO> getAllConnections(Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
 
             Set<ConfirmedConnection> allConnections = confirmedConnectionRepository.getAllByPeerA_Id(authUserId);
             allConnections.addAll(confirmedConnectionRepository.getAllByPeerB_Id(authUserId));
 
-            Set<ConfirmedConnectionResponseDTO> allConnectionResponses = new HashSet<>();
+            Set<RegisteredPlayerResponseDTO> allConnectedPlayersResponseDTO = new HashSet<>();
 
             for (ConfirmedConnection confirmedConnection : allConnections) {
 
                 Long peerAId = confirmedConnection.getPeerA().getId();
                 Long peerBId = confirmedConnection.getPeerB().getId();
-                ConnectionRequestStatus connectionRequestStatus = confirmedConnection.getConnectionRequest().getConnectionRequestStatus();
 
-                ConfirmedConnectionResponseDTO connectionRequestResponseDTO = new ConfirmedConnectionResponseDTO(peerAId, peerBId, connectionRequestStatus);
-                allConnectionResponses.add(connectionRequestResponseDTO);
+                if(!peerAId.equals(authUserId)) {
+                    RegisteredPlayer connection = registeredPlayerRepository.getReferenceById(peerAId);
+                    allConnectedPlayersResponseDTO.add(new RegisteredPlayerResponseDTO(connection.getId(), connection.getFirstName(), connection.getLastName(), connection.getAvatar(), connection.getLoginEmail(), connection.getDisplayName()));
+                }
+                else {
+                    RegisteredPlayer connection = registeredPlayerRepository.getReferenceById(peerBId);
+                    allConnectedPlayersResponseDTO.add(new RegisteredPlayerResponseDTO(connection.getId(), connection.getFirstName(), connection.getLastName(), connection.getAvatar(), connection.getLoginEmail(), connection.getDisplayName()));
+                }
 
             }
 
-            if(!allConnectionResponses.isEmpty()) {
-                return allConnectionResponses;
-            }
 
-            else {
-                throw new NotFoundException("No confirmed Connections!");
-            }
+            return allConnectedPlayersResponseDTO;
+
+
+
 
         }
 

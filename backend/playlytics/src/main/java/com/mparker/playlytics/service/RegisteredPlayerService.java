@@ -49,9 +49,8 @@ public class RegisteredPlayerService {
             byte[] avatar = registeredPlayerDTO.avatar();
 
             RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, ("{noop}" + password));
-            registeredPlayerRepository.save(registeredPlayer);
-
-            return new RegisteredPlayerResponseDTO(firstName, lastName, avatar, loginEmail, displayName);
+            Long id = registeredPlayerRepository.saveAndFlush(registeredPlayer).getId();
+            return new RegisteredPlayerResponseDTO(id, firstName, lastName, avatar, loginEmail, displayName);
 
         }
 

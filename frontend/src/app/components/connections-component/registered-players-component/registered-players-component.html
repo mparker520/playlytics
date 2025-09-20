@@ -1,1 +1,10 @@
-<p>registered-players-component works!</p>
+<h2>Connections</h2>
+
+<section>
+  <app-confirmed-connections-component (remove)="handleRemove($event)" (block)="handleBlock($event)" [connections]="connections"></app-confirmed-connections-component>
+</section>
+
+<section>
+  <app-manage-connections-component></app-manage-connections-component>
+</section>
+

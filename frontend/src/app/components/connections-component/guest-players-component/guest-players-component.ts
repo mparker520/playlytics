@@ -31,7 +31,7 @@ export class GuestPlayersComponent implements OnInit {
 
   //</editor-fold>
 
-  //<editor-fold desc="Get All Associations">
+  //<editor-fold desc="On Initiate, Set Up Data">
   ngOnInit() {
 
     this.networkService.getAllAssociations().subscribe({
@@ -74,7 +74,7 @@ export class GuestPlayersComponent implements OnInit {
   //<editor-fold desc="Add Ghost/Guest Player as Associate">
   handleAdd(id: number) {
         this.networkService.addAssociation(id).subscribe({
-          next: (updateResponse: GhostPlayerResponseDTO) => {
+          next: (response: GhostPlayerResponseDTO) => {
             this.networkService.getAllAssociations().subscribe({
               next: (updateResponse: GhostPlayerResponseDTO[]) => {
                 this.associations = updateResponse;

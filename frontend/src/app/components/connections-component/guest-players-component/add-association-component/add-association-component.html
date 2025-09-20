@@ -1,14 +1,17 @@
 <section>
-  <h3>Add Guest Player as an Associate</h3>
+  <h3>Add Guest Player as An Associate</h3>
 
-  <input type="text" placeholder="Enter Guest Player's Email" #searchBox>
+  <input type="text" placeholder="Search by Guest Player's Email" #searchBox>
   <button (click)="triggerLookup(searchBox.value)">Search Game Database</button>
 
-  <ul >
+  @if (guestPlayer) {
+    <ul >
 
       <li>{{ guestPlayer.firstName + guestPlayer.lastName + guestPlayer.identifierEmail }}</li>
-      <button (click)="triggerAdd(guestPlayer.id)"  id={{guestPlayer.id}}>Add to Inventory</button>
+      <button (click)="triggerAdd(guestPlayer.id)"  id={{guestPlayer.id}}>Add as Association</button>
 
-  </ul>
+    </ul>
+  }
+
 
 </section>

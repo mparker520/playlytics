@@ -60,7 +60,6 @@ export class GuestPlayersComponent implements OnInit {
   }
   //</editor-fold>
 
-
   //<editor-fold desc="Get Guest / Ghost Player from Database">
   handleLookup(databaseFilter: string) {
     this.networkService.getGuestPlayers(databaseFilter).subscribe({
@@ -72,18 +71,20 @@ export class GuestPlayersComponent implements OnInit {
   }
   //</editor-fold>
 
-
+  //<editor-fold desc="Add Ghost/Guest Player as Associate">
   handleAdd(id: number) {
         this.networkService.addAssociation(id).subscribe({
           next: (updateResponse: GhostPlayerResponseDTO) => {
             this.networkService.getAllAssociations().subscribe({
               next: (updateResponse: GhostPlayerResponseDTO[]) => {
                 this.associations = updateResponse;
+                this.guestPlayer = undefined;
               },
               error: (error: any) => console.error("fail", error)
         })
       }
     })
   }
+  //</editor-fold>
 
 }

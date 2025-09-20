@@ -8,7 +8,7 @@ import {GhostPlayerResponseDTO} from '../../../../dtos/ghost-player-response-dto
   styleUrl: './add-association-component.css'
 })
 export class AddAssociationComponent {
-  @Input() guestPlayer!: GhostPlayerResponseDTO;
+  @Input() guestPlayer?: GhostPlayerResponseDTO;
 
   @Output() lookup = new EventEmitter<string>;
   triggerLookup(searchValue: string) {

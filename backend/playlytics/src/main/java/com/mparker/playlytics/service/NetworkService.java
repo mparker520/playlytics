@@ -426,7 +426,7 @@ public class NetworkService {
 
             else {
 
-                return new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+                return new GhostPlayerResponseDTO(ghostPlayer.getId(), ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
 
             }
         }
@@ -478,7 +478,7 @@ public class NetworkService {
                     RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
                     registeredPlayer.getAssociations().add(ghostPlayerExists);
 
-                    return new GhostPlayerResponseDTO(ghostPlayerExists.getFirstName(), ghostPlayerExists.getLastName(), ghostPlayerExists.getAvatar(), ghostPlayerExists.getIdentifierEmail(), ghostPlayerExists.getCreator().getId());
+                    return new GhostPlayerResponseDTO(ghostPlayerId, ghostPlayerExists.getFirstName(), ghostPlayerExists.getLastName(), ghostPlayerExists.getAvatar(), ghostPlayerExists.getIdentifierEmail(), ghostPlayerExists.getCreator().getId());
 
                 }
                 else {
@@ -493,8 +493,6 @@ public class NetworkService {
 
 
         }
-
-
 
 
     //</editor-fold>
@@ -512,7 +510,7 @@ public class NetworkService {
 
             for (GhostPlayer ghostPlayer : allAssociations) {
 
-                GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
+                GhostPlayerResponseDTO ghostPlayerResponseDTO = new GhostPlayerResponseDTO(ghostPlayer.getId(), ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
                 allAssociationResponses.add(ghostPlayerResponseDTO);
             }
 

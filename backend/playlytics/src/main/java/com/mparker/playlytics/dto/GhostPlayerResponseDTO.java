@@ -4,5 +4,5 @@ package com.mparker.playlytics.dto;
 
 import com.mparker.playlytics.enums.GhostStatus;
 
-public record GhostPlayerResponseDTO(String firstName, String lastName, byte[] avatar, String identifierEmail, Long creatorId) {
+public record GhostPlayerResponseDTO(Long id, String firstName, String lastName, byte[] avatar, String identifierEmail, Long creatorId) {
 }

@@ -1,0 +1,12 @@
+
+<section>
+
+  <h3>Your Current Associations with Guest Players</h3>
+  <ul>
+    @for(association of associations; track association.id) {
+      <li>{{ association.firstName + association.lastName}} </li>
+      <button (click)="triggerRemove(association.id)"  id={{association.id}}>Remove Association</button>
+    }
+  </ul>
+
+</section>

@@ -160,9 +160,10 @@ public class GhostPlayerService {
         byte[] avatar = ghostPlayer.getAvatar();
         String identifierEmail = ghostPlayer.getIdentifierEmail();
         Long creatorId = ghostPlayer.getCreator().getId();
+        Long id = ghostPlayer.getId();
 
 
-        return new GhostPlayerResponseDTO(firstName, lastName, avatar, identifierEmail, creatorId);
+        return new GhostPlayerResponseDTO(id, firstName, lastName, avatar, identifierEmail, creatorId);
 
     }
 

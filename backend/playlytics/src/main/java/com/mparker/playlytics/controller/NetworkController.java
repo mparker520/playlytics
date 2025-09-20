@@ -12,7 +12,7 @@ import java.util.Set;
 
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:4200")
 public class NetworkController {
 
     //<editor-fold desc = "Constructor">

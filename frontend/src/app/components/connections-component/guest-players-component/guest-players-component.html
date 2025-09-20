@@ -1,0 +1,13 @@
+<h2>Guest Players</h2>
+
+<section>
+  <app-associations-list-component  (remove)="handleRemove($event)"  [associations]="associations" ></app-associations-list-component>
+</section>
+
+<section>
+  <app-add-association-component></app-add-association-component>
+</section>
+
+<section>
+  <app-add-guest-component></app-add-guest-component>
+</section>

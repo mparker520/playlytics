@@ -1,7 +1,9 @@
-<section>
   <h2>Game Inventory</h2>
 
-<app-owned-games-list-component (delete)="handleDelete($event)" [ownedGames]=ownedGames></app-owned-games-list-component>
-<app-add-owned-game-component (lookup)="handleLookup($event)" (add)="handleAdd($event)" [games]=games></app-add-owned-game-component>
-
+<section>
+  <app-owned-games-list-component (delete)="handleDelete($event)" [ownedGames]=ownedGames></app-owned-games-list-component>
 </section>
+
+  <section>
+    <app-add-owned-game-component (lookup)="handleLookup($event)" (add)="handleAdd($event)" [games]=games></app-add-owned-game-component>
+  </section>

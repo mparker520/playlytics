@@ -9,6 +9,7 @@ import {GhostPlayerResponseDTO} from '../../../../dtos/ghost-player-response-dto
 })
 export class AssociationsListComponent {
   @Input() associations!: GhostPlayerResponseDTO[];
+
   @Output() remove = new EventEmitter<number>;
 
   triggerRemove(id: number) {

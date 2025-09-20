@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddAssociationComponent } from './add-association-component';
+import { AddAssociationComponent } from '../components/connections-component/guest-players-component/add-association-component/add-association-component';
 
 describe('AddAssociationComponent', () => {
   let component: AddAssociationComponent;

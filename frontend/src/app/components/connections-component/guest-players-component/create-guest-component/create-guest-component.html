@@ -1,0 +1,17 @@
+
+<section>
+
+  <h3>Create Guest Player</h3>
+
+  <form (ngSubmit)="triggerCreate()">
+
+    <input [(ngModel)]="firstName" type="text" id="firstName" name="firstName" placeholder="First Name">
+    <input [(ngModel)]="lastName" type="text" id="lastName" name="lastName" placeholder="Last Name">
+    <input [(ngModel)]="identifierEmail" type="email" id="identifierEmail" name="identifierEmail" placeholder="Email Address">
+
+    <button type="submit">Create Guest Player</button>
+
+  </form>
+
+
+</section>

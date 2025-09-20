@@ -1,0 +1,36 @@
+import {Component, EventEmitter, Output} from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {GhostPlayerDTO} from '../../../../dtos/ghost-player-dto';
+
+@Component({
+  selector: 'app-create-guest-component',
+  imports: [
+    FormsModule
+  ],
+  templateUrl: './create-guest-component.html',
+  styleUrl: './create-guest-component.css'
+})
+export class CreateGuestComponent {
+
+  firstName: string = '';
+  lastName: string = '';
+  identifierEmail: string = '';
+
+
+
+  @Output() create = new EventEmitter<GhostPlayerDTO>
+
+  triggerCreate() {
+
+    const ghostPlayerDTO: GhostPlayerDTO = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+      identifierEmail: this.identifierEmail
+    };
+
+      this.create.emit(ghostPlayerDTO)
+  }
+
+}
+
+

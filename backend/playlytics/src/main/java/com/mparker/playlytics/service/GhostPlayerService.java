@@ -54,21 +54,9 @@ public class GhostPlayerService {
 
             if(linkedRegisteredPlayerId == null) {
 
-                // Initialize Fields from DTO
-
-                Long creatorId = ghostPlayerDTO.creatorId();
-
-                if(Objects.equals(creatorId, authUserId)) {
-
-                    RegisteredPlayer creator;
-                    if (creatorId != null) {
-                        creator = registeredPlayerRepository.getReferenceById(creatorId);
-                    }
-                    else {
-                        creator = null;
-                    }
 
 
+                    RegisteredPlayer creator = registeredPlayerRepository.getReferenceById(authUserId);
                     String firstName = ghostPlayerDTO.firstName();
                     String lastName = ghostPlayerDTO.lastName();
                     byte[] avatar = ghostPlayerDTO.avatar();
@@ -82,28 +70,19 @@ public class GhostPlayerService {
                     ghostPlayerRepository.save(ghostPlayer);
 
                     // Add Association to Creator
-                    if (creator != null) {
-                        creator.getAssociations().add(ghostPlayer);
-                    }
+                    creator.getAssociations().add(ghostPlayer);
 
                     // Return GhostPlayerDTO
                     return createGhostPlayerResponseDTO(ghostPlayer);
 
-                }
-                else {
-                    throw new CustomAccessDeniedException("You Do Not Have Permission to Create Ghost Player on Behalf of Another User");
-                }
 
             }
 
             else {
-
                 throw new ExistingResourceException("A New Ghost Player Cannot  Be Created That Has an Existing Registered Player");
-
             }
 
         }
-
 
     }
 

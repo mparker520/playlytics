@@ -223,21 +223,33 @@ public class NetworkService {
     public BlockedRelationshipResponseDTO blockRegisteredPlayer(Long blockedPlayerId, Long authUserId) throws CustomAccessDeniedException {
 
 
-            // Change existing Requests to BLOCKED
-            if (connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(authUserId, blockedPlayerId, blockedPlayerId, authUserId)){
 
-                ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientIdAndConnectionRequestStatus(authUserId, blockedPlayerId, blockedPlayerId, authUserId, ConnectionRequestStatus.ACCEPTED);
+            Long peerAId ;
+            Long peerBId;
 
-                if (connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
-
-                    ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceByConnectionRequest_Id(connectionRequest.getId());
-                    confirmedConnectionRepository.delete(confirmedConnection);
-
-                }
-
-                connectionRequestRepository.delete(connectionRequest);
-
+            if(authUserId < blockedPlayerId) {
+                peerAId = authUserId;
+                peerBId = blockedPlayerId;
             }
+            else {
+                peerAId = blockedPlayerId;
+                peerBId = authUserId;
+            }
+
+            ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
+            ConfirmedConnection confirmedConnection = confirmedConnectionRepository.findById(confirmedConnectionId).orElse(null);
+
+            if (confirmedConnection != null) {
+                confirmedConnectionRepository.delete(confirmedConnection);
+            }
+
+            else {
+                if(connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(authUserId, blockedPlayerId, blockedPlayerId, authUserId)) {
+                    ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(authUserId, blockedPlayerId, blockedPlayerId, authUserId);
+                    connectionRequestRepository.delete(connectionRequest);
+                }
+            }
+
 
             // Create Blocked Entity
             RegisteredPlayer blocker = registeredPlayerRepository.getReferenceById(authUserId);

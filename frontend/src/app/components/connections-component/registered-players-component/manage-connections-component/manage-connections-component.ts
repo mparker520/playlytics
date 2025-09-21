@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../../../dtos/registered-player-response-dto';
+import {ConnectionRequestResponseDTO} from '../../../../dtos/connection-request-response-dto';
 
 @Component({
   selector: 'app-manage-connections-component',
@@ -9,7 +10,7 @@ import {RegisteredPlayerResponseDTO} from '../../../../dtos/registered-player-re
 })
 export class ManageConnectionsComponent {
 
-  //<editor-fold desc="Discover Players">
+  //<editor-fold desc="Discover Players / Send Requests / Block">
   @Input() registeredPlayer?: RegisteredPlayerResponseDTO;
 
   @Output() lookup = new EventEmitter<string>;
@@ -25,6 +26,22 @@ export class ManageConnectionsComponent {
   @Output() block = new EventEmitter<number>;
   triggerBlock(id: number) {
     this.block.emit(id)
+  }
+
+  //</editor-fold>
+
+  //<editor-fold desc="Sent Connection Requests">
+
+  @Input() sentRequests?: ConnectionRequestResponseDTO[];
+
+  @Output() cancel = new EventEmitter<number>
+  triggerCancel(id: number) {
+    this.cancel.emit(id);
+  }
+
+  @Output() accept = new EventEmitter<number>
+  triggerAccept(id: number) {
+    this.accept.emit(id);
   }
 
   //</editor-fold>

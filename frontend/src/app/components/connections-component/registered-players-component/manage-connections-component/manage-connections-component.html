@@ -24,16 +24,31 @@
 
     <h4>Sent Requests</h4>
 
-    @if (registeredPlayer) {
+    @if (sentRequests) {
+      <ul >
+
+        @for(sentRequest  of sentRequests; track sentRequest.id) {
+          <li>{{sentRequest.recipientFirstName + sentRequest.recipientLastName + sentRequest.recipientEmail }}</li>
+          <button (click)="triggerCancel(sentRequest.id)"  id="{cancel}}">Cancel Request</button>
+        }
+
+      </ul>
+    }
+
+  </section>
+
+  <section id="pendingRequests">
+    <h4>Pending Requests</h4>
+
+    @if (pendingRequests) {
       <ul >
 
         <li>{{registeredPlayer.firstName + registeredPlayer.lastName + registeredPlayer.loginEmail }}</li>
-        <button (click)="triggerSend(registeredPlayer.id)"  id="{{send}}">Send Connection Request</button>
-        <button (click)="triggerBlock(registeredPlayer.id)"  id="{{block}}">Block Player</button>
+        <button (click)="triggerAccept(connectionRequest.id)"  id="{{accept}}">Send Connection Request</button>
+
 
       </ul>
     }
   </section>
-
 
 </section>

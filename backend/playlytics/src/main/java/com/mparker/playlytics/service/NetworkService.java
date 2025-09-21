@@ -129,9 +129,9 @@ public class NetworkService {
 
                     else {
                         ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
-                        connectionRequestRepository.save(newConnectionRequest);
+                        Long connectionRequestId = connectionRequestRepository.save(newConnectionRequest).getId();
 
-                        return new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
+                        return new ConnectionRequestResponseDTO(connectionRequestId, sender.getId(), sender.getFirstName(), sender.getLastName(), sender.getLoginEmail(), recipient.getId(), recipient.getFirstName(), recipient.getLastName(), recipient.getLoginEmail(), ConnectionRequestStatus.PENDING);
                     }
                 }
             }
@@ -276,8 +276,9 @@ public class NetworkService {
             Set<ConnectionRequestResponseDTO> allSentConnectionRequestResponses = new HashSet<>();
 
             for (ConnectionRequest connectionRequest : allSentConnectionRequests) {
-
-                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(authUserId, connectionRequest.getRecipient().getId(), connectionRequest.getConnectionRequestStatus());
+                RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(connectionRequest.getRecipient().getId());
+                RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(connectionRequest.getSender().getId());
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getId(), sender.getId(), sender.getFirstName(), sender.getLastName(), sender.getLoginEmail(), connectionRequest.getRecipient().getId(), recipient.getFirstName(), recipient.getLastName(), recipient.getLoginEmail(), connectionRequest.getConnectionRequestStatus());
                 allSentConnectionRequestResponses.add(connectionRequestResponseDTO);
 
             }
@@ -298,8 +299,9 @@ public class NetworkService {
             Set<ConnectionRequestResponseDTO> allPendingConnectionRequestResponses = new HashSet<>();
 
             for (ConnectionRequest connectionRequest : allPendingConnectionRequests) {
-
-                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getSender().getId(), authUserId, connectionRequest.getConnectionRequestStatus());
+                RegisteredPlayer recipient = registeredPlayerRepository.getReferenceById(connectionRequest.getRecipient().getId());
+                RegisteredPlayer sender = registeredPlayerRepository.getReferenceById(connectionRequest.getSender().getId());
+                ConnectionRequestResponseDTO connectionRequestResponseDTO = new ConnectionRequestResponseDTO(connectionRequest.getId(), sender.getId(), sender.getFirstName(), sender.getLastName(), sender.getLoginEmail(), connectionRequest.getRecipient().getId(), recipient.getFirstName(), recipient.getLastName(), recipient.getLoginEmail(), connectionRequest.getConnectionRequestStatus());
                 allPendingConnectionRequestResponses.add(connectionRequestResponseDTO);
 
             }

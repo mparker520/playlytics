@@ -26,6 +26,7 @@ export class RegisteredPlayersComponent implements OnInit {
 
   connections?: RegisteredPlayerResponseDTO[];
   registeredPlayer?: RegisteredPlayerResponseDTO;
+  pendingRequests?: ConnectionRequestResponseDTO[];
   constructor(private networkService: NetworkService) {
   }
 

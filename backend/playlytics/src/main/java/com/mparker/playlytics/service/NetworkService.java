@@ -210,7 +210,7 @@ public class NetworkService {
             ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
             if (authUserId.equals(connectionRequest.getRecipient().getId())) {
 
-                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.DECLINED);
+                connectionRequestRepository.delete(connectionRequest);
 
             }
 
@@ -240,7 +240,7 @@ public class NetworkService {
 
                 }
 
-                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.BLOCKED);
+                connectionRequestRepository.delete(connectionRequest);
 
             }
 
@@ -331,7 +331,7 @@ public class NetworkService {
             ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
             if(connectionRequest.getSender().getId().equals(authUserId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
 
-                connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+                connectionRequestRepository.delete(connectionRequest);
 
             }
 
@@ -406,7 +406,7 @@ public class NetworkService {
             ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(confirmedConnection.getConnectionRequest().getId());
 
             confirmedConnectionRepository.delete(confirmedConnection);
-            connectionRequest.setConnectionRequestStatus(ConnectionRequestStatus.REVERSED);
+            connectionRequestRepository.delete(connectionRequest);
 
     }
 

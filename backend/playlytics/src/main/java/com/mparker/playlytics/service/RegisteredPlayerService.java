@@ -104,7 +104,7 @@ public class RegisteredPlayerService {
         if (ghostPlayerRepository.existsByLinkedRegisteredPlayer_Id(authUserId)) {
 
                 GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByLinkedRegisteredPlayer_Id(authUserId);
-                ghostPlayer.setStatus(GhostStatus.DEACTIVATED);
+                ghostPlayer.setStatus(GhostStatus.REACTIVATED);
                 ghostPlayer.setLinkedRegisteredPlayer(null);
                 ghostPlayer.setCreator(null);
 
@@ -118,7 +118,7 @@ public class RegisteredPlayerService {
             byte[] avatar = registeredPlayer.getAvatar();
             String email = registeredPlayer.getLoginEmail();
 
-            GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, email, GhostStatus.DEACTIVATED, null, null);
+            GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, email, GhostStatus.REACTIVATED, null, null);
             ghostPlayerRepository.save(ghostPlayer);
             updatePlayerReferences(authUserId, ghostPlayer);
         }

@@ -3,6 +3,7 @@ package com.mparker.playlytics.repository;
 // Imports
 
 import com.mparker.playlytics.dto.ConnectionRequestResponseDTO;
+import com.mparker.playlytics.entity.ConfirmedConnectionId;
 import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
@@ -25,5 +26,6 @@ public interface ConnectionRequestRepository extends JpaRepository<ConnectionReq
     Set<ConnectionRequest> findAllBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(Long registeredPlayerId, Long peerId, Long peerId1, Long registeredPlayerId1);
 
     ConnectionRequest getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientIdAndConnectionRequestStatus(Long authUserId, Long blockedPlayerId, Long blockedPlayerId1, Long authUserId1, ConnectionRequestStatus connectionRequestStatus);
+
 
 }

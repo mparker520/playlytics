@@ -39,6 +39,17 @@ export class ManageConnectionsComponent {
     this.cancel.emit(id);
   }
 
+  //</editor-fold>
+
+  //<editor-fold desc="Pending Connection Requests">
+
+  @Input() pendingRequests?: ConnectionRequestResponseDTO[];
+
+  @Output() reject = new EventEmitter<number>
+  triggerReject(id: number) {
+    this.reject.emit(id);
+  }
+
   @Output() accept = new EventEmitter<number>
   triggerAccept(id: number) {
     this.accept.emit(id);

@@ -13,8 +13,8 @@
       <ul >
 
         <li>{{registeredPlayer.firstName + registeredPlayer.lastName + registeredPlayer.loginEmail }}</li>
-        <button (click)="triggerSend(registeredPlayer.id)"  id="{{send}}">Send Connection Request</button>
-        <button (click)="triggerBlock(registeredPlayer.id)"  id="{{block}}">Block Player</button>
+        <button (click)="triggerSend(registeredPlayer.id)"  id="{{'send'}}">Send Connection Request</button>
+        <button (click)="triggerBlock(registeredPlayer.id)"  id="{{'block'}}">Block Player</button>
 
       </ul>
     }
@@ -37,19 +37,22 @@
 
   </section>
 
-<!--  <section id="pendingRequests">
+<section id="pendingRequests">
     <h4>Pending Requests</h4>
 
     @if (pendingRequests) {
       <ul >
 
-        <li>{{registeredPlayer.firstName + registeredPlayer.lastName + registeredPlayer.loginEmail }}</li>
-        <button (click)="triggerAccept(connectionRequest.id)"  id="{{accept}}">Send Connection Request</button>
-
+        @for(pendingRequest of pendingRequests; track pendingRequest.id) {
+          <li>{{pendingRequest.senderFirstName + pendingRequest.senderLastName + pendingRequest.senderEmail }}</li>
+          <button (click)="triggerAccept(pendingRequest.id)"  id="{{'accept' + pendingRequest.id}}">Accept Connection Request</button>
+          <button (click)="triggerReject(pendingRequest.id)"  id="{{'reject' + pendingRequest.id}}">Decline Connection Request</button>
+          <button (click)="triggerBlock(pendingRequest.senderId)"  id="{{'reject' + 'block' + pendingRequest.id}}">Block Player</button>
+        }
 
       </ul>
     }
-  </section> -->
+  </section>
 
 
 </section>

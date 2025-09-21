@@ -4,6 +4,7 @@ import {GhostPlayerResponseDTO} from '../dtos/ghost-player-response-dto';
 import {Observable} from 'rxjs';
 import {RegisteredPlayerResponseDTO} from '../dtos/registered-player-response-dto';
 import {ConnectionRequestResponseDTO} from '../dtos/connection-request-response-dto';
+import {ConfirmedConnectionResponseDTO} from '../dtos/confirmed-connection-response-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -54,15 +55,33 @@ export class NetworkService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Get Pending Connection Requests">
+  public getPendingConnectionRequests(): Observable<ConnectionRequestResponseDTO[]> {
+    return this.http.get<ConnectionRequestResponseDTO[]>('/pending-connection-requests', {withCredentials: true})
+  }
+  //</editor-fold>
+
   //<editor-fold desc="Cancel Sent Connection Requests">
   public cancelConnectionRequest(id: number): Observable<void> {
-    return this.http.delete<void>(`/connection-request/${id}`, {withCredentials: true})
+    return this.http.delete<void>(`/cancel-connection-request/${id}`, {withCredentials: true})
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Create Confirmed Connection">
+  public createConfirmedConnection(id: number): Observable<ConfirmedConnectionResponseDTO> {
+    return this.http.post<ConfirmedConnectionResponseDTO>(`/connections/${id}`, {withCredentials: true})
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Decline Connection Request">
+  public declineConnectionRequest(id: number): Observable<void> {
+    return this.http.delete<void>(`/decline-connection-request/${id}`, {withCredentials: true});
   }
   //</editor-fold>
 
   //<editor-fold desc="Remove Connection">
-  public removeConnection(id: number): Observable<void> {
-        return this.http.delete<void>(`/connections/${id}`, {withCredentials: true})
+  public removeConnection(peerId: number): Observable<void> {
+        return this.http.delete<void>(`/connections/${peerId}`, {withCredentials: true})
   }
   //</editor-fold>
 

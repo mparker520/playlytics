@@ -195,23 +195,26 @@ public class NetworkService {
     //<editor-fold desc = "Decline Connection Request">
 
     @Transactional
-    public void declineConnectionRequest(Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException {
+    public void declineConnectionRequest(Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
+            ConnectionRequest connectionRequest = connectionRequestRepository.findById(connectionRequestId).orElse(null);
+            if (connectionRequest != null) {
+                if (authUserId.equals(connectionRequest.getRecipient().getId())) {
 
+                    connectionRequestRepository.delete(connectionRequest);
 
-            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
-            if (authUserId.equals(connectionRequest.getRecipient().getId())) {
+                }
 
-                connectionRequestRepository.delete(connectionRequest);
-
+                else {
+                    throw new CustomAccessDeniedException("You do not have access to this Resource.");
+                }
             }
 
             else {
-                throw new CustomAccessDeniedException("You do not have access to this Resource.");
+                throw new NotFoundException("No connection Request Available.");
             }
 
         }
-
 
     //</editor-fold>
 
@@ -324,7 +327,7 @@ public class NetworkService {
 
             ConnectionRequest connectionRequest = connectionRequestRepository.findById(connectionRequestId).orElse(null);
             if(connectionRequest != null) {
-                if(connectionRequest.getSender().getId().equals(authUserId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+                if(connectionRequest.getSender().getId().equals(authUserId)) {
 
                     connectionRequestRepository.delete(connectionRequest);
 
@@ -401,12 +404,15 @@ public class NetworkService {
             }
 
             ConfirmedConnectionId confirmedConnectionId = new ConfirmedConnectionId(peerAId, peerBId);
-            ConfirmedConnection confirmedConnection = confirmedConnectionRepository.getReferenceById(confirmedConnectionId);
+            ConfirmedConnection confirmedConnection = confirmedConnectionRepository.findById(confirmedConnectionId).orElse(null);
 
-            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(confirmedConnection.getConnectionRequest().getId());
+            if(confirmedConnection != null) {
+                    confirmedConnectionRepository.delete(confirmedConnection);
+            }
+            else {
+                throw new NotFoundException("This connection request does not exist.");
+            }
 
-            confirmedConnectionRepository.delete(confirmedConnection);
-            connectionRequestRepository.delete(connectionRequest);
 
     }
 

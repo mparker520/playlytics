@@ -6,7 +6,7 @@
       @for(connection of connections; track connection.id) {
         <li>{{ connection.firstName + connection.lastName + connection.displayName + connection.loginEmail}} </li>
         <button (click)="triggerRemove(connection.id)"  id="{{ 'remove' + connection.id}}">Remove Connection</button>
-        <button (click)="triggerBlock(connection.id)"  id="{{ 'block' + connection.id}}">Block & Remove Connection</button>
+        <button (click)="triggerBlock(connection.id)"  id="{{ 'remove' + 'block' + connection.id}}">Block & Remove Connection</button>
       }
     </ul>
   }

@@ -122,24 +122,6 @@ public class NetworkController {
 
     //</editor-fold>
 
-    //<editor-fold desc = "PATCH mappings">
-
-
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/decline-connection-request/{connectionRequestId}")
-    public ResponseEntity<Void> declineConnectionRequest(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable("connectionRequestId") Long connectionRequestId
-    ) {
-
-        networkService.declineConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
-        return ResponseEntity.noContent().build();
-
-    }
-
-
-    //</editor-fold>
-
     //<editor-fold desc = "POST Mappings">
 
 
@@ -161,7 +143,7 @@ public class NetworkController {
     //<editor-fold desc = "Create Confirmed Connection">
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/confirm-connection/{connectionRequestId}")
+    @PostMapping("/connections/{connectionRequestId}")
     public ResponseEntity<ConfirmedConnectionResponseDTO> confirmConnection(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("connectionRequestId") Long connectionRequestId) {
@@ -188,8 +170,6 @@ public class NetworkController {
     }
 
     //</editor-fold>
-
-
 
     //<editor-fold desc = "Block Player">
 
@@ -254,7 +234,7 @@ public class NetworkController {
     // <editor-fold desc = "Reverse Sent ConnectionRequest">
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/connection-request/{connectionRequestId}")
+    @DeleteMapping("/cancel-connection-request/{connectionRequestId}")
     public ResponseEntity<Void> cancelConnectionRequests(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("connectionRequestId") Long connectionRequestId) {
@@ -266,6 +246,19 @@ public class NetworkController {
     }
 
     //</editor-fold>
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/decline-connection-request/{connectionRequestId}")
+    public ResponseEntity<Void> declineConnectionRequest(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable("connectionRequestId") Long connectionRequestId
+    ) {
+
+        networkService.declineConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
+        return ResponseEntity.noContent().build();
+
+    }
+
 
     //</editor-fold>
 

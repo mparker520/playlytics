@@ -59,6 +59,7 @@ public class ConnectionRequest {
     @NotNull
     private RegisteredPlayer sender;
 
+
     // </editor-fold >
 
 

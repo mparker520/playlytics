@@ -51,7 +51,7 @@ public class ConfirmedConnection {
 
 
     // Maps to a ConnectionRequest if ConnectionRequest Status is APPROVED
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "connection_request", nullable = false, updatable = false, unique = true)
     @NotNull
     private ConnectionRequest connectionRequest;

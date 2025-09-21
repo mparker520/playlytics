@@ -10,6 +10,7 @@ import {RegisteredPlayerResponseDTO} from '../../../dtos/registered-player-respo
 import {NetworkService} from '../../../services/network-service';
 import {GhostPlayerResponseDTO} from '../../../dtos/ghost-player-response-dto';
 import {ConnectionRequestResponseDTO} from '../../../dtos/connection-request-response-dto';
+import {ConfirmedConnectionResponseDTO} from '../../../dtos/confirmed-connection-response-dto';
 
 @Component({
   selector: 'app-registered-players-component',
@@ -51,6 +52,13 @@ export class RegisteredPlayersComponent implements OnInit {
       error: (error: any) => console.log("fail", error)
     })
 
+    this.networkService.getPendingConnectionRequests().subscribe({
+      next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
+        this.pendingRequests = pendingRequestsResponse;
+      },
+      error: (error: any) => console.log("fail", error)
+    })
+
   }
 
   //</editor-fold>
@@ -74,7 +82,7 @@ export class RegisteredPlayersComponent implements OnInit {
 
   //<editor-fold desc="Block Registered Player">
   handleBlock(id: number): void {
-    console.log("removeBlock");
+
     this.networkService.blockRegisteredPlayer(id).subscribe({
       next: (response: void) => {
         this.networkService.getAllConnections().subscribe({
@@ -83,11 +91,21 @@ export class RegisteredPlayersComponent implements OnInit {
           },
           error: (error: any) => console.error("fail", error)
         })
-      },
-      error: (error: any) => console.error("fail", error)
-    })
 
-  }
+        this.networkService.getPendingConnectionRequests().subscribe({
+          next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
+            this.pendingRequests = pendingRequestsResponse;
+          },
+          error: (error: any) => console.log("fail", error)
+        })
+
+        },
+          error: (error: any) => console.error("fail", error)
+
+      })
+    }
+
+
 
   //</editor-fold>
 
@@ -120,6 +138,7 @@ export class RegisteredPlayersComponent implements OnInit {
 
   //</editor-fold>
 
+  //<editor-fold desc="Cancel Sent Connection Request">
   handleCancel(id: number) {
     this.networkService.cancelConnectionRequest(id).subscribe({
       next: (cancelResponse: void) => {
@@ -132,4 +151,47 @@ export class RegisteredPlayersComponent implements OnInit {
       }
     })
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Confirm Connection Request">
+  handleAccept(id: number) {
+    this.networkService.createConfirmedConnection(id).subscribe({
+      next: (confirmationResponse: ConfirmedConnectionResponseDTO) => {
+          this.networkService.getPendingConnectionRequests().subscribe({
+            next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
+                  this.pendingRequests = pendingRequestsResponse;
+            },
+            error: (pendingRequestsError: any) => console.log("fail", pendingRequestsError)
+          })
+
+          this.networkService.getAllConnections().subscribe({
+              next: (connectionsResponse: RegisteredPlayerResponseDTO[]) => {
+                this.connections = connectionsResponse;
+              },
+              error: (registeredPlayersResponseError: any) => console.log("fail", registeredPlayersResponseError)
+          })
+      },
+      error: (connectionError: any) => console.error("fail", connectionError)
+      })
+  }
+
+  //</editor-fold>
+
+  //<editor-fold desc="Reject Connection Request">
+  handleReject(id: number) {
+    this.networkService.declineConnectionRequest(id).subscribe({
+      next:(rejectResponse: void) => {
+        this.networkService.getPendingConnectionRequests().subscribe({
+          next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
+            this.pendingRequests = pendingRequestsResponse;
+          },
+          error: (error: any) => console.log("fail", error)
+        })
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+  }
+  //</editor-fold>
+
 }

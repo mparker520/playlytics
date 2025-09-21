@@ -318,20 +318,26 @@ public class NetworkService {
     //<editor-fold desc = "Cancel Sent ConnectionRequest">
 
     @Transactional
-    public void cancelConnectionRequest(Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException {
+    public void cancelConnectionRequest(Long connectionRequestId, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
 
 
-            ConnectionRequest connectionRequest = connectionRequestRepository.getReferenceById(connectionRequestId);
-            if(connectionRequest.getSender().getId().equals(authUserId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
+            ConnectionRequest connectionRequest = connectionRequestRepository.findById(connectionRequestId).orElse(null);
+            if(connectionRequest != null) {
+                if(connectionRequest.getSender().getId().equals(authUserId) && connectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING)) {
 
-                connectionRequestRepository.delete(connectionRequest);
+                    connectionRequestRepository.delete(connectionRequest);
 
+                }
+
+                else {
+                    throw new CustomAccessDeniedException("You do not have access to this resource.");
+                }
             }
-
             else {
-                throw new CustomAccessDeniedException("You do not have access to this resource.");
+                throw new NotFoundException("This connection request does not exist.");
             }
+
 
         }
 

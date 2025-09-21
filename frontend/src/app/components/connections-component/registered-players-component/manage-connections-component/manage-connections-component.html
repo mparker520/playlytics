@@ -29,7 +29,7 @@
 
         @for(sentRequest  of sentRequests; track sentRequest.id) {
           <li>{{sentRequest.recipientFirstName + sentRequest.recipientLastName + sentRequest.recipientEmail }}</li>
-          <button (click)="triggerCancel(sentRequest.id)"  id="{cancel}}">Cancel Request</button>
+          <button (click)="triggerCancel(sentRequest.id)"  id="{{'cancel' + sentRequest.id}}">Cancel Request</button>
         }
 
       </ul>
@@ -37,7 +37,7 @@
 
   </section>
 
-  <section id="pendingRequests">
+<!--  <section id="pendingRequests">
     <h4>Pending Requests</h4>
 
     @if (pendingRequests) {
@@ -49,6 +49,7 @@
 
       </ul>
     }
-  </section>
+  </section> -->
+
 
 </section>

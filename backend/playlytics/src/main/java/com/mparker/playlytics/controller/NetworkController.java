@@ -189,21 +189,7 @@ public class NetworkController {
 
     //</editor-fold>
 
-    // <editor-fold desc = "Reverse Sent ConnectionRequest">
 
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/cancel-connection-request/{connectionRequestId}")
-    public ResponseEntity<Void> removePendingConnectionRequests(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable("connectionRequestId") Long connectionRequestId) {
-
-        networkService.cancelConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
-
-        return ResponseEntity.noContent().build();
-
-    }
-
-    //</editor-fold>
 
     //<editor-fold desc = "Block Player">
 
@@ -259,6 +245,22 @@ public class NetworkController {
             @PathVariable("blockedId") Long blockedId){
 
         networkService.removeBlock(blockedId, principal.getAuthenticatedUserId());
+        return ResponseEntity.noContent().build();
+
+    }
+
+    //</editor-fold>
+
+    // <editor-fold desc = "Reverse Sent ConnectionRequest">
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/connection-request/{connectionRequestId}")
+    public ResponseEntity<Void> cancelConnectionRequests(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable("connectionRequestId") Long connectionRequestId) {
+
+        networkService.cancelConnectionRequest(connectionRequestId, principal.getAuthenticatedUserId());
+
         return ResponseEntity.noContent().build();
 
     }

@@ -26,7 +26,9 @@ export class RegisteredPlayersComponent implements OnInit {
 
   connections?: RegisteredPlayerResponseDTO[];
   registeredPlayer?: RegisteredPlayerResponseDTO;
+  sentRequests?: ConnectionRequestResponseDTO[];
   pendingRequests?: ConnectionRequestResponseDTO[];
+
   constructor(private networkService: NetworkService) {
   }
 
@@ -36,13 +38,21 @@ export class RegisteredPlayersComponent implements OnInit {
   ngOnInit() {
 
     this.networkService.getAllConnections().subscribe({
-      next: (response: RegisteredPlayerResponseDTO[]) => {
-        this.connections = response;
+      next: (connectionsResponse: RegisteredPlayerResponseDTO[]) => {
+        this.connections = connectionsResponse;
+      },
+      error: (error: any) => console.log("fail", error)
+    })
+
+    this.networkService.getSentConnectionRequests().subscribe({
+      next: (sentRequestsResponse: ConnectionRequestResponseDTO[]) => {
+        this.sentRequests = sentRequestsResponse;
       },
       error: (error: any) => console.log("fail", error)
     })
 
   }
+
   //</editor-fold>
 
   //<editor-fold desc="Remove Connection">
@@ -59,6 +69,7 @@ export class RegisteredPlayersComponent implements OnInit {
       }
     })
   }
+
   //</editor-fold>
 
   //<editor-fold desc="Block Registered Player">
@@ -76,32 +87,49 @@ export class RegisteredPlayersComponent implements OnInit {
       error: (error: any) => console.error("fail", error)
     })
 
-    }
+  }
+
   //</editor-fold>
 
   //<editor-fold desc="Get RegisteredPlayer from Database">
   handleLookup(databaseFilter: string) {
     this.networkService.discoverPeers(databaseFilter).subscribe({
-      next:(response: RegisteredPlayerResponseDTO) => {
+      next: (response: RegisteredPlayerResponseDTO) => {
         this.registeredPlayer = response;
       },
       error: (error: any) => console.error("fail", error)
     })
   }
+
   //</editor-fold>
 
   //<editor-fold desc="Send Connection Request">
-  //TODO: Handle update of sent connection requests
   handleSend(id: number) {
     this.networkService.sendConnectionRequest(id).subscribe({
-      next: (response: ConnectionRequestResponseDTO) => {
-            console.log(response)
+      next: (registeredPlayerResponse: ConnectionRequestResponseDTO) => {
+        this.registeredPlayer = undefined;
+        this.networkService.getSentConnectionRequests().subscribe({
+          next: (sentRequestsResponse: ConnectionRequestResponseDTO[]) => {
+            this.sentRequests = sentRequestsResponse;
           },
           error: (error: any) => console.error("fail", error)
         })
       }
+    })
+  }
 
   //</editor-fold>
 
+  handleCancel(id: number) {
+    this.networkService.cancelConnectionRequest(id).subscribe({
+      next: (cancelResponse: void) => {
+        this.networkService.getSentConnectionRequests().subscribe({
+          next: (sentRequestsResponse: ConnectionRequestResponseDTO[]) => {
+            this.sentRequests = sentRequestsResponse;
+          },
+          error: (error: any) => console.error("fail", error)
+        })
+      }
+    })
+  }
 }
-

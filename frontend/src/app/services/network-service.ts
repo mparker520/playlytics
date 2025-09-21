@@ -48,6 +48,18 @@ export class NetworkService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Get Sent Connection Requests">
+  public getSentConnectionRequests(): Observable<ConnectionRequestResponseDTO[]> {
+    return this.http.get<ConnectionRequestResponseDTO[]>('/sent-connection-requests', {withCredentials: true})
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Cancel Sent Connection Requests">
+  public cancelConnectionRequest(id: number): Observable<void> {
+    return this.http.delete<void>(`/connection-request/${id}`, {withCredentials: true})
+  }
+  //</editor-fold>
+
   //<editor-fold desc="Remove Connection">
   public removeConnection(id: number): Observable<void> {
         return this.http.delete<void>(`/connections/${id}`, {withCredentials: true})

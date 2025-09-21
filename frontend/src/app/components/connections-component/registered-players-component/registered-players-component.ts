@@ -9,6 +9,7 @@ import {ManageConnectionsComponent} from './manage-connections-component/manage-
 import {RegisteredPlayerResponseDTO} from '../../../dtos/registered-player-response-dto';
 import {NetworkService} from '../../../services/network-service';
 import {GhostPlayerResponseDTO} from '../../../dtos/ghost-player-response-dto';
+import {ConnectionRequestResponseDTO} from '../../../dtos/connection-request-response-dto';
 
 @Component({
   selector: 'app-registered-players-component',
@@ -24,12 +25,13 @@ export class RegisteredPlayersComponent implements OnInit {
   //<editor-fold desc="Constructor and Fields">
 
   connections?: RegisteredPlayerResponseDTO[];
-
+  registeredPlayer?: RegisteredPlayerResponseDTO;
   constructor(private networkService: NetworkService) {
   }
 
   //</editor-fold>
 
+  //<editor-fold desc="On Initiate">
   ngOnInit() {
 
     this.networkService.getAllConnections().subscribe({
@@ -40,9 +42,7 @@ export class RegisteredPlayersComponent implements OnInit {
     })
 
   }
-
-
-
+  //</editor-fold>
 
   //<editor-fold desc="Remove Connection">
   handleRemove(id: number): void {
@@ -76,6 +76,30 @@ export class RegisteredPlayersComponent implements OnInit {
     })
 
     }
+  //</editor-fold>
+
+  //<editor-fold desc="Get RegisteredPlayer from Database">
+  handleLookup(databaseFilter: string) {
+    this.networkService.discoverPeers(databaseFilter).subscribe({
+      next:(response: RegisteredPlayerResponseDTO) => {
+        this.registeredPlayer = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Send Connection Request">
+  //TODO: Handle update of sent connection requests
+  handleSend(id: number) {
+    this.networkService.sendConnectionRequest(id).subscribe({
+      next: (response: ConnectionRequestResponseDTO) => {
+            console.log(response)
+          },
+          error: (error: any) => console.error("fail", error)
+        })
+      }
+
   //</editor-fold>
 
 }

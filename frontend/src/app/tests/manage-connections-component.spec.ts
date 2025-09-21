@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageConnectionsComponent } from './manage-connections-component';
+import { ManageConnectionsComponent } from '../components/connections-component/registered-players-component/manage-connections-component/manage-connections-component';
 
 describe('ManageConnectionsComponent', () => {
   let component: ManageConnectionsComponent;

@@ -32,7 +32,7 @@ public class NetworkController {
     //<editor-fold desc = "GET All Available RegisteredPlayers for Connection by Filter">
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/discover-players")
+    @GetMapping("/players")
     public ResponseEntity<RegisteredPlayerResponseDTO> discoverPeers(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(value = "filter") String filter){
@@ -145,7 +145,7 @@ public class NetworkController {
 
     //<editor-fold desc = "Create Connection Request">
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/send-connection-request/{peerId}")
+    @PostMapping("/connection-request/{peerId}")
     public ResponseEntity <ConnectionRequestResponseDTO> sendConnectionRequest(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("peerId") Long peerId) {

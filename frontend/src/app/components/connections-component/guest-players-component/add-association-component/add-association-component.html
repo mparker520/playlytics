@@ -1,8 +1,8 @@
 <section>
   <h3>Add Guest Player as An Associate</h3>
 
-  <input type="text" placeholder="Search by Guest Player's Email" #searchBox>
-  <button (click)="triggerLookup(searchBox.value)">Search Game Database</button>
+  <input type="text" placeholder="Search by Guest Player's Email" #guestSearchBox>
+  <button (click)="triggerLookup(guestSearchBox.value)">Search</button>
 
   @if (guestPlayer) {
     <ul >

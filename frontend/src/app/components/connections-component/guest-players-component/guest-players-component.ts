@@ -23,7 +23,6 @@ export class GuestPlayersComponent implements OnInit {
   //<editor-fold desc="Constructor and Fields">
   associations: GhostPlayerResponseDTO[] = [];
   guestPlayer?: GhostPlayerResponseDTO;
-  databaseFilter: string = '';
 
   constructor(private networkService: NetworkService, private ghostPlayerService: GhostPlayerService) {
 

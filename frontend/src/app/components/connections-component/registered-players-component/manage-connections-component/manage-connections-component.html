@@ -1,1 +1,39 @@
-<p>manage-connections-component works!</p>
+<section>
+
+  <h3>Manage Connections</h3>
+
+  <section id="discoverPlayers">
+
+    <h4>Find Players</h4>
+
+    <input type="text" placeholder="Search by Player's Email" #playerSearchBox>
+    <button (click)="triggerLookup(playerSearchBox.value)">Search</button>
+
+    @if (registeredPlayer) {
+      <ul >
+
+        <li>{{registeredPlayer.firstName + registeredPlayer.lastName + registeredPlayer.loginEmail }}</li>
+        <button (click)="triggerSend(registeredPlayer.id)"  id="{{send}}">Send Connection Request</button>
+        <button (click)="triggerBlock(registeredPlayer.id)"  id="{{block}}">Block Player</button>
+
+      </ul>
+    }
+  </section>
+
+  <section id="sentRequests">
+
+    <h4>Sent Requests</h4>
+
+    @if (registeredPlayer) {
+      <ul >
+
+        <li>{{registeredPlayer.firstName + registeredPlayer.lastName + registeredPlayer.loginEmail }}</li>
+        <button (click)="triggerSend(registeredPlayer.id)"  id="{{send}}">Send Connection Request</button>
+        <button (click)="triggerBlock(registeredPlayer.id)"  id="{{block}}">Block Player</button>
+
+      </ul>
+    }
+  </section>
+
+
+</section>

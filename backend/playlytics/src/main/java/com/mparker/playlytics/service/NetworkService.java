@@ -107,8 +107,6 @@ public class NetworkService {
     @Transactional
     public ConnectionRequestResponseDTO createConnectionRequest(Long peerId, Long authUserId) throws CustomAccessDeniedException, ExistingResourceException, NotFoundException {
 
-        ConnectionRequestResponseDTO connectionRequestResponseDTO = null;
-
 
             if (authUserId.equals(peerId)) {
                 throw new NotFoundException("You cannot connect with yourself.");
@@ -125,26 +123,20 @@ public class NetworkService {
 
                 else {
 
-                    if(connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(authUserId, peerId, peerId, authUserId) )  {
-                        Set<ConnectionRequest> existingConnectionRequestsSet = connectionRequestRepository.findAllBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(authUserId, peerId, peerId, authUserId);
+                    if(connectionRequestRepository.existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(authUserId, peerId, peerId, authUserId) ) {
+                        throw new ExistingResourceException("You already have a pending or accepted connection request with this player.");
+                    }
 
-                        for (ConnectionRequest existingConnectionRequest : existingConnectionRequestsSet) {
-                            if(existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.PENDING) || existingConnectionRequest.getConnectionRequestStatus().equals(ConnectionRequestStatus.ACCEPTED)) {
-                                throw new ExistingResourceException("You already have a pending or accepted connection request with this player.");
-                            }
+                    else {
+                        ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
+                        connectionRequestRepository.save(newConnectionRequest);
 
-                            else {
-                                ConnectionRequest newConnectionRequest = new ConnectionRequest(sender, recipient, ConnectionRequestStatus.PENDING);
-                                connectionRequestRepository.save(newConnectionRequest);
-
-                                connectionRequestResponseDTO =  new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
-
-                            }
-                        }
+                        return new ConnectionRequestResponseDTO(sender.getId(), recipient.getId(), ConnectionRequestStatus.PENDING);
                     }
                 }
             }
-            return connectionRequestResponseDTO;
+
+
         }
 
 

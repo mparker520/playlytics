@@ -17,15 +17,9 @@ public interface ConnectionRequestRepository extends JpaRepository<ConnectionReq
 
     Set<ConnectionRequest> getAllByRecipient_IdAndConnectionRequestStatus(Long registeredPlayerId, ConnectionRequestStatus connectionRequestStatus);
 
-    boolean existsBySender_IdAndRecipient_Id(Long registeredPlayerId, Long peerId);
-
     ConnectionRequest getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(Long registeredPlayerId, Long peerId, Long peerId1, Long registeredPlayerId1);
 
     boolean existsBySender_IdAndRecipient_IdOrSender_IdAndRecipient_Id(Long registeredPlayerId, Long blockedPlayerId, Long blockedPlayerId1, Long registeredPlayerId1);
 
-    Set<ConnectionRequest> findAllBySender_IdAndRecipient_IdOrSender_IdAndRecipientId(Long registeredPlayerId, Long peerId, Long peerId1, Long registeredPlayerId1);
-
-    ConnectionRequest getReferenceBySender_IdAndRecipient_IdOrSender_IdAndRecipientIdAndConnectionRequestStatus(Long authUserId, Long blockedPlayerId, Long blockedPlayerId1, Long authUserId1, ConnectionRequestStatus connectionRequestStatus);
-
-
+    boolean existsBySenderAndRecipientOrSenderAndRecipient(RegisteredPlayer registeredPlayer, RegisteredPlayer peer, RegisteredPlayer peer1, RegisteredPlayer registeredPlayer1);
 }

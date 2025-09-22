@@ -50,8 +50,9 @@ public class NetworkService {
 
             boolean isConnection = confirmedConnectionRepository.existsByPeerAAndPeerBOrPeerAAndPeerB(registeredPlayer, peer, peer, registeredPlayer);
             boolean blockExists = blockedRelationshipRepository.existsByBlockerAndBlockedOrBlockerAndBlocked(registeredPlayer, peer, peer, registeredPlayer);
+            boolean pendingRequest = connectionRequestRepository.existsBySenderAndRecipientOrSenderAndRecipient(registeredPlayer, peer, peer, registeredPlayer);
 
-            if (peer == null || isConnection || blockExists || Objects.equals(registeredPlayer.getId(), peer.getId())) {
+            if (peer == null || isConnection || blockExists || pendingRequest || Objects.equals(registeredPlayer.getId(), peer.getId())) {
                 throw new NotFoundException("No registered players available for connection by that filter.");
             }
 
@@ -63,6 +64,7 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc="Get All Blocked Players">
     @Transactional(readOnly = true)
     public Set<RegisteredPlayerResponseDTO> getAllBlocks(Long authUserId) {
 
@@ -79,6 +81,7 @@ public class NetworkService {
         return blockedPlayersResponseDTOs;
 
     }
+    //</editor-fold>
 
    /* //<editor-fold desc = "Get All Available Peers">
 

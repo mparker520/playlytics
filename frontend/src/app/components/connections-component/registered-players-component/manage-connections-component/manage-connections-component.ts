@@ -57,4 +57,15 @@ export class ManageConnectionsComponent {
 
   //</editor-fold>
 
+
+  //<editor-fold desc="Blocked Players">
+  @Input() blockedPlayers?: RegisteredPlayerResponseDTO[];
+
+  @Output() unblock = new EventEmitter<number>
+  triggerUnblock(id: number) {
+      this.unblock.emit(id);
+  }
+
+  //</editor-fold>
+
 }

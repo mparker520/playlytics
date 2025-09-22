@@ -54,5 +54,21 @@
     }
   </section>
 
+  <section id="removeBlocks">
+    <h4>Remove Blocks</h4>
+
+    @if (blockedPlayers) {
+      <ul >
+
+        @for(blockedPlayer of blockedPlayers; track blockedPlayer.id) {
+          <li>{{blockedPlayer.firstName + blockedPlayer.lastName + blockedPlayer.loginEmail }}</li>
+          <button (click)="triggerUnblock(blockedPlayer.id)"  id="{{'unblock' + blockedPlayer.id}}">Remove Block</button>
+        }
+
+      </ul>
+    }
+  </section>
+
+
 
 </section>

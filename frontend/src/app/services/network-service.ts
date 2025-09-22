@@ -103,4 +103,14 @@ export class NetworkService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Get Blocks">
+  public getBlocks(): Observable<RegisteredPlayerResponseDTO[]> {
+    return this.http.get<RegisteredPlayerResponseDTO[]>('/blocks', {withCredentials: true})
+  }
+  //</editor-fold>
+
+  public removeBlock(id: number): Observable<void> {
+    return this.http.delete<void>(`/block/${id}`, {withCredentials: true})
+  }
+
 }

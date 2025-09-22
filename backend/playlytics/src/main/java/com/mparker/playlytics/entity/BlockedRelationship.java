@@ -105,6 +105,13 @@ public class BlockedRelationship {
         return id;
     }
 
+    public RegisteredPlayer getBlocker() {
+        return blocker;
+    }
+
+    public RegisteredPlayer getBlocked() {
+        return blocked;
+    }
 
     //</editor-fold>
 

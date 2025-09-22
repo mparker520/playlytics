@@ -29,6 +29,7 @@ export class RegisteredPlayersComponent implements OnInit {
   registeredPlayer?: RegisteredPlayerResponseDTO;
   sentRequests?: ConnectionRequestResponseDTO[];
   pendingRequests?: ConnectionRequestResponseDTO[];
+  blockedPlayers?: RegisteredPlayerResponseDTO[];
 
   constructor(private networkService: NetworkService) {
   }
@@ -59,6 +60,13 @@ export class RegisteredPlayersComponent implements OnInit {
       error: (error: any) => console.log("fail", error)
     })
 
+    this.networkService.getBlocks().subscribe({
+      next: (blockedPlayersResponse: RegisteredPlayerResponseDTO[]) => {
+        this.blockedPlayers = blockedPlayersResponse;
+      },
+      error: (error: any) => console.log("fail", error)
+    })
+
   }
 
   //</editor-fold>
@@ -85,6 +93,9 @@ export class RegisteredPlayersComponent implements OnInit {
 
     this.networkService.blockRegisteredPlayer(id).subscribe({
       next: (response: void) => {
+
+        this.registeredPlayer = undefined;
+
         this.networkService.getAllConnections().subscribe({
           next: (updateResponse: RegisteredPlayerResponseDTO[]) => {
             this.connections = updateResponse;
@@ -95,6 +106,13 @@ export class RegisteredPlayersComponent implements OnInit {
         this.networkService.getPendingConnectionRequests().subscribe({
           next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
             this.pendingRequests = pendingRequestsResponse;
+          },
+          error: (error: any) => console.log("fail", error)
+        })
+
+        this.networkService.getBlocks().subscribe({
+          next: (blockedPlayersResponse: RegisteredPlayerResponseDTO[]) => {
+            this.blockedPlayers = blockedPlayersResponse;
           },
           error: (error: any) => console.log("fail", error)
         })
@@ -185,11 +203,28 @@ export class RegisteredPlayersComponent implements OnInit {
           next: (pendingRequestsResponse: ConnectionRequestResponseDTO[]) => {
             this.pendingRequests = pendingRequestsResponse;
           },
-          error: (error: any) => console.log("fail", error)
+          error: (error: any) => console.error("fail", error)
         })
       },
       error: (error: any) => console.error("fail", error)
     })
+
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Unblock Player">
+  handleUnblock(id: number) {
+      this.networkService.removeBlock(id).subscribe({
+          next: (response: void) => {
+            this.networkService.getBlocks().subscribe({
+              next: (blockedPlayersResponse: RegisteredPlayerResponseDTO[]) => {
+                this.blockedPlayers = blockedPlayersResponse;
+              },
+              error: (blockedPlayersError: any) => console.log("fail", blockedPlayersError)
+            })
+          },
+        error: (responseError: any) => console.error("fail", responseError)
+      })
 
   }
   //</editor-fold>

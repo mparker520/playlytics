@@ -63,6 +63,23 @@ public class NetworkService {
 
     //</editor-fold>
 
+    @Transactional(readOnly = true)
+    public Set<RegisteredPlayerResponseDTO> getAllBlocks(Long authUserId) {
+
+        Set<RegisteredPlayerResponseDTO> blockedPlayersResponseDTOs = new HashSet<>();
+
+        Set<BlockedRelationship> blockedRelationships = blockedRelationshipRepository.findAllByBlocker_Id(authUserId);
+        for (BlockedRelationship blockedRelationship : blockedRelationships) {
+            Long blockedId = blockedRelationship.getBlocked().getId();
+            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(blockedId);
+            RegisteredPlayerResponseDTO registeredPlayerResponseDTO = new RegisteredPlayerResponseDTO(blockedId, registeredPlayer.getFirstName(), registeredPlayer.getLastName(), registeredPlayer.getAvatar(), registeredPlayer.getLoginEmail(), registeredPlayer.getDisplayName());
+            blockedPlayersResponseDTOs.add(registeredPlayerResponseDTO);
+        }
+
+        return blockedPlayersResponseDTOs;
+
+    }
+
    /* //<editor-fold desc = "Get All Available Peers">
 
     @Transactional(readOnly = true)

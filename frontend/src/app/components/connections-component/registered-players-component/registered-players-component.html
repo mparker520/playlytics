@@ -5,6 +5,7 @@
 </section>
 
 <section>
-  <app-manage-connections-component (lookup)="handleLookup($event)" (send)="handleSend($event)" (block)="handleBlock($event)" (cancel)="handleCancel($event)" (accept)="handleAccept($event)"  (reject)="handleReject($event)" [registeredPlayer]="registeredPlayer" [sentRequests]="sentRequests" [pendingRequests]="pendingRequests"></app-manage-connections-component>
+  <app-manage-connections-component (lookup)="handleLookup($event)" (send)="handleSend($event)" (block)="handleBlock($event)" (cancel)="handleCancel($event)" (accept)="handleAccept($event)"  (reject)="handleReject($event)" (unblock)="handleUnblock($event)"
+  [registeredPlayer]="registeredPlayer" [sentRequests]="sentRequests" [pendingRequests]="pendingRequests" [blockedPlayers]="blockedPlayers"></app-manage-connections-component>
 </section>
 

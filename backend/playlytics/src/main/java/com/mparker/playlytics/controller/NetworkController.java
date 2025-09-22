@@ -120,6 +120,22 @@ public class NetworkController {
 
     //</editor-fold>
 
+    //<editor-fold desc = "GET All Blocks">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/blocks")
+    public ResponseEntity<Set<RegisteredPlayerResponseDTO>> getBlocks(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+        Set<RegisteredPlayerResponseDTO> allBlocks = networkService.getAllBlocks(principal.getAuthenticatedUserId());
+        return ResponseEntity.ok(allBlocks);
+
+    }
+
+    //</editor-fold>
+
+
+
     //</editor-fold>
 
     //<editor-fold desc = "POST Mappings">
@@ -219,7 +235,7 @@ public class NetworkController {
 
     //<editor-fold desc = "Remove Block">
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/remove-blocked-relationship/{blockedId}")
+    @DeleteMapping("/block/{blockedId}")
     public ResponseEntity<Void> removeBlock(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("blockedId") Long blockedId){
@@ -247,6 +263,7 @@ public class NetworkController {
 
     //</editor-fold>
 
+    //<editor-fold desc="Decline Connection">
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/decline-connection-request/{connectionRequestId}")
     public ResponseEntity<Void> declineConnectionRequest(
@@ -258,6 +275,7 @@ public class NetworkController {
         return ResponseEntity.noContent().build();
 
     }
+    //</editor-fold>
 
 
     //</editor-fold>

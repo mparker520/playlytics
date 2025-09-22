@@ -1,0 +1,123 @@
+<section>
+  <h3>Log a Game Play Session</h3>
+
+  <form>
+
+
+    <section name="game">
+      <!--TODO: Fix game selection-->
+      <label for="gameId">Game</label>
+      <input [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
+    </section>
+
+    <section name="scoringModel">
+
+      <label for="scoringModel">Scoring Model</label>
+        <select [(ngModel)]="scoringModel" name="scoringModel" id="scoringModel">
+            <option value="RANKING">Ranking</option>
+            <option value="TEAM">Teams</option>
+            <option value="COOPERATIVE">Cooperative</option>
+        </select>
+
+    </section>
+
+    <section name="rank">
+
+      @if(scoringModel===ScoringModelEnum.RANKING) {
+
+        <section>
+          <label for="numberPlayersRanking">Number of Players</label>
+          <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersRanking" id="numberPlayersRanking" min="1" max="100">
+
+          @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
+
+              <label>{{  'Player ' + (i + 1) + ' Name' }}</label>
+              <select name="rankingPlayerSelection">
+                @for(connection of connections; track connection.id) {
+                  <option [(ngModel)]="sessionParticipant.playerId" [value]="connection.id" [name]="'infoForPlayer' + i" [id]="'infoForPlayer' + i">{{connection.firstName + " " + connection.lastName}}</option>
+                }
+              </select>
+
+              <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+              <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+
+          }
+        </section>
+
+      }
+    </section>
+
+    <section name="team">
+
+      @if(scoringModel===ScoringModelEnum.TEAM) {
+
+        <section>
+          <label for="numberTeams">Number of Teams</label>
+          <input [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
+
+          @for(sessionTeam of sessionTeams; let i = $index; track i) {
+
+            <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place' }}</label>
+            <input [(ngModel)]="sessionTeam.result" type="number" [name]="'rankingForTeam' + i" [id]="'rankingForTeam' + i" min="1" [max]="numberTeams">
+
+            <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name' }}</label>
+            <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + i" [id]="'nameForTeam' + i">
+
+          }
+        </section>
+
+        <section>
+
+          <section>
+            <label for="numberPlayersRanking">Number of Players</label>
+            <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersRanking" id="numberPlayersRanking" min="1" max="100">
+
+            @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
+
+
+              <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+              <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+
+            }
+          </section>
+
+        </section>
+
+        <section>
+          <label for="numberPlayersTeam">Number of Players</label>
+          <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersTeam" id="numberPlayersTeam" min="3" max="100">
+        </section>
+
+      }
+    </section>
+
+    <section name="cooperative">
+
+    @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
+      <p>Cooperative</p>
+
+      <label for="numberPlayersCooperative">Number of Players</label>
+      <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersCooperative" id="numberPlayersCooperative" min="2" max="100">
+
+      @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
+
+
+        <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+        <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+
+      }
+
+      <select [(ngModel)]="cooperativeResult" name="cooperativeResult" id="cooperativeResult">
+        <option value=1>We Won!</option>
+        <option value=0>We Lost!</option>
+      </select>
+
+    }
+    </section>
+
+  </form>
+
+</section>

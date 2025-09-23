@@ -109,8 +109,10 @@ export class NetworkService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Remove Block">
   public removeBlock(id: number): Observable<void> {
     return this.http.delete<void>(`/block/${id}`, {withCredentials: true})
   }
+  //</editor-fold>
 
 }

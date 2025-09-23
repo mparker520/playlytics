@@ -17,9 +17,11 @@ export class GhostPlayerService {
 
 
 
+  //<editor-fold desc="Create Ghost Player">
   public createNewGhostPlayer(ghostPlayerDTO: GhostPlayerDTO): Observable<GhostPlayerResponseDTO> {
     return this.http.post<GhostPlayerResponseDTO>('/ghost-players', ghostPlayerDTO);
   }
+  //</editor-fold>
 
 
 }

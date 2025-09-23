@@ -1,9 +1,10 @@
-import {Component} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
 import {SessionTeamDTO} from '../../../dtos/session-team-dto';
 import {ConnectionDTO} from '../../../dtos/connection-dto';
+import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 
 
 @Component({
@@ -31,30 +32,24 @@ export class AddGamePlaySessionComponent {
   numberPlayers: number = 0;
   numberTeams: number = 0;
   cooperativeResult: number = -1;
+  creatorId: number = 1;
   //</editor-fold>
 
   //<editor-fold desc="GamePlaySessionDTO Constructor">
-  sessionDateTime?: string;
+  sessionDateTime!: string;
   scoringModel: ScoringModelEnum = ScoringModelEnum.RANKING;
-  gameId?: number;
+  gameId!: number;
   sessionParticipants: SessionParticipantDTO[] = []
   sessionTeams: SessionTeamDTO[] = [];
 
 
-  gamePlayerSessionDTO = {
-      sessionDateTime: this.sessionDateTime,
-      scoringModel: this.scoringModel,
-      gameId: this.gameId,
-      sessionParticipantDTOSet: this.sessionParticipants,
-      sessionTeamDTOSet: this.sessionTeams
 
-  }
   //</editor-fold>
 
   //<editor-fold desc="On Change Methods">
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
-        this.sessionParticipants[i] || {result: 0, playerId: 0, teamNumber: 0}
+        this.sessionParticipants[i] || {result: 0, playerId: 0, teamNumber: null}
       );
   }
 
@@ -70,16 +65,43 @@ export class AddGamePlaySessionComponent {
         }
   }
 
-  onTeamAssociationChange(): void {
-      for(const sessionParticipant of this.sessionParticipants) {
-        let teamNumber = sessionParticipant.teamNumber;
-        console.log(sessionParticipant.result = this.sessionTeams[teamNumber].result);
+  onTeamRankChange(teamNumber: number): void {
+
+    for(const sessionParticipant of this.sessionParticipants) {
+      if(sessionParticipant.teamNumber === teamNumber) {
         sessionParticipant.result = this.sessionTeams[teamNumber].result;
       }
+    }
   }
+
+  onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
+        let teamNumber = (this.sessionParticipants)[sessionParticipantIndex].teamNumber;
+        this.sessionParticipants[sessionParticipantIndex].result = this.sessionTeams[teamNumber].result;
+        this.sessionTeams[teamNumber].playerIds.push(sessionParticipantId);
+      }
+
+
 
   //</editor-fold>
 
+
+  //<editor-fold desc="Submit">
+  @Output() sessionSubmit = new EventEmitter<GamePlaySessionDTO>();
+  triggerSubmit(form: NgForm) {
+
+    const gamePlayerSessionDTO = {
+      sessionDateTime: this.sessionDateTime,
+      scoringModel: this.scoringModel,
+      gameId: this.gameId,
+      sessionParticipantDTOSet: this.sessionParticipants,
+      sessionTeamDTOSet: this.sessionTeams,
+      creatorId: this.creatorId
+    }
+
+    this.sessionSubmit.emit(gamePlayerSessionDTO)
+    form.resetForm();
+  }
+  //</editor-fold>
 
 }
 

@@ -2,13 +2,17 @@
   <h3>Log a Game Play Session</h3>
 
 
-<form>
+<form #gameForm="ngForm" (ngSubmit)="triggerSubmit(gameForm)">
 
   <section id="gameSection">
     <label for="gameId">Game</label>
     <input [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
   </section>
 
+  <section id="sessionDateTimeSection">
+    <label for="sessionDateTime">Session Date / Time</label>
+    <input [(ngModel)]="sessionDateTime" type="text" name="sessionDateTime" id="sessionDateTime">
+  </section>
 
 
   <section id="scoringModelSection">
@@ -31,10 +35,10 @@
       @for(sessionTeam of sessionTeams; let i = $index; track i) {
 
         <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
-        <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)">
+        <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)" placeholder="Enter Team Name">
 
         <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
-        <input [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamAssociationChange()" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
+        <input [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamRankChange(i)" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
 
       }
 
@@ -77,7 +81,7 @@
 
     <section id="teamAssociationSection">
       @if(scoringModel===ScoringModelEnum.TEAM) {
-        <select [(ngModel)]="sessionParticipant.teamNumber" [name]="'teamAssociationMenu' + i" [id]="'teamAssociationMenu' + i" (change)="onTeamAssociationChange()">
+        <select [(ngModel)]="sessionParticipant.teamNumber" [name]="'teamAssociationMenu' + i" [id]="'teamAssociationMenu' + i" (change)="onTeamAssociationChange(i, sessionParticipant.playerId)">
           <label for="teamSelect" id="teamSelect">Select Team</label>
           @for(sessionTeam of sessionTeams; let i = $index; track i) {
             <option   [value]=i>{{sessionTeam.teamName}}</option>
@@ -107,7 +111,7 @@
   }
   </section>
 
-
+<button type="submit">Submit Game Play Session</button>
 
 </form>
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:4200")
 public class GhostPlayerController {
 
     //<editor-fold desc = "Constructor">

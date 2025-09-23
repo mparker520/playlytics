@@ -14,7 +14,7 @@ import java.util.Set;
 
 
 @RestController
-
+@CrossOrigin(origins = "http://localhost:4200")
 public class GamePlaySessionController {
 
     //<editor-fold desc = "Constructor">
@@ -55,6 +55,7 @@ public class GamePlaySessionController {
     public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
+
         GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO, principal.getAuthenticatedUserId());
         return ResponseEntity.ok(gamePlaySessionResponseDTO);
 

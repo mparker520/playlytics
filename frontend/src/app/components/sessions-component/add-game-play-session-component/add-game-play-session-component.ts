@@ -3,7 +3,6 @@ import {FormsModule} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
 import {SessionTeamDTO} from '../../../dtos/session-team-dto';
-// @ts-ignore
 import {ConnectionDTO} from '../../../dtos/connection-dto';
 
 
@@ -17,17 +16,24 @@ import {ConnectionDTO} from '../../../dtos/connection-dto';
 })
 export class AddGamePlaySessionComponent {
 
+
   protected readonly ScoringModelEnum = ScoringModelEnum;
+
+
+  //<editor-fold desc="HARDCODED PLAYERS">
   connections: ConnectionDTO[]=[
     {id: 1, firstName: 'Melissa', lastName: 'Parker', displayName: 'The Coding Wabs', email: 'melissaparker520@gmail.com'},
     {id: 2, firstName: 'Joe', lastName: 'Parker', displayName: 'The Dice Master', email: 'sample@gmail.com'}
   ];
+  //</editor-fold>
 
+  //<editor-fold desc="Variables">
   numberPlayers: number = 0;
   numberTeams: number = 0;
-  cooperativeResult: number = 1;
+  cooperativeResult: number = -1;
+  //</editor-fold>
 
-
+  //<editor-fold desc="GamePlaySessionDTO Constructor">
   sessionDateTime?: string;
   scoringModel: ScoringModelEnum = ScoringModelEnum.RANKING;
   gameId?: number;
@@ -43,10 +49,12 @@ export class AddGamePlaySessionComponent {
       sessionTeamDTOSet: this.sessionTeams
 
   }
+  //</editor-fold>
 
+  //<editor-fold desc="On Change Methods">
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
-        this.sessionParticipants[i] || {result: 0, playerId: 0}
+        this.sessionParticipants[i] || {result: 0, playerId: 0, teamNumber: 0}
       );
   }
 
@@ -56,15 +64,23 @@ export class AddGamePlaySessionComponent {
     );
   }
 
+  onCooperativeResultChange(): void {
+        for(const sessionParticipant of this.sessionParticipants) {
+          sessionParticipant.result = this.cooperativeResult;
+        }
+  }
+
+  onTeamAssociationChange(): void {
+      for(const sessionParticipant of this.sessionParticipants) {
+        let teamNumber = sessionParticipant.teamNumber;
+        console.log(sessionParticipant.result = this.sessionTeams[teamNumber].result);
+        sessionParticipant.result = this.sessionTeams[teamNumber].result;
+      }
+  }
+
+  //</editor-fold>
+
 
 }
 
 
-export interface ConnectionDTO {
-  id: number;
-  firstName: string;
-  lastName: string;
-  avatar: Uint8Array
-  email: string;
-  displayName: string,
-}

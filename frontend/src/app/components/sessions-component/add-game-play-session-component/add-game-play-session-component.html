@@ -1,123 +1,121 @@
-<section>
+
   <h3>Log a Game Play Session</h3>
 
-  <form>
+
+<form>
+
+  <section id="gameSection">
+    <label for="gameId">Game</label>
+    <input [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
+  </section>
 
 
-    <section name="game">
-      <!--TODO: Fix game selection-->
-      <label for="gameId">Game</label>
-      <input [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
-    </section>
 
-    <section name="scoringModel">
-
-      <label for="scoringModel">Scoring Model</label>
-        <select [(ngModel)]="scoringModel" name="scoringModel" id="scoringModel">
-            <option value="RANKING">Ranking</option>
-            <option value="TEAM">Teams</option>
-            <option value="COOPERATIVE">Cooperative</option>
-        </select>
-
-    </section>
-
-    <section name="rank">
-
-      @if(scoringModel===ScoringModelEnum.RANKING) {
-
-        <section>
-          <label for="numberPlayersRanking">Number of Players</label>
-          <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersRanking" id="numberPlayersRanking" min="1" max="100">
-
-          @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
-
-              <label>{{  'Player ' + (i + 1) + ' Name' }}</label>
-              <select name="rankingPlayerSelection">
-                @for(connection of connections; track connection.id) {
-                  <option [(ngModel)]="sessionParticipant.playerId" [value]="connection.id" [name]="'infoForPlayer' + i" [id]="'infoForPlayer' + i">{{connection.firstName + " " + connection.lastName}}</option>
-                }
-              </select>
-
-              <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
-              <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+  <section id="scoringModelSection">
+    <label for="scoringModel">Scoring Model</label>
+    <select [(ngModel)]="scoringModel" name="scoringModel" id="scoringModel">
+      <option value="RANKING">Ranking</option>
+      <option value="TEAM">Teams</option>
+      <option value="COOPERATIVE">Cooperative</option>
+    </select>
+  </section>
 
 
-          }
-        </section>
+  <section id="teamSection">
+    @if(scoringModel===ScoringModelEnum.TEAM) {
+
+
+      <label for="numberTeams">Number of Teams</label>
+      <input [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
+
+      @for(sessionTeam of sessionTeams; let i = $index; track i) {
+
+        <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
+        <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)">
+
+        <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
+        <input [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamAssociationChange()" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
 
       }
-    </section>
 
-    <section name="team">
+    }
 
-      @if(scoringModel===ScoringModelEnum.TEAM) {
+  </section>
 
-        <section>
-          <label for="numberTeams">Number of Teams</label>
-          <input [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
-
-          @for(sessionTeam of sessionTeams; let i = $index; track i) {
-
-            <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place' }}</label>
-            <input [(ngModel)]="sessionTeam.result" type="number" [name]="'rankingForTeam' + i" [id]="'rankingForTeam' + i" min="1" [max]="numberTeams">
-
-            <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name' }}</label>
-            <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + i" [id]="'nameForTeam' + i">
-
-          }
-        </section>
-
-        <section>
-
-          <section>
-            <label for="numberPlayersRanking">Number of Players</label>
-            <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersRanking" id="numberPlayersRanking" min="1" max="100">
-
-            @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
-
-
-              <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
-              <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
-
-
-            }
-          </section>
-
-        </section>
-
-        <section>
-          <label for="numberPlayersTeam">Number of Players</label>
-          <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersTeam" id="numberPlayersTeam" min="3" max="100">
-        </section>
-
-      }
-    </section>
-
-    <section name="cooperative">
+  <section id="cooperativeResultSection">
 
     @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
-      <p>Cooperative</p>
-
-      <label for="numberPlayersCooperative">Number of Players</label>
-      <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayersCooperative" id="numberPlayersCooperative" min="2" max="100">
-
-      @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
-
-
-        <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
-        <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
-
-
-      }
-
-      <select [(ngModel)]="cooperativeResult" name="cooperativeResult" id="cooperativeResult">
+      <select [(ngModel)]="cooperativeResult" (ngModelChange)="onCooperativeResultChange()" name="cooperativeResult" id="cooperativeResult">
         <option value=1>We Won!</option>
         <option value=0>We Lost!</option>
       </select>
 
     }
+
+  </section>
+
+
+    <section id="numberOfPlayersSection">
+      <label for="numberPlayers">Number of Players</label>
+      <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" id="numberPlayers" min="1" max="100">
     </section>
 
-  </form>
+   <section id="playerLoopSection">
+  @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
 
-</section>
+    <section id="playerSelectSection">
+
+      <label>{{  'Player ' + (i + 1) + ' Name' }}</label>
+
+      <select [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
+        @for(connection of connections; track connection.id) {
+          <option  [value]="connection.id" [id]="'infoForPlayer' + (i + 1)">{{connection.firstName + " " + connection.lastName}}</option>
+        }
+      </select>
+
+    </section>
+
+    <section id="teamAssociationSection">
+      @if(scoringModel===ScoringModelEnum.TEAM) {
+        <select [(ngModel)]="sessionParticipant.teamNumber" [name]="'teamAssociationMenu' + i" [id]="'teamAssociationMenu' + i" (change)="onTeamAssociationChange()">
+          <label for="teamSelect" id="teamSelect">Select Team</label>
+          @for(sessionTeam of sessionTeams; let i = $index; track i) {
+            <option   [value]=i>{{sessionTeam.teamName}}</option>
+          }
+        </select>
+      }
+    </section>
+
+
+
+    <section id="playerRankingSection">
+
+      @if(scoringModel===ScoringModelEnum.RANKING) {
+
+        <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+        <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+      }
+
+      @if(scoringModel===ScoringModelEnum.TEAM) {
+        <p>Rank: {{sessionParticipant.result}}</p>
+      }
+
+
+    </section>
+
+  }
+  </section>
+
+
+
+</form>
+
+
+
+
+
+
+
+
+

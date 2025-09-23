@@ -1,23 +1,33 @@
 
-<header>
-  <h1>PlayLytics</h1>
+
+
 
     @if (isAuthenticated) {
-    <nav>
-      <a routerLink = "/">Home</a>
-      <a routerLink = "/analytics">Analytics</a>
-      <a routerLink = "/sessions">Game Play Sessions</a>
-      <a routerLink = "/connections">Connections</a>
-      <a routerLink = "/inventory">Inventory</a>
-      <a routerLink = "/logout">Logout</a>
-    </nav>
-
+      <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-6 pt-6 pb-4 text-white">
+      <h1 class="text-4xl pl-3">PlayLytics</h1>
+        <nav class="py-2">
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/">Home</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/analytics">Analytics</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/sessions">Game Play Sessions</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/connections">Connections</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/inventory">Inventory</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/profile">Edit Profile</a>
+          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/logout">Logout</a>
+        </nav>
+      </header>
     } @else {
-      <a routerLink = "/login">Login</a>
-      <a routerLink = "/sign-up">Create Account</a>
+      <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-4 pt-6 pb-4 text-white">
+        <section class="flex justify-between">
+          <h1 class="text-4xl pl-3">PlayLytics</h1>
+          <nav class="py-2 flex justify-end">
+            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/login">Login</a>
+            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/sign-up">Create Account</a>
+          </nav>
+        </section>
+      </header>
+
     }
 
-</header>
 
 
 <main>

@@ -1,4 +1,4 @@
-<h2>Connections</h2>
+<div class="flex flex-col justify-center items-center">
 
 <section>
   <app-confirmed-connections-component (remove)="handleRemove($event)" (block)="handleBlock($event)" [connections]="connections"></app-confirmed-connections-component>
@@ -8,4 +8,4 @@
   <app-manage-connections-component (lookup)="handleLookup($event)" (send)="handleSend($event)" (block)="handleBlock($event)" (cancel)="handleCancel($event)" (accept)="handleAccept($event)"  (reject)="handleReject($event)" (unblock)="handleUnblock($event)"
   [registeredPlayer]="registeredPlayer" [sentRequests]="sentRequests" [pendingRequests]="pendingRequests" [blockedPlayers]="blockedPlayers"></app-manage-connections-component>
 </section>
-
+</div>

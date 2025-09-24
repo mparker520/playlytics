@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AuthService} from '../../services/auth-service';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-shell-component',
   imports: [
     RouterOutlet,
-    RouterLink
+    RouterLink,
+    NgOptimizedImage,
+    RouterLinkActive
   ],
   templateUrl: './shell-component.html',
   styleUrl: './shell-component.css'

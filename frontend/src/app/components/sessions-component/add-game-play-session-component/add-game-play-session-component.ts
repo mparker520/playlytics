@@ -5,12 +5,14 @@ import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
 import {SessionTeamDTO} from '../../../dtos/session-team-dto';
 import {ConnectionDTO} from '../../../dtos/connection-dto';
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
+import {NgOptimizedImage} from '@angular/common';
 
 
 @Component({
   selector: 'app-add-game-play-session-component',
   imports: [
-    FormsModule
+    FormsModule,
+    NgOptimizedImage
   ],
   templateUrl: './add-game-play-session-component.html',
   styleUrl: './add-game-play-session-component.css'
@@ -47,6 +49,9 @@ export class AddGamePlaySessionComponent {
   //</editor-fold>
 
   //<editor-fold desc="On Change Methods">
+
+  expanded: boolean = false;
+
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
         this.sessionParticipants[i] || {result: 0, playerId: 0, teamNumber: null}
@@ -80,7 +85,9 @@ export class AddGamePlaySessionComponent {
         this.sessionTeams[teamNumber].playerIds.push(sessionParticipantId);
       }
 
-
+  onExpandChange() {
+    this.expanded = !this.expanded;
+  }
 
   //</editor-fold>
 

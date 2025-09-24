@@ -1,122 +1,173 @@
+<section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
+my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full navBar:mx-0 navBar:max-w-[600px]">
 
-  <h3>Log a Game Play Session</h3>
-
-
-<form #gameForm="ngForm" (ngSubmit)="triggerSubmit(gameForm)">
-
-  <section id="gameSection">
-    <label for="gameId">Game</label>
-    <input [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
-  </section>
-
-  <section id="sessionDateTimeSection">
-    <label for="sessionDateTime">Session Date / Time</label>
-    <input [(ngModel)]="sessionDateTime" type="text" name="sessionDateTime" id="sessionDateTime">
-  </section>
-
-
-  <section id="scoringModelSection">
-    <label for="scoringModel">Scoring Model</label>
-    <select [(ngModel)]="scoringModel" name="scoringModel" id="scoringModel">
-      <option value="RANKING">Ranking</option>
-      <option value="TEAM">Teams</option>
-      <option value="COOPERATIVE">Cooperative</option>
-    </select>
-  </section>
-
-
-  <section id="teamSection">
-    @if(scoringModel===ScoringModelEnum.TEAM) {
-
-
-      <label for="numberTeams">Number of Teams</label>
-      <input [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
-
-      @for(sessionTeam of sessionTeams; let i = $index; track i) {
-
-        <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
-        <input [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)" placeholder="Enter Team Name">
-
-        <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
-        <input [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamRankChange(i)" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
-
-      }
-
-    }
-
-  </section>
-
-  <section id="cooperativeResultSection">
-
-    @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
-      <select [(ngModel)]="cooperativeResult" (ngModelChange)="onCooperativeResultChange()" name="cooperativeResult" id="cooperativeResult">
-        <option value=1>We Won!</option>
-        <option value=0>We Lost!</option>
-      </select>
-
-    }
-
-  </section>
-
-
-    <section id="numberOfPlayersSection">
-      <label for="numberPlayers">Number of Players</label>
-      <input [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" id="numberPlayers" min="1" max="100">
-    </section>
-
-   <section id="playerLoopSection">
-  @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
-
-    <section id="playerSelectSection">
-
-      <label>{{  'Player ' + (i + 1) + ' Name' }}</label>
-
-      <select [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
-        @for(connection of connections; track connection.id) {
-          <option  [value]="connection.id" [id]="'infoForPlayer' + (i + 1)">{{connection.firstName + " " + connection.lastName}}</option>
-        }
-      </select>
-
-    </section>
-
-    <section id="teamAssociationSection">
-      @if(scoringModel===ScoringModelEnum.TEAM) {
-        <select [(ngModel)]="sessionParticipant.teamNumber" [name]="'teamAssociationMenu' + i" [id]="'teamAssociationMenu' + i" (change)="onTeamAssociationChange(i, sessionParticipant.playerId)">
-          <label for="teamSelect" id="teamSelect">Select Team</label>
-          @for(sessionTeam of sessionTeams; let i = $index; track i) {
-            <option   [value]=i>{{sessionTeam.teamName}}</option>
-          }
-        </select>
-      }
-    </section>
-
-
-
-    <section id="playerRankingSection">
-
-      @if(scoringModel===ScoringModelEnum.RANKING) {
-
-        <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
-        <input [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
-
-      }
-
-      @if(scoringModel===ScoringModelEnum.TEAM) {
-        <p>Rank: {{sessionParticipant.result}}</p>
-      }
-
-
-    </section>
-
+  @if(!expanded) {
+    <div class="flex" (click)="onExpandChange()">
+      <img class="cursor-pointer" ngSrc="assets/PlusSign.png" alt="Plus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  pt-6 text-brand4">Log a Game Play Session</h3>
+    </div>
   }
-  </section>
 
-<button type="submit">Submit Game Play Session</button>
+  @if(expanded) {
+    <div class="flex" (click)="onExpandChange()">
+      <div class="flex">
+        <img class="cursor-pointer" ngSrc="assets/MinusSign.png" alt="Minus Sign Icon" width="40" height="40">
+        <h3 class="text-2xl font-bold  pt-6 text-brand4">Log a Game Play Session</h3>
+      </div>
 
-</form>
+      <form autocomplete="off" #gameForm="ngForm" (ngSubmit)="triggerSubmit(gameForm)">
+
+        <div id="gameSection">
+
+          <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                 [(ngModel)]="gameId" type="number" name="gameId" id="gameId">
+          <label for="gameId">Game</label>
+
+        </div>
+
+        <div id="sessionDateTimeSection">
+
+          <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                 [(ngModel)]="sessionDateTime" type="text" name="sessionDateTime" id="sessionDateTime">
+          <label for="sessionDateTime">Session Date / Time</label>
+
+        </div>
+
+
+        <div id="scoringModelSection">
+
+          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                  [(ngModel)]="scoringModel" name="scoringModel" id="scoringModel">
+            <option value="RANKING">Ranking</option>
+            <option value="TEAM">Teams</option>
+            <option value="COOPERATIVE">Cooperative</option>
+          </select>
+          <label for="scoringModel">Scoring Model</label>
+
+        </div>
+
+
+        <div id="teamSection">
+          @if(scoringModel===ScoringModelEnum.TEAM) {
+
+
+            <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                   [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
+
+            @for(sessionTeam of sessionTeams; let i = $index; track i) {
+
+              <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)" placeholder="Enter Team Name">
+
+              <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamRankChange(i)" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
+
+            }
+
+            <label for="numberTeams">Number of Teams</label>
+
+          }
+
+        </div>
+
+        <div id="cooperativeResultSection">
+
+          @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
+
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                    [(ngModel)]="cooperativeResult" (ngModelChange)="onCooperativeResultChange()" name="cooperativeResult" id="cooperativeResult">
+              <option value=1>We Won!</option>
+              <option value=0>We Lost!</option>
+            </select>
+            <label for="cooperativeResult">Group Result</label>
+
+          }
+
+        </div>
+
+
+        <div id="numberOfPlayersSection">
+
+          <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                 [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" id="numberPlayers" min="1" max="100">
+          <label for="numberPlayers">Number of Players</label>
+
+        </div>
+
+        <div id="playerLoopSection">
+          @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
+
+            <div id="playerSelectSection">
+
+              <div>
+
+                <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                        [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
+                  @for(connection of connections; track connection.id) {
+                    <option  [value]="connection.id" [id]="'infoForPlayer' + (i + 1)">{{connection.firstName + " " + connection.lastName}}</option>
+                  }
+                </select>
+
+                <label>{{  'Player ' + (i + 1) + ' Name' }}</label>
+
+              </div>
+
+              <div>
+                @if(scoringModel===ScoringModelEnum.RANKING) {
+
+                  <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                         [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+                  <label [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+
+                }
+              </div>
+
+            </div>
+
+            <div id="teamAssociationSection">
+              @if(scoringModel===ScoringModelEnum.TEAM) {
+                <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                        [(ngModel)]="sessionParticipant.teamNumber" [name]="'teamAssociationMenu' + i" [id]="'teamAssociationMenu' + i" (change)="onTeamAssociationChange(i, sessionParticipant.playerId)">
+
+                  @for(sessionTeam of sessionTeams; let i = $index; track i) {
+                    <option   [value]=i>{{sessionTeam.teamName}}</option>
+                  }
+                </select>
+
+                <label for="teamSelect" id="teamSelect">Select Team</label>
+
+              }
+
+              @if(scoringModel===ScoringModelEnum.TEAM) {
+                <p>Rank: {{sessionParticipant.result}}</p>
+              }
+
+
+            </div>
 
 
 
+            <div id="playerRankingSection">
+
+
+
+
+            </div>
+
+          }
+        </div>
+
+        <button class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg" type="submit">Submit Game Play Session</button>
+
+      </form>
+    </div>
+  }
+
+
+</section>
 
 
 

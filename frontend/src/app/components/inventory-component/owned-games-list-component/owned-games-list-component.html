@@ -1,37 +1,41 @@
 
 <div  class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white my-6 px-6 shadow-md
 w-7/12 max-w-4xl mx-auto navBar:w-full navBar:mx-0 navBar:max-w-none">
-  <h3 class="text-2xl font-bold  pt-6 text-brand4">Your Current Inventory</h3>
+  <h3 class="text-2xl font-bold  py-6 text-brand4">Your Current Inventory</h3>
 
-  <section class="flex flex-row items-start pb-6 mt-4">
-  <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2  shadow-md table-fixed space-y-4 w-full  mx-0">
-    <colgroup>
-      <col class="w-auto">
-      <col class="w-[100px]">
-    </colgroup>
+  @if(ownedGames.length > 0) {
+    <section class="flex flex-row items-start pb-6 mt-4">
+      <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2  shadow-md table-fixed space-y-4 w-full  mx-0">
+        <colgroup>
+          <col class="w-auto">
+          <col class="w-[100px]">
+        </colgroup>
 
-    <thead class="bg-brand2">
-      <tr>
-        <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
-        <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
-      </tr>
-    </thead>
-
-    <tbody>
-      @for(ownedGame of ownedGames; track ownedGame.gameId) {
+        <thead class="bg-brand2">
         <tr>
-          <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ ownedGame.gameName }}</td>
-          <td class="border-2 border-brand4 px-4 max-w-[100px]">
-            <div class="flex justify-center">
-              <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(ownedGame.gameId)"  id={{ownedGame.gameId}}>
-            </div>
-          </td>
+          <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
+          <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
         </tr>
+        </thead>
 
-      }
-    </tbody>
+        <tbody>
+          @for(ownedGame of ownedGames; track ownedGame.gameId) {
+            <tr>
+              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ ownedGame.gameName }}</td>
+              <td class="border-2 border-brand4 px-4 max-w-[100px]">
+                <div class="flex justify-center">
+                  <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(ownedGame.gameId)"  id={{ownedGame.gameId}}>
+                </div>
+              </td>
+            </tr>
 
-  </table>
-  </section>
+          }
+        </tbody>
+
+      </table>
+    </section>
+  }
+
+
 </div>
 

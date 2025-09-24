@@ -3,11 +3,13 @@ import {FormsModule, NgForm} from '@angular/forms';
 import {LoginService} from '../../services/login-service';
 import {AuthService} from '../../services/auth-service';
 import {Router} from '@angular/router';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-login-component',
   imports: [
-    FormsModule
+    FormsModule,
+    NgOptimizedImage
   ],
   templateUrl: './login-component.html',
   styleUrl: './login-component.css'

@@ -3,6 +3,9 @@ module.exports = {
   content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {
+      screens: {
+        navBar: "1050px"
+      },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
       },

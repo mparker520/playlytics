@@ -13,12 +13,18 @@ import {AuthService} from '../../services/auth-service';
 })
 export class ShellComponent {
 
+  menuOpen = false;
+
   constructor(private authService: AuthService) {
 
   }
 
   get isAuthenticated(): boolean {
     return this.authService.authenticated;
+  }
+
+  toggleMenu() {
+    this.menuOpen = !this.menuOpen;
   }
 
 }

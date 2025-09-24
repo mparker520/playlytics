@@ -4,24 +4,49 @@
 
     @if (isAuthenticated) {
       <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-6 pt-6 pb-4 text-white">
-      <h1 class="text-4xl pl-3">PlayLytics</h1>
+      <section class="flex justify-between">
+        <h1 class="text-4xl pl-3">PlayLytics</h1>
+
         <nav class="py-2">
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/">Home</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/analytics">Analytics</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/sessions">Game Play Sessions</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/connections">Connections</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/inventory">Inventory</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/profile">Edit Profile</a>
-          <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/logout">Logout</a>
+          <div class="flex justify-end">
+            <button class="navBar:hidden mx-3 text-white text-lg" (click)="toggleMenu()">☰</button>
+          </div>
+
+
+            <div class="hidden navBar:flex">
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/">Home</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/analytics">Analytics</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLink = "/sessions">Game Play Sessions</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/connections">Connections</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/inventory">Inventory</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/profile">Edit Profile</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/logout">Logout</a>
+            </div>
+
+
+          @if(menuOpen) {
+            <div class="flex flex-col items-end navBar:hidden">
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/">Home</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/analytics">Analytics</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/sessions">Game Play Sessions</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/connections">Connections</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/inventory">Inventory</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/profile">Edit Profile</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLink = "/logout">Logout</a>
+            </div>
+          }
+
         </nav>
+      </section>
+
       </header>
     } @else {
       <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-4 pt-6 pb-4 text-white">
         <section class="flex justify-between">
           <h1 class="text-4xl pl-3">PlayLytics</h1>
           <nav class="py-2 flex justify-end">
-            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/login">Login</a>
             <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/sign-up">Create Account</a>
+            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLink = "/login">Login</a>
           </nav>
         </section>
       </header>

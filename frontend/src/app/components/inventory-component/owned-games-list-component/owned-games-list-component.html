@@ -1,12 +1,26 @@
 
-<section>
-
   <h3 class="text-2xl font-bold p-6 text-brand4">Your Current Inventory</h3>
-  <ul>
-    @for(ownedGame of ownedGames; track ownedGame.gameId) {
-      <li>{{ ownedGame.gameName }}</li>
-      <button (click)="triggerDelete(ownedGame.gameId)"  id={{ownedGame.gameId}}>Remove from Inventory</button>
-    }
-  </ul>
+  <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 px-6 shadow-md space-y-4 w-full max-w-4xl mx-auto">
+    <thead>
+      <tr>
+        <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-brand5">Game Name</th>
+        <th class="table-auto border-collapse border-2 border-brand4"></th>
+      </tr>
+    </thead>
 
-</section>
+    <tbody>
+      @for(ownedGame of ownedGames; track ownedGame.gameId) {
+        <tr>
+          <td class="border-2 border-brand4 px-4  text-gray-700">{{ ownedGame.gameName }}</td>
+          <td class="border-2 border-brand4 px-4">
+            <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(ownedGame.gameId)"  id={{ownedGame.gameId}}>
+          </td>
+        </tr>
+
+      }
+    </tbody>
+
+  </table>
+
+
+

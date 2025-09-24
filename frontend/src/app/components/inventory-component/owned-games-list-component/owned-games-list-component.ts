@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-owned-games-list-component',
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './owned-games-list-component.html',
   styleUrl: './owned-games-list-component.css'
 })

@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        navBar: "1050px"
+        navBar: "1100px"
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif']

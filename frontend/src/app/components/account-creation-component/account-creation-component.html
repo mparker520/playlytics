@@ -1,24 +1,59 @@
-<section>
-  <h2>Create an Account with PlayLytics!</h2>
-  <form (ngSubmit)="createAccount()" >
+<div class="flex flex-col justify-center items-center">
 
-    <label for = "loginEmail">Email Address</label>
-    <input [(ngModel)]="loginEmail" type = "text" id = "loginEmail" name = "loginEmail" placeholder="Email Address">
-
-    <label for = "password">Password</label>
-    <input [(ngModel)]="password" type = password id = "password" name = "password" placeholder="Enter Your Password">
-
-    <label for = "firstname">First Name</label>
-    <input [(ngModel)]="firstName" type = text id = "firstName" name = "firstName" placeholder="Enter Your First Name">
-
-    <label for = "lastName">Last Name</label>
-    <input [(ngModel)]="lastName" type = text id = "lastName" name = "lastName" placeholder="Enter Your Last Name">
-
-    <label for = "displayName">Display Name</label>
-    <input [(ngModel)]="displayName" type = text id = "displayName" name = "displayName" placeholder="Enter a Fun Display Name">
+  <div class="flex sm:block">
+    <img ngSrc="assets/PlayLyticsLogoTransparent.png" alt="PlayLytics Logo" height="600" width="600">
+  </div>
 
 
-    <button type = "submit" id = "createAccountSubmitButton">Create Account!</button>
+    <section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white px-6 shadow-md space-y-4 max-w-xxl mx-auto">
 
-  </form>
-</section>
+      <form autocomplete="off" (ngSubmit)="createAccount()" >
+
+        <div class="grid  grid-cols-1 gap-4 py-2 m-2 sm:grid-cols-2">
+
+
+            <div class="py-2 mx-2">
+              <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand2 border-b-brand4 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="firstName" type = text id = "firstName" name = "firstName" placeholder="First Name">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for = "firstname">First Name</label>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="lastName" type = text id = "lastName" name = "lastName" placeholder="Last Name">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for = "lastName">Last Name</label>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="displayName" type = text id = "displayName" name = "displayName" placeholder="Display Name">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for = "displayName">Display Name</label>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="loginEmail" type = "text" id = "loginEmail" name = "loginEmail" placeholder="Email Address">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for = "loginEmail">Email Address</label>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="password" type = password id = "password" name = "password" placeholder="Password">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for = "password">Password</label>
+            </div>
+
+        <div class="py-2 mx-2">
+          <button class="w-full bg-brand5 text-white font-semibold py-2 px-4 rounded-md
+             hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3"  type = "submit" id = "createAccountSubmitButton">Create Account</button>
+        </div>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+
+  <h2 class="text-3xl font-bold p-6 text-brand4 text-center">Create an Account with PlayLytics!</h2>
+
+</div>

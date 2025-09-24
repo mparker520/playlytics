@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AccountCreationService} from '../../services/account-creation-service';
 import {Router} from '@angular/router';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-account-creation-component',
-    imports: [
-        FormsModule,
-        ReactiveFormsModule
-    ],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NgOptimizedImage
+  ],
   templateUrl: './account-creation-component.html',
   styleUrl: './account-creation-component.css'
 })

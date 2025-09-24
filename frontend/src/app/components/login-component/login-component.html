@@ -3,28 +3,28 @@
   <img ngSrc="assets/PlayLyticsLogoTransparent.png" alt="PlayLytics Logo" height="600" width="600">
 
 
-<section class="space-y-4 max-w-xl mx-auto">
+<section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white px-6 shadow-md space-y-4 max-w-xxl mx-auto">
   <form autocomplete="off" (ngSubmit)="login()" >
 
-    <div class="flex  flex-col py-2 m-2 md:flex-row ">
+    <div class="grid  grid-cols-1 py-2 mx-2 sm:grid-cols-2">
 
       <div class="py-2 m-2">
-        <input class="p-2 w-64  h-10 border-2 rounded-md border-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="username" type = "text" id = "username" name = "username" placeholder="Enter Your Email">
+        <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="username" type = "text" id = "username" name = "username" placeholder="Enter Your Email">
         <label class="pt-2 block text-sm font-medium text-gray-700" for = "username">User Name</label>
       </div>
 
+
       <div  class="py-2 m-2">
-        <input class="p-2 w-64  h-10 border-2 rounded-md border-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="password" type = "password" id = "password" name = "password" placeholder="Enter Your Password">
+        <input class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none" [(ngModel)]="password" type = "password" id = "password" name = "password" placeholder="Enter Your Password">
         <label class="pt-2 block text-sm font-medium text-gray-700" for = "password">Password</label>
       </div>
 
     </div>
 
 
-
-    <div class="py-2 m-2">
+    <div class="p-2 mx-2 mb-2">
       <button  class="w-full bg-brand5 text-white font-semibold py-2 px-4 rounded-md
-             hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2" type = "submit" id = "loginSubmitButton">Login</button>
+             hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3" type = "submit" id = "loginSubmitButton">Login</button>
     </div>
 
   </form>

@@ -6,15 +6,17 @@ import {NetworkService} from '../../../services/network-service';
 import {CreateGuestComponent} from './create-guest-component/create-guest-component';
 import {GhostPlayerDTO} from '../../../dtos/ghost-player-dto';
 import {GhostPlayerService} from '../../../services/ghost-player-service';
+import {NgOptimizedImage} from "@angular/common";
 
 
 @Component({
   selector: 'app-guest-players-component',
-  imports: [
-    AssociationsListComponent,
-    AddAssociationComponent,
-    CreateGuestComponent
-  ],
+    imports: [
+        AssociationsListComponent,
+        AddAssociationComponent,
+        CreateGuestComponent,
+        NgOptimizedImage
+    ],
   templateUrl: './guest-players-component.html',
   styleUrl: './guest-players-component.css'
 })
@@ -23,6 +25,7 @@ export class GuestPlayersComponent implements OnInit {
   //<editor-fold desc="Constructor and Fields">
   associations: GhostPlayerResponseDTO[] = [];
   guestPlayer?: GhostPlayerResponseDTO;
+  expandedAssociationsManagement: boolean = false;
 
   constructor(private networkService: NetworkService, private ghostPlayerService: GhostPlayerService) {
 
@@ -86,7 +89,6 @@ export class GuestPlayersComponent implements OnInit {
   }
   //</editor-fold>
 
-
   //<editor-fold desc="Create Guest / Ghost Player">
   handleCreate(ghostPlayerDTO: GhostPlayerDTO) {
       this.ghostPlayerService.createNewGhostPlayer(ghostPlayerDTO).subscribe({
@@ -98,6 +100,12 @@ export class GuestPlayersComponent implements OnInit {
           })
         }
       })
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Expand Associations Management">
+  onExpandAssociationsManagementChange() {
+    this.expandedAssociationsManagement = !this.expandedAssociationsManagement;
   }
   //</editor-fold>
 

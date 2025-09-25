@@ -12,9 +12,15 @@ import {NgOptimizedImage} from '@angular/common';
 })
 export class AddOwnedGameComponent {
 
+  //<editor-fold desc="Variables">
+
+        expanded: boolean = false;
         clicked: boolean = false;
 
-        @Input() games!: GameResponseDTO[];
+  //</editor-fold>
+
+  //<editor-fold desc="Inputs and Outputs">
+  @Input() games!: GameResponseDTO[];
 
         @Output() lookup = new EventEmitter<string>;
         triggerLookup(searchValue: string) {
@@ -27,5 +33,11 @@ export class AddOwnedGameComponent {
           this.add.emit(gameId)
           this.clicked = false;
         }
+  //</editor-fold>
+
+  onExpandChange() {
+    this.expanded = !this.expanded;
+  }
+
 
 }

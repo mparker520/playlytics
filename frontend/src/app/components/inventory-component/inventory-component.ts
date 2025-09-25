@@ -6,12 +6,6 @@ import {OwnedGameResponseDTO} from '../../dtos/owned-game-response-dto';
 import {Component, OnInit} from '@angular/core';
 import {GameResponseDTO} from '../../dtos/game-response-dto';
 import {GameService} from '../../services/game-service';
-import {
-    AddGamePlaySessionComponent
-} from "../sessions-component/add-game-play-session-component/add-game-play-session-component";
-import {
-    GamePlaySessionsListComponent
-} from "../sessions-component/game-play-sessions-list-component/game-play-sessions-list-component";
 
 @Component({
   selector: 'app-inventory-component',
@@ -19,9 +13,7 @@ import {
         FormsModule,
         ReactiveFormsModule,
         OwnedGamesListComponent,
-        AddOwnedGameComponent,
-        AddGamePlaySessionComponent,
-        GamePlaySessionsListComponent
+        AddOwnedGameComponent
     ],
   templateUrl: './inventory-component.html',
   styleUrl: './inventory-component.css'

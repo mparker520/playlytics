@@ -1,13 +1,28 @@
 <section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
-my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full navBar:mx-0 navBar:max-w-[600px]">
-  <h3 class="text-2xl font-bold  pt-6 text-brand4">Add to Your Inventory</h3>
+my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
+
+  @if(!expanded) {
+    <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+      <img ngSrc="assets/PlusSign.png" alt="Plus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  text-brand4 pt-1">Add to Your Inventory</h3>
+    </div>
+  }
+
+  @if(expanded) {
+
+    <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+      <img ngSrc="assets/MinusSign.png" alt="Minus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  pt-1 text-brand4">Add to Your Inventory</h3>
+    </div>
+
+
 
   <section>
 
     <div class="flex flex-col mt-4">
       <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
-             type="text" placeholder="Enter Game Title" #searchBox>
-      <label class="pt-2 block text-sm font-medium text-gray-700">Game Title</label>
+             type="text" placeholder="Enter Game Title" #searchBox id="gameSearchBox">
+      <label class="pt-2 block text-sm font-medium text-gray-700" for="gameSearchBox">Game Title</label>
       </div>
 
     <button class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
@@ -21,11 +36,17 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full navBar:mx-0 navBar:ma
 
       @if(games.length > 0) {
 
-        <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 px-6 shadow-md space-y-4 w-full max-w-4xl mx-auto">
+        <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 px-6 shadow-md table-fixed space-y-4 w-full max-w-4xl mx-auto">
+
+          <colgroup>
+            <col class="w-auto">
+            <col class="w-[100px]">
+          </colgroup>
+
           <thead class="bg-brand2">
           <tr>
             <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
-            <th class="table-auto border-collapse border-2 border-brand4"></th>
+            <th class="table-auto border-collapse border-2 border-brand4 max-w-[100px]"></th>
           </tr>
           </thead>
 
@@ -51,6 +72,10 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full navBar:mx-0 navBar:ma
     }
 
   </section>
+
+
+
+  }
 
 
 

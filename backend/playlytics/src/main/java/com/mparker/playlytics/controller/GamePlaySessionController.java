@@ -28,11 +28,9 @@ public class GamePlaySessionController {
     //</editor-fold>
 
      //<editor-fold desc = "GET Mapping">
-    @PreAuthorize("#registeredPlayerId == principal.authenticatedUserId")
-    @GetMapping("/registered-players/{registeredPlayerId}/game-play-sessions")
+     @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @P("registeredPlayerId")@PathVariable("registeredPlayerId") Long registeredPlayerId,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
 
         if (gameTitle == null) {

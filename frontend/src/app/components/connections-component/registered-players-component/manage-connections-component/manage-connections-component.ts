@@ -1,14 +1,19 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../../../dtos/registered-player-response-dto';
 import {ConnectionRequestResponseDTO} from '../../../../dtos/connection-request-response-dto';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-manage-connections-component',
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './manage-connections-component.html',
   styleUrl: './manage-connections-component.css'
 })
 export class ManageConnectionsComponent {
+
+  expandedConnectionsManagement: boolean = false;
 
   //<editor-fold desc="Discover Players / Send Requests / Block">
   @Input() registeredPlayer?: RegisteredPlayerResponseDTO;
@@ -26,6 +31,10 @@ export class ManageConnectionsComponent {
   @Output() block = new EventEmitter<number>;
   triggerBlock(id: number) {
     this.block.emit(id)
+  }
+
+  onExpandConnectionsManagementChange() {
+    this.expandedConnectionsManagement = !this.expandedConnectionsManagement;
   }
 
   //</editor-fold>
@@ -56,7 +65,6 @@ export class ManageConnectionsComponent {
   }
 
   //</editor-fold>
-
 
   //<editor-fold desc="Blocked Players">
   @Input() blockedPlayers?: RegisteredPlayerResponseDTO[];

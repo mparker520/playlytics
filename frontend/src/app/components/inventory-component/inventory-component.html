@@ -5,18 +5,16 @@
   </section>
 
 
-<section class="flex flex-col navBar:flex-row-reverse justify-evenly px-6 w-full">
-
-  <section class="w-full navBar:w-4/12">
+  <section class="w-full navBar:w-full">
     <app-add-owned-game-component (lookup)="handleLookup($event)" (add)="handleAdd($event)" [games]=games></app-add-owned-game-component>
   </section>
 
-  <section class="w-full navBar:w-6/12">
+  <section class="w-full navBar:w-full">
     <app-owned-games-list-component (delete)="handleDelete($event)" [ownedGames]=ownedGames></app-owned-games-list-component>
   </section>
 
 
-</section>
+
 
 
 

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, NgForm} from '@angular/forms';
 import {GhostPlayerDTO} from '../../../../dtos/ghost-player-dto';
 
 @Component({
@@ -20,7 +20,7 @@ export class CreateGuestComponent {
 
   @Output() create = new EventEmitter<GhostPlayerDTO>
 
-  triggerCreate() {
+  triggerCreate(form: NgForm) {
 
     const ghostPlayerDTO: GhostPlayerDTO = {
       firstName: this.firstName,
@@ -29,6 +29,9 @@ export class CreateGuestComponent {
     };
 
       this.create.emit(ghostPlayerDTO)
+      form.resetForm();
+
+
   }
 
 }

@@ -1,15 +1,20 @@
 
-<section>
+<section class="p-4 m-2 bg-gradient-to-br from-brand3 to-brand2 rounded-lg shadow-md">
 
-  <h3>Create Guest Player</h3>
+  <h4 class="text-xl font-bold  text-white">Create Guest Player</h4>
 
-  <form (ngSubmit)="triggerCreate()">
+  <form  autocomplete="off" #guestForm="ngForm" class="pt-2" (ngSubmit)="triggerCreate(guestForm)">
 
-    <input [(ngModel)]="firstName" type="text" id="firstName" name="firstName" placeholder="First Name">
-    <input [(ngModel)]="lastName" type="text" id="lastName" name="lastName" placeholder="Last Name">
-    <input [(ngModel)]="identifierEmail" type="email" id="identifierEmail" name="identifierEmail" placeholder="Email Address">
 
-    <button type="submit">Create Guest Player</button>
+    <input class="navBar:order-1 p-2  h-10 border-2 rounded-md border-t-brand4 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+           [(ngModel)]="firstName" type="text" id="firstName" name="firstName" placeholder="First Name">
+    <input class="navBar:order-1 p-2  h-10 border-2 rounded-md border-t-brand4 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+           [(ngModel)]="lastName" type="text" id="lastName" name="lastName" placeholder="Last Name">
+    <input class="navBar:order-1 p-2  h-10 border-2 rounded-md border-t-brand4 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+           [(ngModel)]="identifierEmail" type="email" id="identifierEmail" name="identifierEmail" placeholder="Email Address">
+
+    <button class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+            type="submit">Create Guest Player</button>
 
   </form>
 

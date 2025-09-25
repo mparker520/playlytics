@@ -1,16 +1,21 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../../../dtos/registered-player-response-dto';
+import {NgOptimizedImage} from '@angular/common';
 
 
 
 
 @Component({
   selector: 'app-confirmed-connections-component',
-  imports: [],
+  imports: [
+    NgOptimizedImage
+  ],
   templateUrl: './confirmed-connections-component.html',
   styleUrl: './confirmed-connections-component.css'
 })
 export class ConfirmedConnectionsComponent {
+
+  expandedConnectionsList: boolean = false;
 
     @Input() connections?: RegisteredPlayerResponseDTO[]
 
@@ -23,5 +28,9 @@ export class ConfirmedConnectionsComponent {
     triggerBlock(id: number) {
       this.block.emit(id);
     }
+
+  onExpandConnectionsListChange() {
+      this.expandedConnectionsList = !this.expandedConnectionsList;
+  }
 
 }

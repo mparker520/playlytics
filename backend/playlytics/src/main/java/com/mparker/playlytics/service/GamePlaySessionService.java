@@ -49,7 +49,7 @@ public class GamePlaySessionService {
 
     // <editor-fold desc = "Create GamePlaySession">
 
-    // Assemble GamePlaySession
+  /*  // Assemble GamePlaySession
     @Transactional
     public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) {
 
@@ -82,14 +82,14 @@ public class GamePlaySessionService {
     }
 
 
-    //</editor-fold>
+    //</editor-fold> */
 
     // Update GamePlaySession will be Handled by Deleting and Recreating the GamePlaySession
 
     // <editor-fold desc = "Lookup GamePlaySession">
 
 
-    // List of all GamePlaySessions for a RegisteredPlayer
+  /*  // List of all GamePlaySessions for a RegisteredPlayer
     @Transactional (readOnly = true)
     public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long registeredPlayerId, Long authUserId) throws CustomAccessDeniedException{
 
@@ -308,7 +308,7 @@ public class GamePlaySessionService {
 
 
 
-    // Create SessionTeams Helper Method
+   /* // Create SessionTeams Helper Method
     private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) throws SessionParticipantTeamMismatchException {
 
         // Session Teams to be Returned
@@ -406,7 +406,7 @@ public class GamePlaySessionService {
 
     }
 
-    // </editor-fold>
+    // </editor-fold>*/
 
 
 }

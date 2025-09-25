@@ -27,27 +27,27 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
-     //<editor-fold desc = "GET Mapping">
+     /*//<editor-fold desc = "GET Mapping">
      @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
 
         if (gameTitle == null) {
-            Set<GamePlaySessionResponseDTO> allGamePlaySessions = gamePlaySessionService.findAllByPlayerId(registeredPlayerId, principal.getAuthenticatedUserId());
+            Set<GamePlaySessionResponseDTO> allGamePlaySessions = gamePlaySessionService.findAllByPlayerId(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allGamePlaySessions);
         }
 
         else {
-            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByPlayerIdAndGameName(registeredPlayerId, gameTitle, principal.getAuthenticatedUserId());
+            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByPlayerIdAndGameName(gameTitle, principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allGamePlaySessionsByTitle);
         }
 
-    }
+    } */
 
     //</editor-fold>
 
-    //<editor-fold desc = "POST Mapping">
+    /* //<editor-fold desc = "POST Mapping">
 
     @PostMapping("/game-play-sessions")
     public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
@@ -59,9 +59,9 @@ public class GamePlaySessionController {
 
     }
 
-    //</editor-fold>
+    //</editor-fold> */
 
-    //<editor-fold desc = "DELETE Mapping">
+   /* //<editor-fold desc = "DELETE Mapping">
 
     @DeleteMapping("/game-play-sessions/{sessionId}")
     public ResponseEntity<String> deleteGamePlaySession(
@@ -73,6 +73,6 @@ public class GamePlaySessionController {
 
     }
 
-    //</editor-fold>
+    //</editor-fold> */
 
 }

@@ -5,8 +5,8 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
   <h3 class="text-2xl font-bold  py-6 text-brand4 text-center">Your Current Inventory</h3>
 
 
-  @if((filteredOwnedGames?.length ?? 0) > 0) {
 
+@if((ownedGames?.length ?? 0) > 0) {
     <section>
 
       <div class="flex flex-col mt-4">
@@ -24,7 +24,8 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
       </div>
     </section>
-
+}
+  @if((filteredOwnedGames?.length ?? 0) > 0) {
 
     <section class="flex flex-row items-start pb-6 mt-4">
       <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2  shadow-md table-fixed space-y-4 w-full  mx-0">

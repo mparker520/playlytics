@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
@@ -6,6 +6,7 @@ import {SessionTeamDTO} from '../../../dtos/session-team-dto';
 import {ConnectionDTO} from '../../../dtos/connection-dto';
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {NgOptimizedImage} from '@angular/common';
+import {GamePlaySessionService} from '../../../services/game-play-session-service';
 
 
 @Component({
@@ -18,6 +19,8 @@ import {NgOptimizedImage} from '@angular/common';
   styleUrl: './add-game-play-session-component.css'
 })
 export class AddGamePlaySessionComponent {
+
+expanded: boolean = false
 
 
   protected readonly ScoringModelEnum = ScoringModelEnum;
@@ -50,7 +53,7 @@ export class AddGamePlaySessionComponent {
 
   //<editor-fold desc="On Change Methods">
 
-  expanded: boolean = false;
+
 
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>

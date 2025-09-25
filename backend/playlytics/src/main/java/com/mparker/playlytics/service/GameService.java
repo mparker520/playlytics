@@ -28,7 +28,7 @@ public class GameService {
 
     public Set<GameResponseDTO> findByTitle(String title) {
 
-        Set <Game> gameSet = gameRepository.findByGameTitleContaining(title);
+        Set <Game> gameSet = gameRepository.findByGameTitleContainingOrderByGameTitle(title);
         Set<GameResponseDTO> gameResponseDTOSet = new HashSet<>();
 
         for (Game game : gameSet) {

@@ -8,6 +8,6 @@ import java.util.Set;
 
 public interface GameRepository extends JpaRepository<Game, Long> {
 
-    Set<Game> findByGameTitleContaining(String title);
+    Set<Game> findByGameTitleContainingOrderByGameTitle(String title);
 
 }

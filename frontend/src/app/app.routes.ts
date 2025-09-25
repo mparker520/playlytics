@@ -9,6 +9,7 @@ import {LoginComponent} from './components/login-component/login-component';
 import {AccountCreationComponent} from './components/account-creation-component/account-creation-component';
 import {AuthGuardService} from './services/auth-guard-service';
 import {ProfileComponent} from './components/profile-component/profile-component';
+import {AboutComponent} from './components/about-component/about-component';
 
 export const routes: Routes = [
 
@@ -23,6 +24,7 @@ export const routes: Routes = [
               {path: 'network', component: ConnectionsComponent, canActivate: [AuthGuardService]},
               {path: 'inventory', component: InventoryComponent, canActivate: [AuthGuardService]},
               {path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService]},
+              {path: 'about', component: AboutComponent, canActivate: [AuthGuardService]},
               {path: 'logout', component: LoginComponent}
       ]
   },

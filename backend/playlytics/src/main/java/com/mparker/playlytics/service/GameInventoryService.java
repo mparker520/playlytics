@@ -80,7 +80,7 @@ public class GameInventoryService {
     public List<OwnedGameResponseDTO> findAllByRegisteredPlayerId(Long authUserId) throws NotFoundException {
 
 
-            List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_Id(authUserId);
+            List<OwnedGame> ownedGamesList = ownedGameRepository.findAllByRegisteredPlayer_IdOrderByGameGameTitle(authUserId);
 
 
                 return getOwnedGamesDTOList(ownedGamesList);

@@ -25,7 +25,7 @@ export class RegisteredPlayersComponent implements OnInit {
 
   //<editor-fold desc="Constructor and Fields">
 
-  connections?: RegisteredPlayerResponseDTO[];
+  connections: RegisteredPlayerResponseDTO[] = [];
   registeredPlayer?: RegisteredPlayerResponseDTO;
   sentRequests?: ConnectionRequestResponseDTO[];
   pendingRequests?: ConnectionRequestResponseDTO[];

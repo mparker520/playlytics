@@ -1,12 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
 import {SessionTeamDTO} from '../../../dtos/session-team-dto';
-import {ConnectionDTO} from '../../../dtos/connection-dto';
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {NgOptimizedImage} from '@angular/common';
-import {GamePlaySessionService} from '../../../services/game-play-session-service';
 import {PlayerResponseDTO} from '../../../dtos/PlayerResponseDTO';
 import {GameResponseDTO} from '../../../dtos/game-response-dto';
 
@@ -41,6 +39,7 @@ expanded: boolean = false
   numberTeams: number = 0;
   cooperativeResult: number = -1;
   creatorId: number = 1;
+  selectedGameName?: string;
   //</editor-fold>
 
   //<editor-fold desc="GamePlaySessionDTO Constructor">
@@ -106,6 +105,16 @@ expanded: boolean = false
 
   triggerGameFilterClear() {
     this.games = [];
+  }
+
+  triggerAddGame(id: number, gameTitle: string) {
+    this.games = [];
+    this.gameId = id;
+    this.selectedGameName = gameTitle;
+  }
+
+  triggerGameRemove() {
+    this.gameId = -1;
   }
 
 

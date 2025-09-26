@@ -18,7 +18,7 @@ export class ConfirmedConnectionsComponent {
 
   expandedConnectionsList: boolean = false;
 
-    @Input() connections!: RegisteredPlayerResponseDTO[]
+  @Input() connections: RegisteredPlayerResponseDTO[] = [];
 
   filteredConnections?: RegisteredPlayerResponseDTO[];
 

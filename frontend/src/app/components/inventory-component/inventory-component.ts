@@ -69,11 +69,11 @@ export class InventoryComponent implements OnInit{
   //<editor-fold desc = "Get Games from Database">
 
   handleLookup(databaseFilter: string) {
-    console.log(databaseFilter);
+
     this.gameService.getBoardGames(databaseFilter).subscribe({
           next:(response: GameResponseDTO[]) => {
             this.games = response;
-            console.log(this.games);
+
           },
 
           error: (error: any) => console.error("fail", error)

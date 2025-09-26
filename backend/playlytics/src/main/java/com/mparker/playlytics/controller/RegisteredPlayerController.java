@@ -45,7 +45,7 @@ public class RegisteredPlayerController {
     //<editor-fold desc = "PATCH Mapping">
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/registered-players")
+    @PatchMapping("/account")
     public ResponseEntity<RegisteredPlayerUpdateDTO> updateRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
@@ -60,7 +60,7 @@ public class RegisteredPlayerController {
     //<editor-fold desc = "DELETE Mapping">
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/registered-players")
+    @DeleteMapping("/account")
     public ResponseEntity<Void> deleteRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal) {
 

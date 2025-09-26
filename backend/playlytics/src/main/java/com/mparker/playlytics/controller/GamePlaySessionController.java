@@ -27,7 +27,7 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
-     /*//<editor-fold desc = "GET Mapping">
+//<editor-fold desc = "GET Mapping">
      @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal,
@@ -39,15 +39,15 @@ public class GamePlaySessionController {
         }
 
         else {
-            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByPlayerIdAndGameName(gameTitle, principal.getAuthenticatedUserId());
+            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByGameName(gameTitle, principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allGamePlaySessionsByTitle);
         }
 
-    } */
+    }
 
     //</editor-fold>
 
-    /* //<editor-fold desc = "POST Mapping">
+ //<editor-fold desc = "POST Mapping">
 
     @PostMapping("/game-play-sessions")
     public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
@@ -59,9 +59,9 @@ public class GamePlaySessionController {
 
     }
 
-    //</editor-fold> */
+    //</editor-fold>
 
-   /* //<editor-fold desc = "DELETE Mapping">
+ //<editor-fold desc = "DELETE Mapping">
 
     @DeleteMapping("/game-play-sessions/{sessionId}")
     public ResponseEntity<String> deleteGamePlaySession(
@@ -73,6 +73,6 @@ public class GamePlaySessionController {
 
     }
 
-    //</editor-fold> */
+    //</editor-fold>
 
 }

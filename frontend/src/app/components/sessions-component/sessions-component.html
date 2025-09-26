@@ -5,7 +5,7 @@
   </section>
 
   <section class="w-full navBar:w-full">
-    <app-add-game-play-session-component (sessionSubmit)="handleSubmit($event)"></app-add-game-play-session-component>
+    <app-add-game-play-session-component  (lookup)="handleGameLookup($event)" (sessionSubmit)="handleSubmit($event)"></app-add-game-play-session-component>
   </section>
 
   <app-game-play-sessions-list-component></app-game-play-sessions-list-component>

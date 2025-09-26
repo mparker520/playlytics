@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
@@ -7,6 +7,8 @@ import {ConnectionDTO} from '../../../dtos/connection-dto';
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {NgOptimizedImage} from '@angular/common';
 import {GamePlaySessionService} from '../../../services/game-play-session-service';
+import {PlayerResponseDTO} from '../../../dtos/PlayerResponseDTO';
+import {GameResponseDTO} from '../../../dtos/game-response-dto';
 
 
 @Component({
@@ -27,9 +29,10 @@ expanded: boolean = false
 
 
   //<editor-fold desc="HARDCODED PLAYERS">
-  connections: ConnectionDTO[]=[
-    {id: 1, firstName: 'Melissa', lastName: 'Parker', displayName: 'The Coding Wabs', email: 'melissaparker520@gmail.com'},
-    {id: 2, firstName: 'Joe', lastName: 'Parker', displayName: 'The Dice Master', email: 'sample@gmail.com'}
+  connections: PlayerResponseDTO[]=[
+    {id: 1, firstName: 'Melissa', lastName: 'Parker', identifier: 'The Coding Wabs'},
+    {id: 2, firstName: 'Joe', lastName: 'Parker', identifier: 'The Dice Master'},
+    {id: 3, firstName: 'Tim', lastName: 'Henri', identifier: 'ghost2@gmail.com'}
   ];
   //</editor-fold>
 
@@ -94,6 +97,17 @@ expanded: boolean = false
 
   //</editor-fold>
 
+  @Input() games: GameResponseDTO[] = [];
+
+  @Output() lookup = new EventEmitter<string>;
+  triggerGameLookup(searchValue: string) {
+    this.lookup.emit(searchValue);
+  }
+
+  triggerGameFilterClear() {
+    this.games = [];
+  }
+
 
   //<editor-fold desc="Submit">
   @Output() sessionSubmit = new EventEmitter<GamePlaySessionDTO>();
@@ -112,6 +126,9 @@ expanded: boolean = false
     form.resetForm();
   }
   //</editor-fold>
+
+
+
 
 }
 

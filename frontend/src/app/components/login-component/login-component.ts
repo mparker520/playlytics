@@ -34,7 +34,6 @@ export class LoginComponent {
     this.loginService.login(authRequestDTO).subscribe({
 
       next: (response) => {
-        console.log('Login Success');
         this.authService.authenticated = true;
         this.router.navigate(['/home']);
       },

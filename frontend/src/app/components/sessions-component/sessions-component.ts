@@ -40,7 +40,6 @@ export class SessionsComponent implements OnInit{
   this.gamePlaySessionService.getGamePlaySessions().subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
-        console.log(this.playSessions);
       },
       error: (error: any) => console.error("fail", error)
     })
@@ -53,7 +52,6 @@ export class SessionsComponent implements OnInit{
   //<editor-fold desc="Handle Game Lookup">
   handleGameLookup(databaseFilter: string) {
     const now = new Date()
-    console.log('game lookup' + now)
     this.gameService.getBoardGames(databaseFilter).subscribe({
       next:(response: GameResponseDTO[]) => {
         this.games = response;
@@ -67,10 +65,15 @@ export class SessionsComponent implements OnInit{
   //<editor-fold desc="Handle Game Play Session Submission">
   handleSubmit(gamePlaySessionDTO: GamePlaySessionDTO) {
     const now = new Date()
-    console.log('game submti triggered' + now);
+
       this.gamePlaySessionService.createGamePlaySession(gamePlaySessionDTO).subscribe({
         next: (response: GamePlaySessionDTO) => {
-          console.log(response)
+              this.gamePlaySessionService.getGamePlaySessions().subscribe({
+                next:(gamePlaySessionResponse: GamePlaySessionResponseDTO[]) => {
+                  this.playSessions = gamePlaySessionResponse;
+                },
+                error: (gamePlaySessionError: any) => console.error("fail", gamePlaySessionError)
+              })
         },
         error: (error: any) => console.error("fail", error)
       })

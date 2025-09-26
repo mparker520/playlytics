@@ -36,12 +36,11 @@ export class AssociationsListComponent {
     this.expandedAssociationsList = !this.expandedAssociationsList;
   }
 
-  triggerAssociationLookup(searchInventoryBox: string) {
+  triggerAssociationLookup(searchAssociationBox: string) {
     this.filteredAssociations = this.associations.filter(association => {
         const fullName = (association.firstName + " " + association.lastName).toLowerCase();
-      console.log('Checking:', association.identifierEmail, fullName, searchInventoryBox);
-        return association.identifierEmail.toLowerCase().includes(searchInventoryBox.toLowerCase()) ||
-        fullName.toLowerCase().includes(searchInventoryBox.toLowerCase());
+        return association.identifierEmail.toLowerCase().includes(searchAssociationBox.toLowerCase()) ||
+        fullName.toLowerCase().includes(searchAssociationBox.toLowerCase());
       }
     );
   }

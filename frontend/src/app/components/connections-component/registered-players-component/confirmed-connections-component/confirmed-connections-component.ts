@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../../../dtos/registered-player-response-dto';
 import {NgOptimizedImage} from '@angular/common';
+import {GhostPlayerResponseDTO} from '../../../../dtos/ghost-player-response-dto';
 
 
 
@@ -17,9 +18,19 @@ export class ConfirmedConnectionsComponent {
 
   expandedConnectionsList: boolean = false;
 
-    @Input() connections?: RegisteredPlayerResponseDTO[]
+    @Input() connections!: RegisteredPlayerResponseDTO[]
 
-    @Output() remove = new EventEmitter<number>
+  filteredConnections?: RegisteredPlayerResponseDTO[];
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['connections'] && this.connections) {
+      this.filteredConnections = this.connections;
+    }
+  }
+
+
+
+  @Output() remove = new EventEmitter<number>
     triggerRemove(id: number) {
       this.remove.emit(id);
     }
@@ -32,5 +43,21 @@ export class ConfirmedConnectionsComponent {
   onExpandConnectionsListChange() {
       this.expandedConnectionsList = !this.expandedConnectionsList;
   }
+
+  triggerConnectionLookup(searchConnectionBox: string) {
+    this.filteredConnections = this.connections.filter(connections => {
+      console.log(connections.displayName + " " + searchConnectionBox);
+        const fullName = (connections.firstName + " " + connections.lastName).toLowerCase();
+        return connections.loginEmail.toLowerCase().includes(searchConnectionBox.toLowerCase()) ||
+          fullName.toLowerCase().includes(searchConnectionBox.toLowerCase()) || connections.displayName.toLowerCase().includes(searchConnectionBox.toLowerCase());
+      }
+    );
+  }
+
+  triggerFilterClear() {
+    this.filteredConnections = this.connections;
+  }
+
+
 
 }

@@ -394,14 +394,18 @@ public class GamePlaySessionService {
             String identifier;
 
             Long playerId = sessionParticipant.getPlayer().getId();
-            Player player = playerRepository.getById(playerId);
+            Player proxyPlayer = playerRepository.getById(playerId);
+            Player player = Hibernate.unproxy(proxyPlayer, Player.class);
 
-            if (player instanceof RegisteredPlayer) {
-                identifier = ((RegisteredPlayer) player).getDisplayName();
+            if (player instanceof RegisteredPlayer registeredPlayer) {
+                identifier = registeredPlayer.getDisplayName();
             }
             else {
-                identifier = ((GhostPlayer) player).getIdentifierEmail();
+                GhostPlayer ghostPlayer = (GhostPlayer) player;
+                identifier = ghostPlayer.getIdentifierEmail();
             }
+
+
 
             PlayerResponseDTO playerResponseDTO = new PlayerResponseDTO(firstName, lastName, identifier);
             sessionParticipantDetails.add(playerResponseDTO);

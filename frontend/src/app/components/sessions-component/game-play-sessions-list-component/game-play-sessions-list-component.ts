@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {NgOptimizedImage} from "@angular/common";
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {GamePlaySessionResponseDTO} from '../../../dtos/game-play-session-response-dto';
@@ -11,9 +11,10 @@ import {GamePlaySessionResponseDTO} from '../../../dtos/game-play-session-respon
   templateUrl: './game-play-sessions-list-component.html',
   styleUrl: './game-play-sessions-list-component.css'
 })
-export class GamePlaySessionListComponent {
+export class GamePlaySessionListComponent{
 
-  @Input() playSessions!: GamePlaySessionResponseDTO[];
+  @Input() playSessions: GamePlaySessionResponseDTO[] =[];
+
 
   @Output() delete =  new EventEmitter<number>;
 

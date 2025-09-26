@@ -8,6 +8,8 @@
     <app-add-game-play-session-component  (lookup)="handleGameLookup($event)" (sessionSubmit)="handleSubmit($event)"></app-add-game-play-session-component>
   </section>
 
-  <app-game-play-sessions-list-component></app-game-play-sessions-list-component>
+  <section class="w-full navBar:w-full">
+    <app-game-play-sessions-list-component [playSessions]="playSessions"></app-game-play-sessions-list-component>
+  </section>
 
 </div>

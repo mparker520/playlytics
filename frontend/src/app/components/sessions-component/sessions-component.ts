@@ -39,13 +39,14 @@ export class SessionsComponent implements OnInit{
 
   ngOnInit() : void {
 
-   /* this.gamePlaySessionService.getGamePlaySessions().subscribe({
+  this.gamePlaySessionService.getGamePlaySessions().subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
+        console.log(this.playSessions);
       },
       error: (error: any) => console.error("fail", error)
-    }) */
-    console.log("init")
+    })
+
 
   }
 

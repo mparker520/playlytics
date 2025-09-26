@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import {ShellComponent} from './components/shell-component/shell-component';
-import {HomeComponent} from './components/home-component/home-component';
 import {AnalyticsComponent} from './components/analytics-component/analytics-component';
 import {SessionsComponent} from './components/sessions-component/sessions-component';
 import {ConnectionsComponent} from './components/connections-component/connections-component';
@@ -18,7 +17,7 @@ export const routes: Routes = [
       children: [
               {path: 'login', component: LoginComponent},
               {path: 'sign-up', component: AccountCreationComponent},
-              {path: '', component: HomeComponent, canActivate: [AuthGuardService] },
+              {path: '', component: AnalyticsComponent, canActivate: [AuthGuardService] },
               {path: 'analytics', component: AnalyticsComponent, canActivate: [AuthGuardService]},
               {path: 'sessions', component: SessionsComponent, canActivate: [AuthGuardService]},
               {path: 'network', component: ConnectionsComponent, canActivate: [AuthGuardService]},

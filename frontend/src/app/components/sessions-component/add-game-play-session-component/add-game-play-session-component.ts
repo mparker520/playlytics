@@ -26,18 +26,16 @@ expanded: boolean = false
   protected readonly ScoringModelEnum = ScoringModelEnum;
 
 
-  //<editor-fold desc="HARDCODED PLAYERS">
-  connections: PlayerResponseDTO[]=[
-    {id: 1, firstName: 'Melissa', lastName: 'Parker', identifier: 'The Coding Wabs'},
-    {id: 2, firstName: 'Joe', lastName: 'Parker', identifier: 'The Dice Master'},
-    {id: 3, firstName: 'Tim', lastName: 'Henri', identifier: 'ghost2@gmail.com'}
-  ];
+  @Input() network: PlayerResponseDTO[] = [];
+  @Input() games: GameResponseDTO[] = [];
+  @Input() self!: PlayerResponseDTO;
+
   //</editor-fold>
 
   //<editor-fold desc="Variables">
   numberPlayers: number = 0;
   numberTeams: number = 0;
-  cooperativeResult: number = -1;
+  cooperativeResult: number = 1;
   creatorId: number = 1;
   selectedGameName?: string;
 
@@ -97,7 +95,7 @@ expanded: boolean = false
 
   //</editor-fold>
 
-  @Input() games: GameResponseDTO[] = [];
+
 
   @Output() lookup = new EventEmitter<string>;
   triggerGameLookup(searchValue: string) {

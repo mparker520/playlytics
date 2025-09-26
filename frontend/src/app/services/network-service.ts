@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {RegisteredPlayerResponseDTO} from '../dtos/registered-player-response-dto';
 import {ConnectionRequestResponseDTO} from '../dtos/connection-request-response-dto';
 import {ConfirmedConnectionResponseDTO} from '../dtos/confirmed-connection-response-dto';
+import {PlayerResponseDTO} from '../dtos/PlayerResponseDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -112,6 +113,12 @@ export class NetworkService {
   //<editor-fold desc="Remove Block">
   public removeBlock(id: number): Observable<void> {
     return this.http.delete<void>(`/block/${id}`, {withCredentials: true})
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Get Entire Network">
+  public getNetwork(): Observable<PlayerResponseDTO[]> {
+    return this.http.get<PlayerResponseDTO[]>('/network', {withCredentials: true});
   }
   //</editor-fold>
 

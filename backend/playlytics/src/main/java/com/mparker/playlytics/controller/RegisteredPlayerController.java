@@ -1,6 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.PlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
@@ -25,6 +26,15 @@ public class RegisteredPlayerController {
     }
 
     //</editor-fold>
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile")
+    public ResponseEntity<PlayerResponseDTO > getProfile(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+        PlayerResponseDTO playerResponseDTO = registeredPlayerService.getProfile(principal.getAuthenticatedUserId());
+        return ResponseEntity.ok(playerResponseDTO);
+    }
 
 
     //<editor-fold desc = "POST Mapping">

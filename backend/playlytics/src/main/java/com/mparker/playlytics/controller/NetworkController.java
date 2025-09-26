@@ -2,6 +2,7 @@ package com.mparker.playlytics.controller;
 
 // Imports
 import com.mparker.playlytics.dto.*;
+import com.mparker.playlytics.entity.Player;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.NetworkService;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,20 @@ public class NetworkController {
     //</editor-fold>
 
     //<editor-fold desc = "GET Mappings">
+
+    //<editor-fold desc="Get Entire Network">
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/network")
+    public ResponseEntity<Set<PlayerResponseDTO>> getNetwork(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+
+        Set<PlayerResponseDTO> networkResponseDTO = networkService.getNetwork(principal.getAuthenticatedUserId());
+
+        return ResponseEntity.ok(networkResponseDTO);
+
+    }
+    //</editor-fold>
 
     //<editor-fold desc = "GET All Available RegisteredPlayers for Connection by Filter">
 

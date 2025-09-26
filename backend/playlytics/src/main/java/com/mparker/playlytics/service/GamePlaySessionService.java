@@ -407,7 +407,7 @@ public class GamePlaySessionService {
 
 
 
-            PlayerResponseDTO playerResponseDTO = new PlayerResponseDTO(firstName, lastName, identifier);
+            PlayerResponseDTO playerResponseDTO = new PlayerResponseDTO(playerId, firstName, lastName, identifier);
             sessionParticipantDetails.add(playerResponseDTO);
         }
 

@@ -1,12 +1,14 @@
 package com.mparker.playlytics.service;
 
 // Imports
+import com.mparker.playlytics.dto.PlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.GhostStatus;
 import com.mparker.playlytics.exception.CustomAccessDeniedException;
+import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,21 @@ public class RegisteredPlayerService {
     }
 
     //</editor-fold>
+
+
+    public PlayerResponseDTO getProfile(Long authUserId) throws NotFoundException {
+        RegisteredPlayer self = registeredPlayerRepository.findById(authUserId).orElse(null);
+        if (self != null) {
+
+            return new PlayerResponseDTO(self.getId(), self.getFirstName(), self.getLastName(), self.getDisplayName());
+        }
+
+        else {
+            throw new NotFoundException("There is no player by that id");
+        }
+
+    }
+
 
     //<editor-fold desc = "Create Registered Player">
 

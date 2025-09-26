@@ -39,6 +39,31 @@ public class NetworkService {
 
     //</editor-fold>
 
+    //<editor-fold desc="Get Network">
+    @Transactional(readOnly = true)
+    public Set<PlayerResponseDTO> getNetwork(Long authUserId) throws CustomAccessDeniedException, NotFoundException {
+
+                Set<PlayerResponseDTO> entireNetwork = new HashSet<>();
+
+                Set<RegisteredPlayerResponseDTO> allConfirmedConnections = this.getAllConnections(authUserId);
+                Set<GhostPlayerResponseDTO> allAssociations = this.getAllAssociations(authUserId);
+
+                for (RegisteredPlayerResponseDTO registeredPlayerResponseDTO : allConfirmedConnections) {
+                    PlayerResponseDTO playerResponse = new PlayerResponseDTO(registeredPlayerResponseDTO.id(), registeredPlayerResponseDTO.firstName(), registeredPlayerResponseDTO.lastName(), registeredPlayerResponseDTO.displayName());
+                    entireNetwork.add(playerResponse);
+                }
+
+                for (GhostPlayerResponseDTO ghostPlayerResponseDTO : allAssociations) {
+                    PlayerResponseDTO playerResponse = new PlayerResponseDTO(ghostPlayerResponseDTO.id(), ghostPlayerResponseDTO.firstName(), ghostPlayerResponseDTO.lastName(), ghostPlayerResponseDTO.identifierEmail());
+                    entireNetwork.add(playerResponse);
+                }
+
+                return entireNetwork;
+
+    }
+
+    //</editor-fold>
+
     //<editor-fold desc = "Get Available Peer By Email or DisplayName">
 
     @Transactional(readOnly = true)

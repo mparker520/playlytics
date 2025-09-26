@@ -9,6 +9,9 @@ import {GamePlaySessionResponseDTO} from '../../dtos/game-play-session-response-
 import {AddOwnedGameComponent} from '../inventory-component/add-owned-game-component/add-owned-game-component';
 import {GameResponseDTO} from '../../dtos/game-response-dto';
 import {GameService} from '../../services/game-service';
+import {PlayerResponseDTO} from '../../dtos/PlayerResponseDTO';
+import {NetworkService} from '../../services/network-service';
+import {RegisteredPlayerService} from '../../services/registered-player-service';
 
 @Component({
   selector: 'app-sessions-component',
@@ -26,8 +29,10 @@ export class SessionsComponent implements OnInit{
 
   playSessions: GamePlaySessionResponseDTO[] = [];
   games: GameResponseDTO[] = [];
+  network: PlayerResponseDTO[] = [];
+  self?: PlayerResponseDTO;
 
-  constructor(private gamePlaySessionService: GamePlaySessionService, private gameService: GameService) {
+  constructor(private gamePlaySessionService: GamePlaySessionService, private gameService: GameService, private networkService: NetworkService, private registeredPlayerService: RegisteredPlayerService) {
 
   }
   //</editor-fold>
@@ -40,6 +45,20 @@ export class SessionsComponent implements OnInit{
   this.gamePlaySessionService.getGamePlaySessions().subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+    this.networkService.getNetwork().subscribe({
+      next: (response: PlayerResponseDTO[]) => {
+        this.network = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+    this.registeredPlayerService.getSelf().subscribe({
+      next:(response: PlayerResponseDTO) => {
+        this.self = response;
       },
       error: (error: any) => console.error("fail", error)
     })

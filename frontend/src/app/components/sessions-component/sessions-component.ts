@@ -33,8 +33,6 @@ export class SessionsComponent implements OnInit{
   //</editor-fold>
 
 
-
-
   //<editor-fold desc = "On Initiate">
 
   ngOnInit() : void {
@@ -51,7 +49,6 @@ export class SessionsComponent implements OnInit{
   }
 
   //</editor-fold>
-
 
   //<editor-fold desc="Handle Game Lookup">
   handleGameLookup(databaseFilter: string) {
@@ -75,6 +72,20 @@ export class SessionsComponent implements OnInit{
       })
   }
   //</editor-fold>
+
+  handleSessionDelete(id: number) {
+    this.gamePlaySessionService.deleteByIdAndPlayerId(id).subscribe({
+      next:(deleteResponse: void) => {
+        this.gamePlaySessionService.getGamePlaySessions().subscribe({
+          next: (gamePlaySessionResponse: GamePlaySessionResponseDTO[]) => {
+            this.playSessions = gamePlaySessionResponse;
+          },
+          error: (gamePlaySessionResponseError: any) => console.error("fail", gamePlaySessionResponseError)
+        })
+      },
+      error: (deleteError: any) => console.error("fail", deleteError)
+    })
+  }
 
 
 }

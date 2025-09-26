@@ -24,8 +24,14 @@ export class GamePlaySessionService {
   //</editor-fold>
 
 
+  //<editor-fold desc="Get Game Play Sessions">
   public getGamePlaySessions() : Observable<GamePlaySessionResponseDTO[]> {
     return this.http.get<GamePlaySessionResponseDTO[]>('/game-play-sessions',  {withCredentials: true});
+  }
+  //</editor-fold>
+
+  public deleteByIdAndPlayerId(sessionId: number): Observable<void> {
+    return this.http.delete<void>(`/game-play-sessions/${sessionId}`, {withCredentials: true})
   }
 
 

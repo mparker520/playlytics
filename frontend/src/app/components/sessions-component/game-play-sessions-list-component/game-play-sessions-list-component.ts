@@ -1,14 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
-import {NgOptimizedImage} from "@angular/common";
+import {DatePipe, NgOptimizedImage} from "@angular/common";
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {GamePlaySessionResponseDTO} from '../../../dtos/game-play-session-response-dto';
 import {GameResponseDTO} from '../../../dtos/game-response-dto';
 
 @Component({
   selector: 'app-game-play-sessions-list-component',
-    imports: [
-        NgOptimizedImage
-    ],
+  imports: [
+    NgOptimizedImage,
+    DatePipe
+  ],
   templateUrl: './game-play-sessions-list-component.html',
   styleUrl: './game-play-sessions-list-component.css'
 })

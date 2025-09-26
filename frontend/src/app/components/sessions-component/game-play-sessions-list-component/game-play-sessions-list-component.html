@@ -28,7 +28,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
           @for(playSession of playSessions; track playSession.id) {
             <tr>
               <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ playSession.gameName }}</td>
-              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ playSession.sessionDateTime}}</td>
+              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{  playSession.sessionDateTime | date:'medium'}}</td>
               <td class="border-2 border-brand4 px-4  text-gray-700 truncate"><ul>@for (sessionParticipant of playSession.sessionParticipantDetails; track sessionParticipant.id) {
                 <li>{{sessionParticipant.firstName + " " + sessionParticipant.lastName + " | " + sessionParticipant.identifier}}</li>
               }</ul>

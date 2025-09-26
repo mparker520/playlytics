@@ -40,13 +40,14 @@ expanded: boolean = false
   cooperativeResult: number = -1;
   creatorId: number = 1;
   selectedGameName?: string;
+
   //</editor-fold>
 
   //<editor-fold desc="GamePlaySessionDTO Constructor">
   sessionDateTime!: string;
   scoringModel: ScoringModelEnum = ScoringModelEnum.RANKING;
   gameId!: number;
-  sessionParticipants: SessionParticipantDTO[] = []
+  sessionParticipants: SessionParticipantDTO[] = [];
   sessionTeams: SessionTeamDTO[] = [];
 
 
@@ -122,8 +123,10 @@ expanded: boolean = false
   @Output() sessionSubmit = new EventEmitter<GamePlaySessionDTO>();
   triggerSubmit(form: NgForm) {
 
+    const iso = new Date(this.sessionDateTime).toISOString();
+
     const gamePlayerSessionDTO = {
-      sessionDateTime: this.sessionDateTime,
+      sessionDateTime: iso,
       scoringModel: this.scoringModel,
       gameId: this.gameId,
       sessionParticipantDTOSet: this.sessionParticipants,

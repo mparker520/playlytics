@@ -17,8 +17,10 @@ export class RegisteredPlayerService {
   public getSelf(): Observable<RegisteredPlayerResponseDTO> {
     return this.http.get<RegisteredPlayerResponseDTO>('/profile', {withCredentials: true})
   }
+
   //</editor-fold>
 
+  //<editor-fold desc="Update Registered Player">
   public updateRegisteredPlayer(updateDetails: {
     loginEmail: string;
     firstName: string;
@@ -27,6 +29,11 @@ export class RegisteredPlayerService {
 
   }): Observable<RegisteredPlayerResponseDTO> {
     return this.http.patch<RegisteredPlayerResponseDTO>('/profile', updateDetails, {withCredentials: true});
+  }
+  //</editor-fold>
+
+  public deleteRegisteredPlayer(): Observable<void> {
+    return this.http.delete<void>('/profile', {withCredentials: true})
   }
 
 

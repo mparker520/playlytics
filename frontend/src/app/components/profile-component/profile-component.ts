@@ -45,7 +45,12 @@ ngOnInit(): void {
   }
 
   triggerDelete() {
-    console.log("fake delete");
+    this.registeredPlayerService.deleteRegisteredPlayer().subscribe({
+      next:(response: void) => {
+
+      },
+      error: (error: any) => console.error('fail', error)
+    })
   }
 
   triggerKeepAccount() {

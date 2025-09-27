@@ -25,18 +25,20 @@ public class RegisteredPlayerService {
     private final GhostPlayerRepository ghostPlayerRepository;
     private final GamePlaySessionRepository gamePlaySessionRepository;
     private final SessionParticipantRepository sessionParticipantRepository;
+    private final PlayerRepository playerRepository;
 
-    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository) {
+    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository, PlayerRepository playerRepository) {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
-
+        this.playerRepository = playerRepository;
     }
 
     //</editor-fold>
 
 
+    //<editor-fold desc="GET Profile Info">
     public RegisteredPlayerResponseDTO getProfile(Long authUserId) throws NotFoundException {
         RegisteredPlayer self = registeredPlayerRepository.findById(authUserId).orElse(null);
         if (self != null) {
@@ -49,6 +51,7 @@ public class RegisteredPlayerService {
         }
 
     }
+    //</editor-fold>
 
 
     //<editor-fold desc = "Create Registered Player">
@@ -112,7 +115,7 @@ public class RegisteredPlayerService {
     @Transactional
     public void deleteRegisteredPlayer(Long authUserId) {
 
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("There is no player by that id"));
 
         // Convert to GhostPlayer
         if (ghostPlayerRepository.existsByLinkedRegisteredPlayer_Id(authUserId)) {
@@ -132,14 +135,16 @@ public class RegisteredPlayerService {
             byte[] avatar = registeredPlayer.getAvatar();
             String email = registeredPlayer.getLoginEmail();
 
-            GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, email, GhostStatus.REACTIVATED, null, null);
+            GhostPlayer ghostPlayer = new GhostPlayer(firstName, lastName, avatar, email, GhostStatus.FROMDELETE, null, null);
             ghostPlayerRepository.save(ghostPlayer);
             updatePlayerReferences(authUserId, ghostPlayer);
         }
 
         // Remove row from table
+        registeredPlayerRepository.delete(registeredPlayer);
 
-        registeredPlayerRepository.deleteById(authUserId);
+
+
     }
 
     //</editor-fold>

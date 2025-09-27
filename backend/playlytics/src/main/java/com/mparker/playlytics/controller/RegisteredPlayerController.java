@@ -72,7 +72,7 @@ public class RegisteredPlayerController {
     //<editor-fold desc = "DELETE Mapping">
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/account")
+    @DeleteMapping("/profile")
     public ResponseEntity<Void> deleteRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal) {
 

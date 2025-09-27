@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
@@ -27,6 +27,7 @@ expanded: boolean = false
 
 
   @Input() network: PlayerResponseDTO[] = [];
+  filteredNetwork?: PlayerResponseDTO[];
   @Input() games: GameResponseDTO[] = [];
 
 
@@ -38,6 +39,7 @@ expanded: boolean = false
   cooperativeResult: number = 1;
   creatorId: number = 1;
   selectedGameName?: string;
+  filterKeyword?: string;
 
   //</editor-fold>
 
@@ -54,6 +56,12 @@ expanded: boolean = false
 
   //<editor-fold desc="On Change Methods">
 
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['network'] && this.network) {
+      this.filteredNetwork = this.network;
+    }
+  }
+
 
 
   onNumPlayerChange(): void {
@@ -68,7 +76,18 @@ expanded: boolean = false
     );
   }
 
+onFilterNetworkChange() {
+    console.log("change");
 
+    if(this.filterKeyword) {
+      console.log(this.filterKeyword)
+      this.filteredNetwork = this.network.filter(network => {
+        const fullName = (network.firstName + " " + network.lastName).toLowerCase();
+        // @ts-ignore
+        return fullName.toLowerCase().includes(this.filterKeyword.toLowerCase()) || network.identifier.toLowerCase().includes(this.filterKeyword.toLowerCase());
+      })
+    }
+}
 
   onTeamRankChange(teamNumber: number): void {
 
@@ -141,5 +160,4 @@ expanded: boolean = false
 
 
 }
-
 

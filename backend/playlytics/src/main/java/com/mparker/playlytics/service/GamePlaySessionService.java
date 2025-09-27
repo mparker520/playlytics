@@ -63,9 +63,7 @@ public class GamePlaySessionService {
             if(gamePlaySessionDTO.sessionParticipantDTOSet().size() < 3) {
                 throw new SessionParticipantTeamMismatchException("Team Scoring Must have 3 or more players.");
             }
-            if(gamePlaySessionDTO.sessionTeamDTOSet().size() < 2) {
-                throw new SessionParticipantTeamMismatchException("Team Scoring Must have 2 at least 2 teams.");
-            }
+
         }
 
        ArrayList<Integer> results = new ArrayList<>();
@@ -74,12 +72,9 @@ public class GamePlaySessionService {
             results.add(result);
         }
 
-        for(SessionTeamDTO sessionTeamDTO: gamePlaySessionDTO.sessionTeamDTOSet()) {
-            int result = sessionTeamDTO.result();
-            results.add(result);
-        }
 
-        if(gamePlaySessionDTO.scoringModel() == ScoringModel.TEAM || gamePlaySessionDTO.scoringModel() == ScoringModel.RANKING) {
+
+        if(gamePlaySessionDTO.scoringModel() == ScoringModel.RANKING) {
             if(!results.contains(1)) {
                 throw new SessionParticipantTeamMismatchException("There must be at least one winner!");
             }
@@ -94,7 +89,7 @@ public class GamePlaySessionService {
             Set<SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet(), authUserId);
 
 
-            // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
+          /*  // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
             if (gamePlaySession.getScoringModel() == ScoringModel.TEAM) {
 
                 // Create Session Teams
@@ -104,7 +99,7 @@ public class GamePlaySessionService {
                 linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
 
 
-            }
+            } */
 
 
             // Link GamePlaySession and SessionParticipants together
@@ -231,8 +226,6 @@ public class GamePlaySessionService {
 
 
 
-
-
             Long gameId = gamePlaySessionDTO.gameId();
 
             if (gameRepository.existsById(gameId)) {
@@ -251,11 +244,9 @@ public class GamePlaySessionService {
             }
 
 
-
-
-
-
     }
+
+
 //</editor-fold>
 
 //<editor-fold desc="Create SessionParticipants Helper Method">
@@ -336,7 +327,7 @@ public class GamePlaySessionService {
 
 //<editor-fold desc="Create Session Teams Helper Method">
 
-    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet, Set<SessionParticipantDTO> sessionParticipantDTOSet) throws SessionParticipantTeamMismatchException {
+  /*  private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet, Set<SessionParticipantDTO> sessionParticipantDTOSet) throws SessionParticipantTeamMismatchException {
 
         // Session Teams to be Returned
         Set<SessionTeam> sessionTeamsSet = new HashSet<>();
@@ -396,7 +387,8 @@ public class GamePlaySessionService {
                 return sessionTeamsSet;
 
 
-    }
+    } */
+
 //</editor-fold>
 
 
@@ -415,12 +407,12 @@ public class GamePlaySessionService {
 
 //<editor-fold desc="Attach GamePlaySession and SessionTeams Helper Method">
 
-    private void linkTeamsAndGpSession(GamePlaySession gamePlaySession, Set<SessionTeam> sessionTeamSet) {
+    /* private void linkTeamsAndGpSession(GamePlaySession gamePlaySession, Set<SessionTeam> sessionTeamSet) {
         for (SessionTeam sessionTeam : sessionTeamSet) {
             sessionTeam.setGamePlaySession(gamePlaySession);
             gamePlaySession.getSessionTeams().add(sessionTeam);
         }
-    }
+    } */
 //</editor-fold>
 
 //<editor-fold desc="Create GamePlaySessionResponseDTO Helper Method">

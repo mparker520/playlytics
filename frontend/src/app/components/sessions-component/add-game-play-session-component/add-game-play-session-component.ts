@@ -64,33 +64,6 @@ expanded: boolean = false
       );
   }
 
-  onNumTeamChange(): void {
-    this.sessionTeams = Array.from({length: this.numberTeams}, (_, i) =>
-      this.sessionTeams[i] || {result: 0, playerIds: [], teamName: ''}
-    );
-  }
-
-
-
-  /* onTeamRankChange(teamNumber: number): void {
-
-   for(const sessionParticipant of this.sessionParticipants) {
-
-     if(sessionParticipant.teamNumber === teamNumber) {
-
-        sessionParticipant.result = this.sessionTeams[teamNumber].result;
-      }
-(ngModelChange)="onTeamRankChange(i)"
-   }
-  } */
-
- /* onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
-
-        let teamNumber = (this.sessionParticipants)[sessionParticipantIndex].teamNumber;
-
-        this.sessionTeams[teamNumber].playerIds.push(sessionParticipantId);
- (change)="onTeamAssociationChange(i, sessionParticipant.playerId)
-      } */
 
 
   onExpandChange() {
@@ -138,8 +111,7 @@ expanded: boolean = false
       sessionDateTime: iso,
       scoringModel: this.scoringModel,
       gameId: this.gameId,
-      sessionParticipantDTOSet: this.sessionParticipants,
-      sessionTeamDTOSet: this.sessionTeams
+      sessionParticipantDTOSet: this.sessionParticipants
     }
 
 

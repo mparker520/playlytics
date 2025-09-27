@@ -7,5 +7,6 @@ export interface GamePlaySessionDTO {
   scoringModel: ScoringModelEnum;
   gameId: number;
   sessionParticipantDTOSet: Array<SessionParticipantDTO>;
-  sessionTeamDTOSet: Array<SessionTeamDTO>
+
 }
+//  sessionTeamDTOSet: Array<SessionTeamDTO>

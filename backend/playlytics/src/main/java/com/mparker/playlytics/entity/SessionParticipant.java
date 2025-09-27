@@ -31,9 +31,9 @@ public class SessionParticipant {
     // <editor-fold desc = "Relationship Mappings">
 
     // Link to SessionTeam: Can be Null, not all SessionParticipants are part of a team
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "session_team_id")
-    private SessionTeam sessionTeam;
+    //@ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "session_team_id")
+    //private SessionTeam sessionTeam;
 
 
     // Link to Player
@@ -103,9 +103,6 @@ public class SessionParticipant {
         return id;
     }
 
-    public void setSessionTeam(SessionTeam sessionTeam) {
-        this.sessionTeam = sessionTeam;
-    }
 
     public Player getPlayer() {
         return player;
@@ -131,9 +128,6 @@ public class SessionParticipant {
         this.result = result;
     }
 
-    public SessionTeam getSessionTeam() {
-        return sessionTeam;
-    }
 
     // </editor-fold>
 

@@ -55,9 +55,9 @@ public class GamePlaySession {
     // Set of SessionTeams in GamePlaySession
     // Bidirectional Mapping SessionTeam.Java
     // If GamePlaySession is deleted, all SessionTeams are deleted, if SessionTeam removed from set, SessionTeam removed from DB
-    @OneToMany(mappedBy = "gamePlaySession", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
-    @NotNull
-    private Set<SessionTeam> sessionTeams = new HashSet<>();
+    //@OneToMany(mappedBy = "gamePlaySession", cascade = {CascadeType.REMOVE, CascadeType.PERSIST}, orphanRemoval = true)
+    //@NotNull
+    //private Set<SessionTeam> sessionTeams = new HashSet<>();
 
 
     // Set of SessionParticipants in GamePlaySession
@@ -142,9 +142,9 @@ public class GamePlaySession {
         this.creator = creator;
     }
 
-    public Set<SessionTeam> getSessionTeams() {
-        return sessionTeams;
-    }
+    //public Set<SessionTeam> getSessionTeams() {
+    //    return sessionTeams;
+    //}
 
     public Set<SessionParticipant> getSessionParticipants() {
         return sessionParticipants;

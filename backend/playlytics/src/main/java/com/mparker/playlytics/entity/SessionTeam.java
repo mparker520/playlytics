@@ -1,4 +1,4 @@
-package com.mparker.playlytics.entity;
+/* package com.mparker.playlytics.entity;
 
 // Imports
 import jakarta.persistence.*;
@@ -112,3 +112,4 @@ public class SessionTeam {
     // </editor-fold>
 
 }
+*/

@@ -15,6 +15,12 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
 })
 export class GamePlaySessionListComponent{
 
+  expanded: boolean = false
+
+  onExpandChange() {
+    this.expanded = !this.expanded;
+  }
+
   @Input() playSessions: GamePlaySessionResponseDTO[] = [];
 
   @Output() delete =  new EventEmitter<number>;

@@ -9,12 +9,14 @@ import {GameService} from '../../services/game-service';
 import {PlayerResponseDTO} from '../../dtos/PlayerResponseDTO';
 import {NetworkService} from '../../services/network-service';
 import {RegisteredPlayerService} from '../../services/registered-player-service';
+import {PendingGamePlaySessionsComponent} from './pending-game-play-sessions-component/pending-game-play-sessions-component';
 
 @Component({
   selector: 'app-sessions-component',
   imports: [
     AddGamePlaySessionComponent,
     GamePlaySessionListComponent,
+    PendingGamePlaySessionsComponent
 
   ],
   templateUrl: './sessions-component.html',
@@ -25,6 +27,7 @@ export class SessionsComponent implements OnInit{
   //<editor-fold desc="Constructor">
 
   playSessions: GamePlaySessionResponseDTO[] = [];
+  pendingPlaySessions: GamePlaySessionResponseDTO[] = [];
   games: GameResponseDTO[] = [];
   network: PlayerResponseDTO[] = [];
 
@@ -41,6 +44,13 @@ export class SessionsComponent implements OnInit{
   this.gamePlaySessionService.getGamePlaySessions().subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+    this.gamePlaySessionService.getPendingGamePlaySessions().subscribe({
+      next: (response: GamePlaySessionResponseDTO[]) => {
+        this.pendingPlaySessions = response;
       },
       error: (error: any) => console.error("fail", error)
     })
@@ -99,6 +109,14 @@ export class SessionsComponent implements OnInit{
       },
       error: (deleteError: any) => console.error("fail", deleteError)
     })
+  }
+
+  handleSessionDecline(id: number) {
+    console.log("decline")
+  }
+
+  handleSessionAccept(id: number) {
+    console.log("accept")
   }
 
 

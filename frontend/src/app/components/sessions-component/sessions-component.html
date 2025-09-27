@@ -12,4 +12,8 @@
     <app-game-play-sessions-list-component (delete)="handleSessionDelete($event)" [playSessions]="playSessions"></app-game-play-sessions-list-component>
   </section>
 
+  <section class="w-full navBar:w-full">
+    <app-pending-game-play-sessions-component (decline)="handleSessionDecline($event)" (accept)="handleSessionAccept($event)" [pendingPlaySessions]="pendingPlaySessions"></app-pending-game-play-sessions-component>
+  </section>
+
 </div>

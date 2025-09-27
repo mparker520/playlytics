@@ -140,6 +140,30 @@ public class GamePlaySessionService {
         }
     //</editor-fold>
 
+    //<editor-fold desc="List all Pending GamePlaySessions for a Registered Player">
+
+    @Transactional (readOnly = true)
+    public Set<GamePlaySessionResponseDTO> getAllPendingGpSessions(Long authUserId) throws CustomAccessDeniedException, NotFoundException{
+
+
+        Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+        RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("No registered player found"));
+
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(registeredPlayer.getId());
+        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
+
+        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+            gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+        }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
+
+    //</editor-fold>
+
+
     //<editor-fold desc="List All GamePlaySessions for a Registered Player by Game Title">
 // List of all GamePlaySessions for a RegisteredPlayer by Game Title
     @Transactional (readOnly = true)

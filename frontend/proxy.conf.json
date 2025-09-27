@@ -89,6 +89,7 @@
     "changeOrigin": true,
     "logLevel": "debug"
   },
+
   "/network": {
     "target": "http://localhost:8080",
     "secure": false,
@@ -96,6 +97,12 @@
     "logLevel": "debug"
   },
   "/profile": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/pending-game-play-sessions": {
     "target": "http://localhost:8080",
     "secure": false,
     "changeOrigin": true,

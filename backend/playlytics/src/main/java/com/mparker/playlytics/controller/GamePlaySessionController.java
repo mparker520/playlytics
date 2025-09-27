@@ -28,7 +28,9 @@ public class GamePlaySessionController {
     //</editor-fold>
 
 //<editor-fold desc = "GET Mapping">
-     @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
+
+//<editor-fold desc="Get Game Play Sessions for Player">
+@PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(value = "gameTitle", required = false) String gameTitle) {
@@ -44,6 +46,21 @@ public class GamePlaySessionController {
         }
 
     }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Get Pending Game Play Sessions for Player">
+    @PreAuthorize("isAuthenticated()")    @GetMapping("/pending-game-play-sessions")
+    public ResponseEntity<Set<GamePlaySessionResponseDTO>> getPendingGamePlaySessions(
+            @AuthenticationPrincipal CustomUserDetails principal) {
+
+            Set<GamePlaySessionResponseDTO> allPendingGamePlaySessions = gamePlaySessionService.getAllPendingGpSessions(principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(allPendingGamePlaySessions);
+
+
+    }
+    //</editor-fold>
+
 
     //</editor-fold>
 

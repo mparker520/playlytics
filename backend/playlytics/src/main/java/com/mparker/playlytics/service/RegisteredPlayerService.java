@@ -94,9 +94,6 @@ public class RegisteredPlayerService {
             registeredPlayer.setLastName(registeredPlayerUpdateDTO.lastName());
         }
 
-        if(registeredPlayerUpdateDTO.avatar() != null) {
-            registeredPlayer.setAvatar(registeredPlayerUpdateDTO.avatar());
-        }
 
         if(registeredPlayerUpdateDTO.displayName() != null) {
             registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
@@ -104,7 +101,7 @@ public class RegisteredPlayerService {
 
         registeredPlayerRepository.save(registeredPlayer);
 
-        return new RegisteredPlayerUpdateDTO(registeredPlayer.getFirstName(), registeredPlayer.getLastName(), registeredPlayer.getAvatar(), registeredPlayer.getDisplayName());
+        return new RegisteredPlayerUpdateDTO(registeredPlayer.getFirstName(), registeredPlayer.getLastName(), registeredPlayer.getDisplayName(), registeredPlayer.getLoginEmail());
 
     }
 

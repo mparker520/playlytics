@@ -27,6 +27,7 @@ public class RegisteredPlayerController {
 
     //</editor-fold>
 
+    //<editor-fold desc="GET Mapping">
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public ResponseEntity<RegisteredPlayerResponseDTO> getProfile(
@@ -35,6 +36,7 @@ public class RegisteredPlayerController {
         RegisteredPlayerResponseDTO playerResponseDTO = registeredPlayerService.getProfile(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(playerResponseDTO);
     }
+    //</editor-fold>
 
 
     //<editor-fold desc = "POST Mapping">
@@ -55,7 +57,7 @@ public class RegisteredPlayerController {
     //<editor-fold desc = "PATCH Mapping">
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/account")
+    @PatchMapping("/profile")
     public ResponseEntity<RegisteredPlayerUpdateDTO> updateRegisteredPlayer(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestBody RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {

@@ -73,8 +73,16 @@ public class GamePlaySessionService {
             results.add(result);
         }
 
-        if(!results.contains(1) && gamePlaySessionDTO.scoringModel() == ScoringModel.TEAM || gamePlaySessionDTO.scoringModel() == ScoringModel.RANKING) {
-            throw new SessionParticipantTeamMismatchException("There must be at least one winner!");
+        for(SessionTeamDTO sessionTeamDTO: gamePlaySessionDTO.sessionTeamDTOSet()) {
+            int result = sessionTeamDTO.result();
+            results.add(result);
+        }
+
+        if(gamePlaySessionDTO.scoringModel() == ScoringModel.TEAM || gamePlaySessionDTO.scoringModel() == ScoringModel.RANKING) {
+            if(!results.contains(1)) {
+                throw new SessionParticipantTeamMismatchException("There must be at least one winner!");
+            }
+
         }
 
 
@@ -220,7 +228,7 @@ public class GamePlaySessionService {
 
     private GamePlaySession createGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        Long creatorId = authUserId;
+
 
 
 
@@ -230,7 +238,7 @@ public class GamePlaySessionService {
 
                 Instant sessionDateTime = gamePlaySessionDTO.sessionDateTime();
                 ScoringModel scoringModel = gamePlaySessionDTO.scoringModel();
-                Player creator = playerRepository.getReferenceById(creatorId);
+                Player creator = playerRepository.getReferenceById(authUserId);
                 Game game = gameRepository.getReferenceById(gameId);
 
                 return new GamePlaySession(sessionDateTime, scoringModel, creator, game);
@@ -269,7 +277,7 @@ public class GamePlaySessionService {
                 if (playerRepository.existsById(peerId)) {
 
                     int result = sessionParticipantDTO.result();
-                    Player peer = playerRepository.getById((peerId));
+                    Player peer = playerRepository.getById(peerId);
 
 
                    // If Peer is a Registered Player, Check If Self or Confirmed Connection
@@ -334,11 +342,13 @@ public class GamePlaySessionService {
 
         // All Team Members
         Set<Long> sessionTeamMemberIds = new HashSet<>();
+
         for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
             sessionTeamMemberIds.addAll(sessionTeamDTO.playerIds());
         }
 
         Set<Long> sessionParticipantsIds = new HashSet<>();
+
         for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
             sessionParticipantsIds.add(sessionParticipant.getPlayer().getId());
         }
@@ -362,13 +372,12 @@ public class GamePlaySessionService {
                         for(SessionParticipant sessionParticipant : sessionParticipantsSet) {
                             if(sessionParticipant.getPlayer().getId().equals(teamMemberId)) {
 
-                                if (sessionParticipant.getResult() == teamResult) {
+
+                                    sessionParticipant.setResult(teamResult);
                                     sessionParticipant.setSessionTeam(sessionTeam);
                                     sessionTeam.getTeamMembers().add(sessionParticipant);
-                                }
-                                else {
-                                    throw new SessionParticipantTeamMismatchException("Session Participant Result is Not the Same as Team's Result.");
-                                }
+
+
 
                             }
                         }

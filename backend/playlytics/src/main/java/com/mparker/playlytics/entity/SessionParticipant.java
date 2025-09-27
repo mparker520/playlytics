@@ -127,6 +127,10 @@ public class SessionParticipant {
         return result;
     }
 
+    public void setResult(int result) {
+        this.result = result;
+    }
+
     // </editor-fold>
 
 }

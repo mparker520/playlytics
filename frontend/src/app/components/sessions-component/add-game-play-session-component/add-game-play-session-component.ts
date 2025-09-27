@@ -72,27 +72,26 @@ expanded: boolean = false
 
 
 
-  onTeamRankChange(teamNumber: number): void {
+  /* onTeamRankChange(teamNumber: number): void {
 
-    for(const sessionParticipant of this.sessionParticipants) {
+   for(const sessionParticipant of this.sessionParticipants) {
 
-      if(sessionParticipant.teamNumber === teamNumber) {
+     if(sessionParticipant.teamNumber === teamNumber) {
 
         sessionParticipant.result = this.sessionTeams[teamNumber].result;
       }
+(ngModelChange)="onTeamRankChange(i)"
+   }
+  } */
 
-    }
-  }
-
-  onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
+ /* onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
 
         let teamNumber = (this.sessionParticipants)[sessionParticipantIndex].teamNumber;
 
-        this.sessionParticipants[sessionParticipantIndex].result = this.sessionTeams[teamNumber].result;
-
         this.sessionTeams[teamNumber].playerIds.push(sessionParticipantId);
+ (change)="onTeamAssociationChange(i, sessionParticipant.playerId)
+      } */
 
-      }
 
   onExpandChange() {
     this.expanded = !this.expanded;

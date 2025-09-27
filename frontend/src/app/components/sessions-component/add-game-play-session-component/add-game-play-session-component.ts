@@ -60,7 +60,7 @@ expanded: boolean = false
 
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
-        this.sessionParticipants[i] || {result: 0, playerId: 0, teamNumber: null}
+        this.sessionParticipants[i] || {result: 0, playerId: 0}
       );
   }
 

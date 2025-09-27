@@ -105,6 +105,10 @@ public class SessionTeam {
         this.gamePlaySession = gamePlaySession;
     }
 
+    public int getResult() {
+        return result;
+    }
+
     // </editor-fold>
 
 }

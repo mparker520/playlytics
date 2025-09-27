@@ -9,6 +9,7 @@ import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.exception.SessionParticipantTeamMismatchException;
 import com.mparker.playlytics.repository.*;
 import org.hibernate.Hibernate;
+import org.hibernate.Session;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -97,7 +98,7 @@ public class GamePlaySessionService {
             if (gamePlaySession.getScoringModel() == ScoringModel.TEAM) {
 
                 // Create Session Teams
-                Set<SessionTeam> sessionTeamSet = createSessionTeamSet(gamePlaySessionDTO.sessionTeamDTOSet(), sessionParticipantSet);
+                Set<SessionTeam> sessionTeamSet = createSessionTeamSet(gamePlaySessionDTO.sessionTeamDTOSet(), sessionParticipantSet, gamePlaySessionDTO.sessionParticipantDTOSet());
 
                 // Link Teams and GamePlaySession
                 linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
@@ -335,28 +336,12 @@ public class GamePlaySessionService {
 
 //<editor-fold desc="Create Session Teams Helper Method">
 
-    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet) throws SessionParticipantTeamMismatchException {
+    private Set<SessionTeam> createSessionTeamSet(Set<SessionTeamDTO> sessionTeamDTOSet, Set<SessionParticipant> sessionParticipantsSet, Set<SessionParticipantDTO> sessionParticipantDTOSet) throws SessionParticipantTeamMismatchException {
 
         // Session Teams to be Returned
         Set<SessionTeam> sessionTeamsSet = new HashSet<>();
 
-        // All Team Members
-        Set<Long> sessionTeamMemberIds = new HashSet<>();
 
-        for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
-            sessionTeamMemberIds.addAll(sessionTeamDTO.playerIds());
-        }
-
-        Set<Long> sessionParticipantsIds = new HashSet<>();
-
-        for (SessionParticipant sessionParticipant : sessionParticipantsSet) {
-            sessionParticipantsIds.add(sessionParticipant.getPlayer().getId());
-        }
-
-
-
-        // Check that All Session Participants are Listed as Team Members
-        if(sessionTeamMemberIds.equals(sessionParticipantsIds)) {
 
                 // For Each Session Team
                 for (SessionTeamDTO sessionTeamDTO : sessionTeamDTOSet) {
@@ -366,35 +351,55 @@ public class GamePlaySessionService {
                     String teamName = sessionTeamDTO.teamName();
                     SessionTeam sessionTeam = new SessionTeam(teamResult, teamName);
 
+                    for(SessionParticipant sessionParticipant : sessionParticipantsSet) {
 
-                    // For Each Team Member
-                    for (Long teamMemberId : sessionTeamDTO.playerIds()) {
-                        for(SessionParticipant sessionParticipant : sessionParticipantsSet) {
-                            if(sessionParticipant.getPlayer().getId().equals(teamMemberId)) {
+                        for (SessionParticipantDTO sessionParticipantDTO : sessionParticipantDTOSet) {
 
+                            if (sessionParticipantDTO.playerId().equals(sessionParticipant.getPlayer().getId())) {
 
-                                    sessionParticipant.setResult(teamResult);
-                                    sessionParticipant.setSessionTeam(sessionTeam);
+                                int sessionParticipantTeamIndex = sessionParticipantDTO.teamIndex();
+
+                                if (sessionParticipantTeamIndex == sessionTeamDTO.teamIndex()) {
+
                                     sessionTeam.getTeamMembers().add(sessionParticipant);
-
-
-
+                                }
                             }
                         }
                     }
 
                     sessionTeamsSet.add(sessionTeam);
-            }
+
+                }
+
+                for (SessionTeam sessionTeam : sessionTeamsSet) {
+
+                    for(SessionParticipant teamSessionParticipant : sessionTeam.getTeamMembers()) {
+
+                        for(SessionParticipant sessionParticipant : sessionParticipantsSet) {
+                            if (sessionParticipant.getPlayer().getId().equals(teamSessionParticipant.getPlayer().getId())) {
+
+                                sessionParticipant.setResult(sessionTeam.getResult());
+                                sessionParticipant.setSessionTeam(sessionTeam);
+
+                            }
+                        }
+
+
+                    }
+
+
+
+
+                }
+
 
                 return sessionTeamsSet;
 
-        }
 
-        else {
-            throw new SessionParticipantTeamMismatchException("Game Session Participants do not match the Session Team Members.");
-        }
     }
 //</editor-fold>
+
+
 
 //<editor-fold desc="Attach GamePlaySession and SessionParticipants Helper Method">
 

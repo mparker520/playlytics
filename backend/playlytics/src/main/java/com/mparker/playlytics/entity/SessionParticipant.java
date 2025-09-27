@@ -131,6 +131,10 @@ public class SessionParticipant {
         this.result = result;
     }
 
+    public SessionTeam getSessionTeam() {
+        return sessionTeam;
+    }
+
     // </editor-fold>
 
 }

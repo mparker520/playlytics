@@ -27,7 +27,7 @@ expanded: boolean = false
 
 
   @Input() network: PlayerResponseDTO[] = [];
-  filteredNetwork?: PlayerResponseDTO[];
+
   @Input() games: GameResponseDTO[] = [];
 
 
@@ -37,9 +37,8 @@ expanded: boolean = false
   numberPlayers: number = 0;
   numberTeams: number = 0;
   cooperativeResult: number = 1;
-  creatorId: number = 1;
   selectedGameName?: string;
-  filterKeyword?: string;
+
 
   //</editor-fold>
 
@@ -56,11 +55,6 @@ expanded: boolean = false
 
   //<editor-fold desc="On Change Methods">
 
-  ngOnChanges(changes: SimpleChanges) {
-    if(changes['network'] && this.network) {
-      this.filteredNetwork = this.network;
-    }
-  }
 
 
 
@@ -76,32 +70,28 @@ expanded: boolean = false
     );
   }
 
-onFilterNetworkChange() {
-    console.log("change");
 
-    if(this.filterKeyword) {
-      console.log(this.filterKeyword)
-      this.filteredNetwork = this.network.filter(network => {
-        const fullName = (network.firstName + " " + network.lastName).toLowerCase();
-        // @ts-ignore
-        return fullName.toLowerCase().includes(this.filterKeyword.toLowerCase()) || network.identifier.toLowerCase().includes(this.filterKeyword.toLowerCase());
-      })
-    }
-}
 
   onTeamRankChange(teamNumber: number): void {
 
     for(const sessionParticipant of this.sessionParticipants) {
+
       if(sessionParticipant.teamNumber === teamNumber) {
+
         sessionParticipant.result = this.sessionTeams[teamNumber].result;
       }
+
     }
   }
 
   onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
+
         let teamNumber = (this.sessionParticipants)[sessionParticipantIndex].teamNumber;
+
         this.sessionParticipants[sessionParticipantIndex].result = this.sessionTeams[teamNumber].result;
+
         this.sessionTeams[teamNumber].playerIds.push(sessionParticipantId);
+
       }
 
   onExpandChange() {
@@ -138,18 +128,21 @@ onFilterNetworkChange() {
 
     const iso = new Date(this.sessionDateTime).toISOString();
 
-    for(const sessionParticipant of this.sessionParticipants) {
-      sessionParticipant.result = this.cooperativeResult;
+    if(this.scoringModel === 'COOPERATIVE') {
+      for(const sessionParticipant of this.sessionParticipants) {
+        sessionParticipant.result = this.cooperativeResult;
+      }
     }
+
 
     const gamePlayerSessionDTO = {
       sessionDateTime: iso,
       scoringModel: this.scoringModel,
       gameId: this.gameId,
       sessionParticipantDTOSet: this.sessionParticipants,
-      sessionTeamDTOSet: this.sessionTeams,
-      creatorId: this.creatorId
+      sessionTeamDTOSet: this.sessionTeams
     }
+
 
     this.sessionSubmit.emit(gamePlayerSessionDTO)
     form.resetForm();

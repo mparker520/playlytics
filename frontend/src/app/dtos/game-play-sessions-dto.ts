@@ -5,7 +5,6 @@ import {SessionTeamDTO} from './session-team-dto';
 export interface GamePlaySessionDTO {
   sessionDateTime: string;
   scoringModel: ScoringModelEnum;
-  creatorId: number;
   gameId: number;
   sessionParticipantDTOSet: Array<SessionParticipantDTO>;
   sessionTeamDTOSet: Array<SessionTeamDTO>

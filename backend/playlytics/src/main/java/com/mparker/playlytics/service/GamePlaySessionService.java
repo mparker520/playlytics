@@ -11,7 +11,9 @@ import com.mparker.playlytics.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -48,35 +50,67 @@ public class GamePlaySessionService {
 
 
     @Transactional
-    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) {
+    public GamePlaySessionResponseDTO assembleGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) throws SessionParticipantTeamMismatchException{
 
-        // Create GamePlaySession
-        GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO, authUserId);
-
-        // Create SessionParticipants from sessionParticipantDTO Set
-        Set <SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet(), authUserId);
-
-        // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
-        if (gamePlaySession.getScoringModel() == ScoringModel.TEAM && gamePlaySessionDTO.sessionTeamDTOSet().size() > 1) {
-
-            // Create Session Teams
-            Set<SessionTeam> sessionTeamSet = createSessionTeamSet(gamePlaySessionDTO.sessionTeamDTOSet(), sessionParticipantSet);
-
-            // Link Teams and GamePlaySession
-            linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
-
+        if(gamePlaySessionDTO.scoringModel() == ScoringModel.COOPERATIVE) {
+            if(gamePlaySessionDTO.sessionParticipantDTOSet().size() < 2) {
+                throw new SessionParticipantTeamMismatchException("There must be at least 2 players for a Cooperative Game");
+            }
         }
 
-        // Link GamePlaySession and SessionParticipants together
-        linkGpSessionAndParticipants(gamePlaySession, sessionParticipantSet);
+        if(gamePlaySessionDTO.scoringModel() == ScoringModel.TEAM) {
+            if(gamePlaySessionDTO.sessionParticipantDTOSet().size() < 3) {
+                throw new SessionParticipantTeamMismatchException("Team Scoring Must have 3 or more players.");
+            }
+            if(gamePlaySessionDTO.sessionTeamDTOSet().size() < 2) {
+                throw new SessionParticipantTeamMismatchException("Team Scoring Must have 2 at least 2 teams.");
+            }
+        }
 
-        // Save GamePlaySession
-        gamePlaySessionRepository.save(gamePlaySession);
+       ArrayList<Integer> results = new ArrayList<>();
+        for(SessionParticipantDTO sessionParticipantDTO: gamePlaySessionDTO.sessionParticipantDTOSet()) {
+            int result = sessionParticipantDTO.result();
+            results.add(result);
+        }
 
-        // Create and Return GamePlaySessionResponse DTO
-        return createGpSessionResponseDTO(gamePlaySession);
+        if(!results.contains(1) && gamePlaySessionDTO.scoringModel() == ScoringModel.TEAM || gamePlaySessionDTO.scoringModel() == ScoringModel.RANKING) {
+            throw new SessionParticipantTeamMismatchException("There must be at least one winner!");
+        }
 
-    }
+
+            // Create GamePlaySession
+            GamePlaySession gamePlaySession = createGpSession(gamePlaySessionDTO, authUserId);
+
+            // Create SessionParticipants from sessionParticipantDTO Set
+            Set<SessionParticipant> sessionParticipantSet = createSessionParticipantsSet(gamePlaySessionDTO.sessionParticipantDTOSet(), authUserId);
+
+
+            // Create SessionTeams from sessionTeamsDTOList If Scoring Model TEAMS and sessionTeamsDTOList not Empty
+            if (gamePlaySession.getScoringModel() == ScoringModel.TEAM) {
+
+                // Create Session Teams
+                Set<SessionTeam> sessionTeamSet = createSessionTeamSet(gamePlaySessionDTO.sessionTeamDTOSet(), sessionParticipantSet);
+
+                // Link Teams and GamePlaySession
+                linkTeamsAndGpSession(gamePlaySession, sessionTeamSet);
+
+
+            }
+
+
+            // Link GamePlaySession and SessionParticipants together
+            linkGpSessionAndParticipants(gamePlaySession, sessionParticipantSet);
+
+            // Save GamePlaySession
+            gamePlaySessionRepository.save(gamePlaySession);
+
+            // Create and Return GamePlaySessionResponse DTO
+            return createGpSessionResponseDTO(gamePlaySession);
+        }
+
+
+
+
 
 
     //</editor-fold>
@@ -186,9 +220,9 @@ public class GamePlaySessionService {
 
     private GamePlaySession createGpSession(GamePlaySessionDTO gamePlaySessionDTO, Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
-        Long creatorId = gamePlaySessionDTO.creatorId();
+        Long creatorId = authUserId;
 
-        if(creatorId.equals(authUserId)) {
+
 
             Long gameId = gamePlaySessionDTO.gameId();
 
@@ -208,11 +242,8 @@ public class GamePlaySessionService {
             }
 
 
-        }
 
-        else {
-            throw new CustomAccessDeniedException("You are not authorized to create a Game Play Session on another user's behalf");
-        }
+
 
 
     }

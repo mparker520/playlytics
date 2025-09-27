@@ -18,7 +18,7 @@ export class LoginComponent {
 
   username: string = '';
   password: string = '';
-
+  errorMessage?: string;
 
   constructor( private loginService: LoginService, private authService: AuthService, private router: Router) {
 
@@ -37,7 +37,11 @@ export class LoginComponent {
         this.authService.authenticated = true;
         this.router.navigate(['/home']);
       },
-      error: (error) => console.log('Failed to Authenticate')
+
+      error: (error: any) =>  {
+              this.errorMessage = "You do not have an Account or Your Credentials are Not Valid."
+        }
+
 
       }
     );

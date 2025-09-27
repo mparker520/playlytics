@@ -1,5 +1,5 @@
 <section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
-my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
+my-6 px-6 shadow-md w-10/12 max-w-4xl mx-auto navBar:w-full">
 
   @if(!expanded) {
     <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
@@ -99,7 +99,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
               <input type="datetime-local" class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full "
                      [(ngModel)]="sessionDateTime" name="sessionDateTime" id="sessionDateTime">
-              <label for="sessionDateTime">Session Date / Time</label>
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="sessionDateTime">Session Date / Time</label>
 
             </div>
 
@@ -112,7 +112,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
                 <option value="TEAM">Teams</option>
                 <option value="COOPERATIVE">Cooperative</option>
               </select>
-              <label for="scoringModel">Scoring Model</label>
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="scoringModel">Scoring Model</label>
 
             </div>
           </div>
@@ -126,7 +126,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
             <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full"
                     [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
 
-            <label for="numberTeams">Number of Teams</label>
+            <label class="pt-2 block text-sm font-medium text-gray-700" for="numberTeams">Number of Teams</label>
           </div>
             @for(sessionTeam of sessionTeams; let i = $index; track i) {
 
@@ -135,13 +135,13 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
                 <div >
                   <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full"
                          [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)" placeholder="Enter Team Name">
-                  <label [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
+                  <label class="pt-2 block text-sm font-medium text-gray-700" [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
                 </div>
 
               <div class="flex flex-col">
               <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand4 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-lg text-center"
                      [(ngModel)]="sessionTeam.result" (ngModelChange)="onTeamRankChange(i)" type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
-                <label [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
+                <label class="pt-2 block text-sm font-medium text-gray-700" [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
               </div>
 
               </div>
@@ -164,7 +164,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
                 <option value=0>We Lost!</option>
               </select>
 
-              <label for="cooperativeResult">Group Result</label>
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="cooperativeResult">Group Result</label>
             </div>
           }
 
@@ -178,7 +178,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
             <input class="p-2  h-10 border-2 rounded-md border-t-brand3 border-r-brand2 border-b-brand2 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
                    [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" id="numberPlayers" min="1" max="100">
-            <label for="numberPlayers">Number of Players</label>
+            <label class="pt-2 block text-sm font-medium text-gray-700" for="numberPlayers">Number of Players</label>
 
           </div>
 
@@ -186,10 +186,6 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
           </div>
 
-          <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg text-center"
-                 [(ngModel)]="filterKeyword" (ngModelChange)="onFilterNetworkChange()"   type="text" name="'networkFilter' + i" id="networkFilter">
-
-          <label for="networkFilter">Filter Players</label>
 
           @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
 
@@ -201,9 +197,10 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
                 <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
                         [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
-                  @for(member of filteredNetwork; track member.id) {
+                  @for(member of network; track member.id) {
                     <option  [value]="member.id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
                   }
+
                 </select>
 
                 <label>{{  'Player ' + (i + 1) + ' Name' }}</label>

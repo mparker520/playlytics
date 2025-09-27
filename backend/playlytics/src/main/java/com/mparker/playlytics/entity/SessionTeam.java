@@ -36,7 +36,6 @@ public class SessionTeam {
     // Bidirectional Mapping to SessionParticipants
     @OneToMany (mappedBy =  "sessionTeam")
     @NotNull
-    @Size(min = 2)
     private Set<SessionParticipant> teamMembers = new HashSet<>();
 
 

@@ -45,9 +45,11 @@ export class AccountCreationComponent {
           console.log('Account Created');
           this.router.navigate(['/login']);
         },
-        error: (error) => console.log('Failed to Authenticate')
+        error: (error: any) => {
 
-      }
+        }
+        }
+
     );
 
   }

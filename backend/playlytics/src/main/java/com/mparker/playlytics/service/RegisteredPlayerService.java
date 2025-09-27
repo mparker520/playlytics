@@ -37,11 +37,11 @@ public class RegisteredPlayerService {
     //</editor-fold>
 
 
-    public PlayerResponseDTO getProfile(Long authUserId) throws NotFoundException {
+    public RegisteredPlayerResponseDTO getProfile(Long authUserId) throws NotFoundException {
         RegisteredPlayer self = registeredPlayerRepository.findById(authUserId).orElse(null);
         if (self != null) {
 
-            return new PlayerResponseDTO(self.getId(), self.getFirstName(), self.getLastName(), self.getDisplayName());
+            return new RegisteredPlayerResponseDTO(self.getId(), self.getFirstName(), self.getLastName(), null, self.getLoginEmail(), self.getDisplayName());
         }
 
         else {

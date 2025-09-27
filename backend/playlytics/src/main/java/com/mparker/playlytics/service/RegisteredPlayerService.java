@@ -55,12 +55,14 @@ public class RegisteredPlayerService {
 
 
     //<editor-fold desc = "Create Registered Player">
-
+    @Transactional
     public RegisteredPlayerResponseDTO createRegisteredPlayer(RegisteredPlayerDTO registeredPlayerDTO) throws CustomAccessDeniedException {
 
         String loginEmail = registeredPlayerDTO.loginEmail().replaceAll("\\s+", "").toLowerCase();
 
         if (!registeredPlayerRepository.existsByLoginEmail(loginEmail)) {
+
+
 
             String password = registeredPlayerDTO.password();
             String firstName = registeredPlayerDTO.firstName();
@@ -69,8 +71,12 @@ public class RegisteredPlayerService {
             byte[] avatar = registeredPlayerDTO.avatar();
 
             RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, ("{noop}" + password));
-            Long id = registeredPlayerRepository.saveAndFlush(registeredPlayer).getId();
-            return new RegisteredPlayerResponseDTO(id, firstName, lastName, avatar, loginEmail, displayName);
+            Long newRegisteredPlayerId = registeredPlayerRepository.saveAndFlush(registeredPlayer).getId();
+            if(ghostPlayerRepository.existsByIdentifierEmail(loginEmail)) {
+                    GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(loginEmail);
+                    ghostPlayer.setLinkedRegisteredPlayer(registeredPlayer);
+            }
+            return new RegisteredPlayerResponseDTO(newRegisteredPlayerId, firstName, lastName, avatar, loginEmail, displayName);
 
         }
 

@@ -14,7 +14,7 @@ export class OwnedGamesListComponent{
 
 
 
-  @Input() ownedGames!: OwnedGameResponseDTO[];
+  @Input() ownedGames: OwnedGameResponseDTO[] = [];
 
   filteredOwnedGames?: OwnedGameResponseDTO[];
 

@@ -37,7 +37,7 @@ public class NetworkController {
             @AuthenticationPrincipal CustomUserDetails principal) {
 
 
-        Set<PlayerResponseDTO> networkResponseDTO = networkService.getNetwork(principal.getAuthenticatedUserId());
+        Set<PlayerResponseDTO> networkResponseDTO = networkService.getNetworkPlusSelf(principal.getAuthenticatedUserId());
 
         return ResponseEntity.ok(networkResponseDTO);
 

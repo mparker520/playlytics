@@ -41,7 +41,7 @@ public class NetworkService {
 
     //<editor-fold desc="Get Network">
     @Transactional(readOnly = true)
-    public Set<PlayerResponseDTO> getNetwork(Long authUserId) throws CustomAccessDeniedException, NotFoundException {
+    public Set<PlayerResponseDTO> getNetworkPlusSelf(Long authUserId) throws CustomAccessDeniedException, NotFoundException {
 
                 Set<PlayerResponseDTO> entireNetwork = new HashSet<>();
 
@@ -51,6 +51,12 @@ public class NetworkService {
                 for (RegisteredPlayerResponseDTO registeredPlayerResponseDTO : allConfirmedConnections) {
                     PlayerResponseDTO playerResponse = new PlayerResponseDTO(registeredPlayerResponseDTO.id(), registeredPlayerResponseDTO.firstName(), registeredPlayerResponseDTO.lastName(), registeredPlayerResponseDTO.displayName());
                     entireNetwork.add(playerResponse);
+                }
+
+                RegisteredPlayer self = registeredPlayerRepository.findById(authUserId).orElse(null);
+                if (self != null) {
+                    PlayerResponseDTO selfResponse = new PlayerResponseDTO(self.getId(), self.getFirstName(), self.getLastName(), self.getDisplayName());
+                    entireNetwork.add(selfResponse);
                 }
 
                 for (GhostPlayerResponseDTO ghostPlayerResponseDTO : allAssociations) {

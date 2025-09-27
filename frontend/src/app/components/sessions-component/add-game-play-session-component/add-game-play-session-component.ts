@@ -28,7 +28,7 @@ expanded: boolean = false
 
   @Input() network: PlayerResponseDTO[] = [];
   @Input() games: GameResponseDTO[] = [];
-  @Input() self!: PlayerResponseDTO;
+
 
   //</editor-fold>
 
@@ -68,11 +68,7 @@ expanded: boolean = false
     );
   }
 
-  onCooperativeResultChange(): void {
-        for(const sessionParticipant of this.sessionParticipants) {
-          sessionParticipant.result = this.cooperativeResult;
-        }
-  }
+
 
   onTeamRankChange(teamNumber: number): void {
 
@@ -122,6 +118,10 @@ expanded: boolean = false
   triggerSubmit(form: NgForm) {
 
     const iso = new Date(this.sessionDateTime).toISOString();
+
+    for(const sessionParticipant of this.sessionParticipants) {
+      sessionParticipant.result = this.cooperativeResult;
+    }
 
     const gamePlayerSessionDTO = {
       sessionDateTime: iso,

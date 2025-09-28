@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {RegisteredPlayerResponseDTO} from '../dtos/registered-player-response-dto';
 import {RegisteredPlayerUpdateDTO} from '../dtos/RegisteredPlayerUpdateDTO';
+import {environment} from '../../environments/environment';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class RegisteredPlayerService {
 
   //<editor-fold desc="Get Profile Information">
   public getSelf(): Observable<RegisteredPlayerResponseDTO> {
-    return this.http.get<RegisteredPlayerResponseDTO>('/profile', {withCredentials: true})
+    return this.http.get<RegisteredPlayerResponseDTO>(`${environment.apiUrl}/profile`, {withCredentials: true})
   }
 
   //</editor-fold>
@@ -28,13 +29,13 @@ export class RegisteredPlayerService {
     displayName: string;
 
   }): Observable<RegisteredPlayerResponseDTO> {
-    return this.http.patch<RegisteredPlayerResponseDTO>('/profile', updateDetails, {withCredentials: true});
+    return this.http.patch<RegisteredPlayerResponseDTO>(`${environment.apiUrl}/profile`, updateDetails, {withCredentials: true});
   }
   //</editor-fold>
 
   //<editor-fold desc="Delete Registered Player">
   public deleteRegisteredPlayer(): Observable<void> {
-    return this.http.delete<void>('/profile', {withCredentials: true})
+    return this.http.delete<void>(`${environment.apiUrl}/profile`, {withCredentials: true})
   }
   //</editor-fold>
 

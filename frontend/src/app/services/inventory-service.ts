@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {OwnedGameResponseDTO} from '../dtos/owned-game-response-dto';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class InventoryService {
   //<editor-fold desc = "Get All Owned Games"
   public getInventory(): Observable<OwnedGameResponseDTO[]> {
 
-    return this.http.get<OwnedGameResponseDTO[]>('/owned-games', {withCredentials: true});
+    return this.http.get<OwnedGameResponseDTO[]>(`${environment.apiUrl}/owned-games`, {withCredentials: true});
 
   }
 
@@ -28,7 +29,7 @@ export class InventoryService {
 
   //<editor-fold desc="Add Game to Inventory">
   public addOwnedGame(gameId: number): Observable<OwnedGameResponseDTO> {
-    return this.http.post<OwnedGameResponseDTO>(`/owned-games/${gameId}`, {withCredentials: true});
+    return this.http.post<OwnedGameResponseDTO>(`/owned-games/${gameId}`, {}, {withCredentials: true});
   }
   //</editor-fold>
 

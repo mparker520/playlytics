@@ -478,6 +478,21 @@ public class GamePlaySessionService {
 //</editor-fold>
 
 
+    @Transactional
+public void acceptGamePlaySession(Long id, Long authUserId) throws NotFoundException {
+
+        RegisteredPlayer player = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("Player doesn't exist."));
+        GamePlaySession gamePlaySession = gamePlaySessionRepository.findById(id).orElseThrow(() -> new NotFoundException("Session doesn't exist."));
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
+        Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
+
+        for(SessionParticipant sessionParticipant : sessionParticipants) {
+            if(sessionParticipant.getPlayer().getId().equals(ghostPlayer.getId())) {
+                sessionParticipant.setPlayer(player);
+            }
+        }
+
+}
 
 //</editor-fold>
 

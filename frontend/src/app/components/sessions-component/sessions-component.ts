@@ -27,6 +27,7 @@ export class SessionsComponent implements OnInit{
   //<editor-fold desc="Constructor">
 
   playSessions: GamePlaySessionResponseDTO[] = [];
+  associatedPlaySessions: GamePlaySessionResponseDTO[] = [];
   pendingPlaySessions: GamePlaySessionResponseDTO[] = [];
   games: GameResponseDTO[] = [];
   network: PlayerResponseDTO[] = [];
@@ -97,6 +98,8 @@ export class SessionsComponent implements OnInit{
   }
   //</editor-fold>
 
+
+  //<editor-fold desc="Handle Session Delete">
   handleSessionDelete(id: number) {
     this.gamePlaySessionService.deleteByIdAndPlayerId(id).subscribe({
       next:(deleteResponse: void) => {
@@ -110,13 +113,29 @@ export class SessionsComponent implements OnInit{
       error: (deleteError: any) => console.error("fail", deleteError)
     })
   }
+  //</editor-fold>
 
-  handleSessionDecline(id: number) {
-    console.log("decline")
-  }
+
 
   handleSessionAccept(id: number) {
-    console.log("accept")
+    this.gamePlaySessionService.acceptGamePlaySession(id).subscribe({
+      next: (response: void) => {
+        this.gamePlaySessionService.getGamePlaySessions().subscribe({
+          next: (response: GamePlaySessionResponseDTO[]) => {
+            this.playSessions = response;
+          },
+          error: (error: any) => console.error("fail", error)
+        })
+
+        this.gamePlaySessionService.getPendingGamePlaySessions().subscribe({
+          next: (response: GamePlaySessionResponseDTO[]) => {
+            this.pendingPlaySessions = response;
+          },
+          error: (error: any) => console.error("fail", error)
+        })
+      },
+      error:(error: any) => console.error('fail', error)
+    })
   }
 
 

@@ -32,9 +32,12 @@ export class RegisteredPlayerService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Delete Registered Player">
   public deleteRegisteredPlayer(): Observable<void> {
     return this.http.delete<void>('/profile', {withCredentials: true})
   }
+  //</editor-fold>
+
 
 
 }

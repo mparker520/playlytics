@@ -3,6 +3,7 @@ package com.mparker.playlytics.controller;
 // Imports
 import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
+import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
@@ -91,5 +92,17 @@ public class GamePlaySessionController {
     }
 
     //</editor-fold>
+
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/game-play-sessions/{id}")
+    public ResponseEntity<Void> acceptGamePlaySession(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @PathVariable ("id") Long id) {
+
+        gamePlaySessionService.acceptGamePlaySession(id, principal.getAuthenticatedUserId());
+        return ResponseEntity.ok().build();
+
+    }
+
 
 }

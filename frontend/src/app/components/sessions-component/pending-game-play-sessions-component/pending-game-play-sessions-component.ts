@@ -21,12 +21,9 @@ export class PendingGamePlaySessionsComponent {
 
   @Input() pendingPlaySessions: GamePlaySessionResponseDTO[] = [];
 
-  @Output() decline =  new EventEmitter<number>;
+
   @Output() accept =  new EventEmitter<number>;
 
-  triggerDecline(id: number) {
-    this.decline.emit(id)
-  }
 
   triggerAccept(id: number) {
     this.accept.emit(id)

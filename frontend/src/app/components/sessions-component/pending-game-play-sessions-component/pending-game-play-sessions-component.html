@@ -25,7 +25,7 @@ my-6 px-6 shadow-md w-10/12 max-w-4xl mx-auto navBar:w-full">
             <col class="w-auto">
             <col class="w-auto">
             <col class="w-[100px]">
-              <col class="w-[100px]">
+
           </colgroup>
 
           <thead class="bg-brand2">
@@ -34,7 +34,7 @@ my-6 px-6 shadow-md w-10/12 max-w-4xl mx-auto navBar:w-full">
             <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Date</th>
             <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Players</th>
             <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
-              <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
+
           </tr>
           </thead>
 
@@ -55,13 +55,6 @@ my-6 px-6 shadow-md w-10/12 max-w-4xl mx-auto navBar:w-full">
                           <img class="cursor-pointer" ngSrc="assets/PlusSign.png" alt="Plus Sign Icon" width="40" height="40" (click)="triggerAccept(pendingPlaySession.id)"  [id] ="'Accept' +pendingPlaySession.id">
                       </div>
                   </td>
-
-
-                <td class="border-2 border-brand4 px-4 max-w-[100px]">
-                  <div class="flex justify-center">
-                    <img class="cursor-pointer" ngSrc="assets/MinusSign.png" alt="Minus Sign Icon" width="40" height="40" (click)="triggerDecline(pendingPlaySession.id)"  [id] ="'Decline' +pendingPlaySession.id">
-                  </div>
-                </td>
 
 
               </tr>

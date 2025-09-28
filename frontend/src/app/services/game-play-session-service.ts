@@ -36,10 +36,15 @@ export class GamePlaySessionService {
   }
   //</editor-fold>
 
+  //<editor-fold desc="Delete Game Play Session">
   public deleteByIdAndPlayerId(sessionId: number): Observable<void> {
     return this.http.delete<void>(`/game-play-sessions/${sessionId}`, {withCredentials: true})
   }
+  //</editor-fold>
 
+  public acceptGamePlaySession(id: number): Observable<void> {
+    return this.http.patch<void>(`/game-play-sessions/${id}`, {withCredentials: true})
+  }
 
 
 }

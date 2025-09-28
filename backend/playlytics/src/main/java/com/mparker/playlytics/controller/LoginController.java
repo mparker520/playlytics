@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +28,7 @@ public class LoginController {
 
     private final AuthenticationService authenticationService;
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+
 
     public LoginController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
@@ -49,6 +51,9 @@ public class LoginController {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         securityContextRepository.saveContext(context, request, response);
+
+        CsrfToken token = csrfTokenRepository.generateToken(request);
+        csrfTokenRepository.saveToken(token, request, response);
 
       CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
 

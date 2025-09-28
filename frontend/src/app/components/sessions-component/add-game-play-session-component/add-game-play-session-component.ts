@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/co
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
-import {SessionTeamDTO} from '../../../dtos/session-team-dto';
 import {GamePlaySessionDTO} from '../../../dtos/game-play-sessions-dto';
 import {NgOptimizedImage} from '@angular/common';
 import {PlayerResponseDTO} from '../../../dtos/PlayerResponseDTO';
@@ -47,7 +46,7 @@ expanded: boolean = false
   scoringModel: ScoringModelEnum = ScoringModelEnum.RANKING;
   gameId!: number;
   sessionParticipants: SessionParticipantDTO[] = [];
-  sessionTeams: SessionTeamDTO[] = [];
+
 
 
 

@@ -91,20 +91,27 @@ public class RegisteredPlayerService {
     //<editor-fold desc = "Update RegisteredPlayer">
 
     @Transactional
-    public RegisteredPlayerUpdateDTO updateRegisteredPlayer(Long authUserId, RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) {
+    public RegisteredPlayerUpdateDTO updateRegisteredPlayer(Long authUserId, RegisteredPlayerUpdateDTO registeredPlayerUpdateDTO) throws CustomAccessDeniedException {
 
         RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
 
-        if(registeredPlayerUpdateDTO.firstName() != null) {
+        if(registeredPlayerUpdateDTO.firstName() != null && !registeredPlayerUpdateDTO.firstName().isBlank()) {
             registeredPlayer.setFirstName(registeredPlayerUpdateDTO.firstName());
         }
 
-        if(registeredPlayerUpdateDTO.lastName() != null) {
+        if(registeredPlayerUpdateDTO.lastName() != null && !registeredPlayerUpdateDTO.lastName().isBlank()) {
             registeredPlayer.setLastName(registeredPlayerUpdateDTO.lastName());
         }
 
 
-        if(registeredPlayerUpdateDTO.displayName() != null) {
+        if(registeredPlayerUpdateDTO.displayName() != null && !registeredPlayerUpdateDTO.displayName().isBlank()) {
+            registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
+        }
+
+        if(registeredPlayerUpdateDTO.loginEmail() != null && !registeredPlayerUpdateDTO.loginEmail().isBlank()) {
+            if(registeredPlayerRepository.existsByLoginEmail(registeredPlayerUpdateDTO.loginEmail())) {
+                throw new CustomAccessDeniedException("An Account with that login email already exists");
+            }
             registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
         }
 

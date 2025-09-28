@@ -1,18 +1,13 @@
 package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.dto.GameResponseDTO;
 import com.mparker.playlytics.dto.analytics.WinLossProjection;
 import com.mparker.playlytics.dto.analytics.WinLossResponseDTO;
-import com.mparker.playlytics.entity.Game;
+import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.repository.AnalyticsRepository;
-import com.mparker.playlytics.repository.GameRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Service
@@ -33,9 +28,9 @@ public class AnalyticsService {
 
 //<editor-fold desc = "Get Win/Loss Ratio">
 
-    public WinLossResponseDTO getWinLossRatio(Long authUserId) {
+    public WinLossResponseDTO getWinLossRatio(Long authUserId, Long selectedGame, ScoringModel selectedScoringModel) {
 
-        WinLossProjection result = analyticsRepository.getWinLossRatio(authUserId);
+        WinLossProjection result = analyticsRepository.getWinLossRatio(authUserId, selectedGame, selectedScoringModel);
 
         return new WinLossResponseDTO("Win/Loss Ratio", List.of("Wins", "Losses"), List.of(result.getWins(), result.getLosses()));
 

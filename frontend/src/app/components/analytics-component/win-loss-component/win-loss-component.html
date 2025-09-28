@@ -1,13 +1,42 @@
 <section class="w-6/12 m-6 shadow-md">
 
   <section class="mx-auto flex justify-center">
-    <h2 class="text-3xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Win/Loss Ratio</h2>
+    <h2 class="text-3xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Win / Loss Ratio</h2>
   </section>
 
+
   <canvas  baseChart
-          [data]="chartData"
-          [type]="'pie'"
-          [options]="chartOptions">
+           [data]="chartData"
+           [type]="'pie'"
+           [options]="chartOptions">
   </canvas>
+
+  <div class="flex flex-col p-4 justify-evenly navBar:flex-row navBar:space-x-4">
+
+    <div class="flex flex-col w-8/12 pt-2 mx-auto">
+      <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+              [(ngModel)]="selectedGame" (ngModelChange)="filterResults()">
+        <option [ngValue]="null">Filter by Game</option>
+        @for(playedGame of playedGames; track playedGame.id){
+          <option [value]="playedGame.id">{{ playedGame.name }}</option>
+        }
+      </select>
+      <label class="pt-2 block text-sm font-medium text-gray-700">Filter By Game</label>
+    </div>
+
+    <div class="flex flex-col w-8/12 pt-2 mx-auto">
+      <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+              [(ngModel)]="selectedScoringModel" (ngModelChange)="filterResults()">
+        <option class="border-x-brand4" [ngValue]="null">Filter by Scoring Type</option>
+        @for(scoringModel of scoringModels; track scoringModel){
+          <option [value]="scoringModel">{{ scoringModel }}</option>
+        }
+      </select>
+      <label class="pt-2 block text-sm font-medium text-gray-700">Filter By Scoring Model</label>
+    </div>
+
+  </div>
+
+
 
 </section>

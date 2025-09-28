@@ -2,18 +2,14 @@ package com.mparker.playlytics.controller;
 
 // Imports
 
-import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.dto.analytics.WinLossResponseDTO;
+import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.AnalyticsService;
-import com.mparker.playlytics.service.GameInventoryService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -36,9 +32,12 @@ public class AnalyticsController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/win-loss-ratio")
     public ResponseEntity<WinLossResponseDTO> getWinLossRatio(
-            @AuthenticationPrincipal CustomUserDetails principal)  {
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @RequestParam(required = false) Long selectedGame,
+            @RequestParam(required = false) ScoringModel selectedScoringModel)  {
 
-            WinLossResponseDTO winLossResponseDTO = analyticsService.getWinLossRatio(principal.getAuthenticatedUserId());
+
+            WinLossResponseDTO winLossResponseDTO = analyticsService.getWinLossRatio(principal.getAuthenticatedUserId(), selectedGame, selectedScoringModel);
             return ResponseEntity.ok(winLossResponseDTO);
 
     }

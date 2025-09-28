@@ -67,7 +67,10 @@ ngOnInit(): void {
     }
 
     this.registeredPlayerService.updateRegisteredPlayer(registeredPlayerUpdateDTO).subscribe({
-
+            next: (response: RegisteredPlayerResponseDTO) => {
+                this.profileInformation = response;
+          },
+          error: (error: any) => console.error('fail', error)
     })
 
 

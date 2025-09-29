@@ -27,7 +27,8 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
 
 
   //<editor-fold desc="Constructor and Variables">
-    selectedGame: number | null = null;
+    selectedGame: GameResponseDTO | null = null;
+    selectedGameName: string | null = null;
     selectedScoringModel: ScoringModelEnum | null=null;
 
     constructor(private analyticsService: AnalyticsService) {
@@ -43,7 +44,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
     if(this.selectedGame && this.selectedScoringModel) {
 
       params = {
-        selectedGame: this.selectedGame,
+        selectedGame: this.selectedGame.gameId,
         selectedScoringModel: this.selectedScoringModel
       }
 
@@ -52,7 +53,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
     else if(this.selectedGame) {
 
       params = {
-        selectedGame: this.selectedGame
+        selectedGame: this.selectedGame.gameId
       }
 
     }
@@ -108,10 +109,21 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
 
   //<editor-fold desc="Filter Results">
   filterResults() {
+
+
+    console.log(this.selectedGame)
+    console.log(this.selectedGameName)
+
     const params = this.buildParams();
+
 
     this.analyticsService.getWinLossRatio(params).subscribe({
       next: (winLossResponse: WinLossResponseDTO) => {
+
+        if(this.selectedGame) {
+          this.selectedGameName = this.selectedGame.title;
+        }
+
 
 
         this.chartData = {

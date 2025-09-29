@@ -5,8 +5,9 @@ import {AnalyticsService} from '../../../services/analytics-service';
 
 import {WinLossResponseDTO} from '../../../dtos/analytic-dtos/win-loss-response-dto';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
-import {GameResponseDTO} from '../../../dtos/GameResponseDTO';
+
 import {FormsModule} from '@angular/forms';
+import {GameResponseDTO} from '../../../dtos/game-response-dto';
 
 @Component({
   selector: 'app-win-loss-component',

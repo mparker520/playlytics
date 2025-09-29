@@ -1,4 +1,4 @@
-export interface GameResponseDTO {
-  id: number;
-  name: string;
-}
+//export interface GameResponseDTO {
+  //id: number;
+ // name: string;
+//}

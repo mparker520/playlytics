@@ -17,8 +17,8 @@
       <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
               [(ngModel)]="selectedGame" (ngModelChange)="filterResults()">
         <option [ngValue]="null">Filter by Game</option>
-        @for(playedGame of playedGames; track playedGame.id){
-          <option [value]="playedGame.id">{{ playedGame.name }}</option>
+        @for(playedGame of playedGames; track playedGame.gameId){
+          <option [value]="playedGame.gameId">{{ playedGame.title }}</option>
         }
       </select>
       <label class="pt-2 block text-sm font-medium text-gray-700">Filter By Game</label>

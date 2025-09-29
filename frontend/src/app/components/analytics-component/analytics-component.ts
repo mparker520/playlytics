@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {WinLossComponent} from './win-loss-component/win-loss-component';
-import {GameResponseDTO} from '../../dtos/GameResponseDTO';
+import {GamePlaySessionService} from '../../services/game-play-session-service';
+import {GameResponseDTO} from '../../dtos/game-response-dto';
 
 
 
@@ -13,14 +14,25 @@ import {GameResponseDTO} from '../../dtos/GameResponseDTO';
   templateUrl: './analytics-component.html',
   styleUrl: './analytics-component.css'
 })
-export class AnalyticsComponent {
+export class AnalyticsComponent implements OnInit {
+
+  constructor(private gamePlaySessionService: GamePlaySessionService) {
+  }
 
   playedGames: GameResponseDTO[] = [
-    {id: 1, name: 'Canvas'},
-    {id: 2, name: 'Lost Cities'},
-    {id: 3, name: 'Wingspan'},
-    {id: 4, name: 'Azul, Queen Garden'}
+
   ];
+
+  ngOnInit() {
+    this.gamePlaySessionService.getAllPlayedGames().subscribe({
+      next: (response: GameResponseDTO[]) => {
+        this.playedGames = response;
+        console.log(response)
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+  }
 
 
 

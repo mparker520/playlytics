@@ -3,6 +3,7 @@ package com.mparker.playlytics.controller;
 // Imports
 import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
+import com.mparker.playlytics.dto.GameResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GamePlaySessionService;
@@ -50,6 +51,21 @@ public class GamePlaySessionController {
     //</editor-fold>
 
 
+//<editor-fold desc="Get Names of All Games Played">
+@PreAuthorize("isAuthenticated()")
+@GetMapping("/played-games")
+public ResponseEntity<Set<GameResponseDTO>> getPlayedGames(
+        @AuthenticationPrincipal CustomUserDetails principal) {
+
+
+        Set<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
+        System.out.println(allPlayedGames);
+        return ResponseEntity.ok(allPlayedGames);
+
+}
+//</editor-fold>
+
+
     //<editor-fold desc="Get Pending Game Play Sessions for Player">
     @PreAuthorize("isAuthenticated()")    @GetMapping("/pending-game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getPendingGamePlaySessions(
@@ -63,7 +79,7 @@ public class GamePlaySessionController {
     //</editor-fold>
 
 
-    //</editor-fold>
+//</editor-fold>
 
  //<editor-fold desc = "POST Mapping">
 
@@ -93,6 +109,7 @@ public class GamePlaySessionController {
 
     //</editor-fold>
 
+//<editor-fold desc="PATCH Mapping">
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/game-play-sessions/{id}")
     public ResponseEntity<Void> acceptGamePlaySession(
@@ -103,6 +120,7 @@ public class GamePlaySessionController {
         return ResponseEntity.ok().build();
 
     }
+    //</editor-fold>
 
 
 }

@@ -120,6 +120,24 @@ public class GamePlaySessionService {
     //</editor-fold>
 
 //<editor-fold desc="Get Methods">
+
+
+
+    //<editor-fold desc="List all GamePlaySessions for a Registered Player">
+
+    @Transactional (readOnly = true)
+    public Set<GameResponseDTO> getAllPlayedGames(Long authUserId) throws CustomAccessDeniedException{
+
+        Set<GameResponseDTO> gameResponseDTOSet = gamePlaySessionRepository.getAllPlayedGames(authUserId);
+        System.out.println(gameResponseDTOSet);
+        return gameResponseDTOSet;
+
+
+
+    }
+    //</editor-fold>
+
+
     //<editor-fold desc="List all GamePlaySessions for a Registered Player">
 
     @Transactional (readOnly = true)

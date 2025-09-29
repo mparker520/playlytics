@@ -4,6 +4,8 @@ import {GamePlaySessionDTO} from '../dtos/game-play-sessions-dto';
 import {Observable} from 'rxjs';
 import {GamePlaySessionResponseDTO} from '../dtos/game-play-session-response-dto';
 import {environment} from '../../environments/environment';
+import {GameResponseDTO} from '../dtos/game-response-dto';
+
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +24,13 @@ export class GamePlaySessionService {
   public createGamePlaySession(gamePlaySessionDTO: GamePlaySessionDTO): Observable<GamePlaySessionDTO> {
     return this.http.post<GamePlaySessionDTO>(`${environment.apiUrl}/game-play-sessions`, gamePlaySessionDTO, {withCredentials: true})
   }
+  //</editor-fold>
+
+  //<editor-fold desc="Get All Played Games">
+  public getAllPlayedGames(): Observable<GameResponseDTO[]>{
+
+      return this.http.get<GameResponseDTO[]>(`${environment.apiUrl}/played-games`, {withCredentials: true});
+}
   //</editor-fold>
 
 

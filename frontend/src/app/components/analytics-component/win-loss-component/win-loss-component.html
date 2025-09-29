@@ -22,12 +22,15 @@
   </section>
 
 
-  <div class="flex w-7/12 mx-auto">
+  <div class="flex justify-center mx-auto">
+    <div class="w-full h-[50vh] mx-auto">
     <canvas  baseChart
              [data]="chartData"
              [type]="'pie'"
-             [options]="chartOptions">
+             [options]="chartOptions"
+             class="w-full h-full">
     </canvas>
+    </div>
   </div>
 
   <div class="flex flex-col p-4 justify-evenly navBar:flex-row navBar:space-x-4">

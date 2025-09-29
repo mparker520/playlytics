@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,8 +23,9 @@ public interface GamePlaySessionRepository extends JpaRepository<GamePlaySession
     JOIN sp.gamePlaySession gsp
     JOIN gsp.game g
     WHERE sp.player.id = :playerId
+    ORDER BY g.gameTitle ASC
 
 """))
-    Set<GameResponseDTO> getAllPlayedGames(@Param ("playerId") Long authUserId);
+    List<GameResponseDTO> getAllPlayedGames(@Param ("playerId") Long authUserId);
 
 }

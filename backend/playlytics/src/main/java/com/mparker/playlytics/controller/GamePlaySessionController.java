@@ -12,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 import java.util.Set;
 
 
@@ -54,12 +56,11 @@ public class GamePlaySessionController {
 //<editor-fold desc="Get Names of All Games Played">
 @PreAuthorize("isAuthenticated()")
 @GetMapping("/played-games")
-public ResponseEntity<Set<GameResponseDTO>> getPlayedGames(
+public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
         @AuthenticationPrincipal CustomUserDetails principal) {
 
 
-        Set<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
-        System.out.println(allPlayedGames);
+        List<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(allPlayedGames);
 
 }

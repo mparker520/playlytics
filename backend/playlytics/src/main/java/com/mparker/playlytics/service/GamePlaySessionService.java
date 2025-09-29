@@ -14,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -126,11 +123,9 @@ public class GamePlaySessionService {
     //<editor-fold desc="List all GamePlaySessions for a Registered Player">
 
     @Transactional (readOnly = true)
-    public Set<GameResponseDTO> getAllPlayedGames(Long authUserId) throws CustomAccessDeniedException{
+    public List<GameResponseDTO> getAllPlayedGames(Long authUserId) throws CustomAccessDeniedException{
 
-        Set<GameResponseDTO> gameResponseDTOSet = gamePlaySessionRepository.getAllPlayedGames(authUserId);
-        System.out.println(gameResponseDTOSet);
-        return gameResponseDTOSet;
+        return gamePlaySessionRepository.getAllPlayedGames(authUserId);
 
 
 

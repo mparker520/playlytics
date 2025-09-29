@@ -76,7 +76,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
     datasets: [
       { data: [],
         label: 'Win/Loss Ratio',
-        backgroundColor: ['#F7B267', '#F4845F']}
+        backgroundColor: ['#F7B267', '#F79D65']}
     ]
   };
   //</editor-fold>
@@ -106,6 +106,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
   }
   //</editor-fold>
 
+  //<editor-fold desc="Filter Results">
   filterResults() {
     const params = this.buildParams();
 
@@ -118,7 +119,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
           datasets: [{
             data: winLossResponse.data,
             label: winLossResponse.label ?? 'Win Rate',
-            backgroundColor: ['#F7B267', '#F4845F']
+            backgroundColor: ['#F7B267', '#F79D65']
           }
           ]
         }
@@ -126,6 +127,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
       error: (error: any) => console.error('fail', error)
     })
   }
+  //</editor-fold>
 
   //<editor-fold desc="Options">
   chartOptions: ChartOptions<'pie'> = {

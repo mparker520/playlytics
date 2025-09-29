@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {WinLossComponent} from './win-loss-component/win-loss-component';
 import {GamePlaySessionService} from '../../services/game-play-session-service';
 import {GameResponseDTO} from '../../dtos/game-response-dto';
+import {OwnedGameFrequencyComponent} from './owned-game-frequency-component/owned-game-frequency-component';
 
 
 
@@ -9,7 +10,8 @@ import {GameResponseDTO} from '../../dtos/game-response-dto';
   selector: 'app-analytics-component',
   standalone: true,
   imports: [
-    WinLossComponent
+    WinLossComponent,
+    OwnedGameFrequencyComponent
   ],
   templateUrl: './analytics-component.html',
   styleUrl: './analytics-component.css'

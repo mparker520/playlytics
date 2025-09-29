@@ -29,14 +29,14 @@ export class InventoryService {
 
   //<editor-fold desc="Add Game to Inventory">
   public addOwnedGame(gameId: number): Observable<OwnedGameResponseDTO> {
-    return this.http.post<OwnedGameResponseDTO>(`/owned-games/${gameId}`, {}, {withCredentials: true});
+    return this.http.post<OwnedGameResponseDTO>(`${environment.apiUrl}/owned-games/${gameId}`, {}, {withCredentials: true});
   }
   //</editor-fold>
 
   //<editor-fold desc = "Delete OwnedGame">
   public deleteOwnedGame(id: number): Observable<void> {
 
-    return this.http.delete<void>(`/owned-games/${id}`, {withCredentials: true});
+    return this.http.delete<void>(`${environment.apiUrl}/owned-games/${id}`, {withCredentials: true});
 
   }
 

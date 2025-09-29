@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {WinLossResponseDTO} from '../dtos/analytic-dtos/win-loss-response-dto';
+import {BasicAnalyticsResponseDto} from '../dtos/analytic-dtos/basic-analytics-response-dto';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
@@ -17,10 +17,14 @@ export class AnalyticsService {
   //</editor-fold>
 
   //<editor-fold desc="Get Win/Loss Ratio">
-  public getWinLossRatio(params: any): Observable<WinLossResponseDTO> {
-        return this.http.get<WinLossResponseDTO>(`${environment.apiUrl}/win-loss-ratio`, {params, withCredentials: true})
+  public getWinLossRatio(params: any): Observable<BasicAnalyticsResponseDto> {
+        return this.http.get<BasicAnalyticsResponseDto>(`${environment.apiUrl}/win-loss-ratio`, {params, withCredentials: true})
   }
   //</editor-fold>
+
+  public getOwnedGameFrequency(): Observable<BasicAnalyticsResponseDto> {
+    return this.http.get<BasicAnalyticsResponseDto>(`${environment.apiUrl}/owned-game-frequency`, {withCredentials: true})
+  }
 
 
 }

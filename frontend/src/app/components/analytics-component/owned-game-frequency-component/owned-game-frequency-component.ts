@@ -5,7 +5,7 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {AnalyticsService} from '../../../services/analytics-service';
 import {ChartData, ChartOptions} from 'chart.js';
-import {WinLossResponseDTO} from '../../../dtos/analytic-dtos/win-loss-response-dto';
+import {BasicAnalyticsResponseDto} from '../../../dtos/analytic-dtos/basic-analytics-response-dto';
 
 @Component({
   selector: 'app-owned-game-frequency-component',
@@ -84,15 +84,16 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
     const params = this.buildParams();
 
-    this.analyticsService.getWinLossRatio(params).subscribe({
-      next: (winLossResponse: WinLossResponseDTO) => {
+    this.analyticsService.getOwnedGameFrequency().subscribe({
+      next: (ownedGameFrequencyResponse: BasicAnalyticsResponseDto) => {
 
+        console.log(ownedGameFrequencyResponse);
 
         this.chartData = {
-          labels: winLossResponse.labels,
+          labels: ownedGameFrequencyResponse.labels,
           datasets: [{
-            data: winLossResponse.data,
-            label: winLossResponse.label ?? 'Win Rate',
+            data: ownedGameFrequencyResponse.data,
+            label: ownedGameFrequencyResponse.label ?? 'Win Rate',
             backgroundColor: ['#F7B267', '#F4845F']
           }
           ]
@@ -115,7 +116,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
 
     this.analyticsService.getWinLossRatio(params).subscribe({
-      next: (winLossResponse: WinLossResponseDTO) => {
+      next: (winLossResponse: BasicAnalyticsResponseDto) => {
 
         if(this.selectedGame) {
           this.selectedGameName = this.selectedGame.title;

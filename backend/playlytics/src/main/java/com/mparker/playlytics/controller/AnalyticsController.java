@@ -2,7 +2,7 @@ package com.mparker.playlytics.controller;
 
 // Imports
 
-import com.mparker.playlytics.dto.analytics.WinLossResponseDTO;
+import com.mparker.playlytics.dto.analytics.BasicAnalyticsResponseDTO;
 import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.AnalyticsService;
@@ -27,18 +27,33 @@ public class AnalyticsController {
 
     //</editor-fold>
 
-    //<editor-fold desc = "GET Mapping">
+    //<editor-fold desc = "Win / Loss Ratio">
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/win-loss-ratio")
-    public ResponseEntity<WinLossResponseDTO> getWinLossRatio(
+    public ResponseEntity<BasicAnalyticsResponseDTO> getWinLossRatio(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(required = false) Long selectedGame,
             @RequestParam(required = false) ScoringModel selectedScoringModel)  {
 
 
-            WinLossResponseDTO winLossResponseDTO = analyticsService.getWinLossRatio(principal.getAuthenticatedUserId(), selectedGame, selectedScoringModel);
+            BasicAnalyticsResponseDTO winLossResponseDTO = analyticsService.getWinLossRatio(principal.getAuthenticatedUserId(), selectedGame, selectedScoringModel);
             return ResponseEntity.ok(winLossResponseDTO);
+
+    }
+
+    //</editor-fold>
+
+    //<editor-fold desc = "Owned Game Frequency">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/owned-game-frequency")
+    public ResponseEntity<BasicAnalyticsResponseDTO> getOwnedGameFrequency(
+            @AuthenticationPrincipal CustomUserDetails principal)  {
+
+
+        BasicAnalyticsResponseDTO ownedGameFrequencyResponseDTO = analyticsService.getOwnedGameFrequency(principal.getAuthenticatedUserId());
+        return ResponseEntity.ok(ownedGameFrequencyResponseDTO);
 
     }
 

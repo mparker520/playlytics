@@ -3,7 +3,7 @@ import {ChartData, ChartOptions} from 'chart.js';
 import {BaseChartDirective, provideCharts, withDefaultRegisterables} from 'ng2-charts';
 import {AnalyticsService} from '../../../services/analytics-service';
 
-import {WinLossResponseDTO} from '../../../dtos/analytic-dtos/win-loss-response-dto';
+import {BasicAnalyticsResponseDto} from '../../../dtos/analytic-dtos/basic-analytics-response-dto';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 
 import {FormsModule} from '@angular/forms';
@@ -88,7 +88,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
     const params = this.buildParams();
 
     this.analyticsService.getWinLossRatio(params).subscribe({
-        next: (winLossResponse: WinLossResponseDTO) => {
+        next: (winLossResponse: BasicAnalyticsResponseDto) => {
 
 
           this.chartData = {
@@ -118,7 +118,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
 
 
     this.analyticsService.getWinLossRatio(params).subscribe({
-      next: (winLossResponse: WinLossResponseDTO) => {
+      next: (winLossResponse: BasicAnalyticsResponseDto) => {
 
         if(this.selectedGame) {
           this.selectedGameName = this.selectedGame.title;

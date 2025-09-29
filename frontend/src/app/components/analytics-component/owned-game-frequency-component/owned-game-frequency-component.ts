@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {BaseChartDirective} from "ng2-charts";
 import {FormsModule} from "@angular/forms";
 import {GameResponseDTO} from '../../../dtos/game-response-dto';
-import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {AnalyticsService} from '../../../services/analytics-service';
 import {ChartData, ChartOptions} from 'chart.js';
 import {BasicAnalyticsResponseDto} from '../../../dtos/analytic-dtos/basic-analytics-response-dto';
@@ -18,15 +17,14 @@ import {BasicAnalyticsResponseDto} from '../../../dtos/analytic-dtos/basic-analy
 })
 export class OwnedGameFrequencyComponent implements OnInit{
 
-  @Input() playedGames: GameResponseDTO[]  = [];
-  scoringModels: ScoringModelEnum[] = [ScoringModelEnum.RANKING,
-    ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
-
 
   //<editor-fold desc="Constructor and Variables">
+
+  @Input() ownedGames: GameResponseDTO[]  = [];
+
   selectedGame: GameResponseDTO | null = null;
   selectedGameName: string | null = null;
-  selectedScoringModel: ScoringModelEnum | null=null;
+  selectedView: string = "topTen";
 
   constructor(private analyticsService: AnalyticsService) {
   }
@@ -34,47 +32,21 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   //<editor-fold desc="Build Params">
   buildParams(): any {
-    let params: any = {
 
-    }
-
-    if(this.selectedGame && this.selectedScoringModel) {
-
-      params = {
-        selectedGame: this.selectedGame.gameId,
-        selectedScoringModel: this.selectedScoringModel
-      }
-
-    }
-
-    else if(this.selectedGame) {
-
-      params = {
-        selectedGame: this.selectedGame.gameId
-      }
-
-    }
-
-    else if(this.selectedScoringModel) {
-
-      params = {
-        selectedScoringModel: this.selectedScoringModel
-      }
-
-    }
-
-    return params;
+    return {
+      selectedView: this.selectedView
+    };
 
   }
   //</editor-fold>
 
   //<editor-fold desc="Chart Data">
   chartData: ChartData<'bar'> = {
-    labels: ['Wins', 'Losses'],
+    labels: [],
     datasets: [
       { data: [],
-        label: 'Win/Loss Ratio',
-        backgroundColor: ['#F7B267', '#F79D65']}
+        label: 'Owned Game Play Frequency',
+        backgroundColor: ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267']}
     ]
   };
   //</editor-fold>
@@ -84,7 +56,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
     const params = this.buildParams();
 
-    this.analyticsService.getOwnedGameFrequency().subscribe({
+    this.analyticsService.getOwnedGameFrequency(params).subscribe({
       next: (ownedGameFrequencyResponse: BasicAnalyticsResponseDto) => {
 
         console.log(ownedGameFrequencyResponse);
@@ -93,8 +65,11 @@ export class OwnedGameFrequencyComponent implements OnInit{
           labels: ownedGameFrequencyResponse.labels,
           datasets: [{
             data: ownedGameFrequencyResponse.data,
-            label: ownedGameFrequencyResponse.label ?? 'Win Rate',
-            backgroundColor: ['#F7B267', '#F4845F']
+            label: ownedGameFrequencyResponse.label ?? 'Play Rate',
+            backgroundColor: ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267'],
+
+            barPercentage: 0.8,
+            categoryPercentage: 1
           }
           ]
         }
@@ -109,13 +84,10 @@ export class OwnedGameFrequencyComponent implements OnInit{
   filterResults() {
 
 
-    console.log(this.selectedGame)
-    console.log(this.selectedGameName)
-
     const params = this.buildParams();
+    console.log(params);
 
-
-    this.analyticsService.getWinLossRatio(params).subscribe({
+    this.analyticsService.getOwnedGameFrequency(params).subscribe({
       next: (winLossResponse: BasicAnalyticsResponseDto) => {
 
         if(this.selectedGame) {
@@ -123,13 +95,12 @@ export class OwnedGameFrequencyComponent implements OnInit{
         }
 
 
-
         this.chartData = {
           labels: winLossResponse.labels,
           datasets: [{
             data: winLossResponse.data,
             label: winLossResponse.label ?? 'Win Rate',
-            backgroundColor: ['#F7B267', '#F79D65']
+            backgroundColor:  ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267']
           }
           ]
         }
@@ -141,15 +112,27 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   //<editor-fold desc="Options">
   chartOptions: ChartOptions<'bar'> = {
+    indexAxis: 'y',
     responsive: true,
     plugins: {
       legend: {
+        display: false,
         position: 'bottom',
         labels: {
           font: { size: 18 }
         },
       }
     },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          autoSkip: false,
+          stepSize: 1,
+          precision: 0
+        }
+      }
+    }
 
   };
   //</editor-fold>

@@ -45,12 +45,37 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Owned Game Frequency">
 
-    public BasicAnalyticsResponseDTO getOwnedGameFrequency(Long authUserId) {
+    public BasicAnalyticsResponseDTO getOwnedGameFrequency(Long authUserId, String selectedView) {
 
-        List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequency(authUserId);
+        List<String> labels = List.of();
+        List<Long> data = List.of();
 
-        List<String> labels = rows.stream().map(r -> r.getTitle()).toList();
-        List<Long> data = rows.stream().map(r -> r.getPlayCount()).toList();
+        if (selectedView.equals("all")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyAll(authUserId);
+
+             labels = rows.stream().map(r -> r.getTitle()).toList();
+            data = rows.stream().map(r -> r.getPlayCount()).toList();
+
+        }
+
+
+        if (selectedView.equals("topTen")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyTopTen(authUserId);
+
+            labels = rows.stream().map(r -> r.getTitle()).toList();
+            data = rows.stream().map(r -> r.getPlayCount()).toList();
+
+        }
+
+
+
+        if (selectedView.equals("bottomTen")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyBottomTen(authUserId);
+
+            labels = rows.stream().map(r -> r.getTitle()).toList();
+            data = rows.stream().map(r -> r.getPlayCount()).toList();
+
+        }
 
 
 

@@ -49,10 +49,11 @@ public class AnalyticsController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/owned-game-frequency")
     public ResponseEntity<BasicAnalyticsResponseDTO> getOwnedGameFrequency(
-            @AuthenticationPrincipal CustomUserDetails principal)  {
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @RequestParam(required = true) String selectedView)  {
 
 
-        BasicAnalyticsResponseDTO ownedGameFrequencyResponseDTO = analyticsService.getOwnedGameFrequency(principal.getAuthenticatedUserId());
+        BasicAnalyticsResponseDTO ownedGameFrequencyResponseDTO = analyticsService.getOwnedGameFrequency(principal.getAuthenticatedUserId(), selectedView);
         return ResponseEntity.ok(ownedGameFrequencyResponseDTO);
 
     }

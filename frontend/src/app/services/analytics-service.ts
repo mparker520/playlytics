@@ -22,8 +22,8 @@ export class AnalyticsService {
   }
   //</editor-fold>
 
-  public getOwnedGameFrequency(): Observable<BasicAnalyticsResponseDto> {
-    return this.http.get<BasicAnalyticsResponseDto>(`${environment.apiUrl}/owned-game-frequency`, {withCredentials: true})
+  public getOwnedGameFrequency(params: any): Observable<BasicAnalyticsResponseDto> {
+    return this.http.get<BasicAnalyticsResponseDto>(`${environment.apiUrl}/owned-game-frequency`, {params, withCredentials: true})
   }
 
 

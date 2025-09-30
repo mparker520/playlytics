@@ -2,7 +2,6 @@ package com.mparker.playlytics.service;
 
 // Imports
 
-
 import com.mparker.playlytics.dto.*;
 import com.mparker.playlytics.entity.*;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
@@ -10,7 +9,6 @@ import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.exception.ExistingResourceException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
-import jdk.jfr.Registered;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,7 +82,16 @@ public class NetworkService {
             boolean pendingRequest = connectionRequestRepository.existsBySenderAndRecipientOrSenderAndRecipient(registeredPlayer, peer, peer, registeredPlayer);
 
             if (peer == null || isConnection || blockExists || pendingRequest || Objects.equals(registeredPlayer.getId(), peer.getId())) {
-                throw new NotFoundException("No registered players available for connection by that filter.");
+                if (peer == null || blockExists) {
+                    throw new NotFoundException("No registered players available for connection by that filter.");
+                }
+                else if (isConnection) {
+                    throw new ExistingResourceException("You are already connected to this player!");
+                }
+                else {
+                    throw new ExistingResourceException("There is an outstanding connection request with that player");
+                }
+
             }
 
             else {
@@ -486,14 +493,20 @@ public class NetworkService {
     //<editor-fold desc = "Get Available GhostPlayers">
 
     @Transactional(readOnly = true)
-    public GhostPlayerResponseDTO getUnassociatedGhostPlayerByEmail(String identifierEmail, Long authUserId) throws CustomAccessDeniedException, NotFoundException{
+    public GhostPlayerResponseDTO getUnassociatedGhostPlayerByEmail(String identifierEmail, Long authUserId) throws CustomAccessDeniedException, NotFoundException, ExistingResourceException{
 
 
             GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail.replaceAll("\\s+", "").toLowerCase());
             boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(authUserId, ghostPlayer);
 
             if (ghostPlayer == null || isAssociate) {
-                throw new NotFoundException("No ghost players available for connection by that filter.");
+                if(ghostPlayer == null) {
+                    throw new NotFoundException("No guest players available for connection by that filter.");
+                }
+                else {
+                    throw new ExistingResourceException("You're already associated with this guest player!");
+                }
+
             }
 
             else {
@@ -501,6 +514,7 @@ public class NetworkService {
                 return new GhostPlayerResponseDTO(ghostPlayer.getId(), ghostPlayer.getFirstName(), ghostPlayer.getLastName(), ghostPlayer.getAvatar(), ghostPlayer.getIdentifierEmail(), ghostPlayer.getCreator().getId());
 
             }
+
         }
 
 

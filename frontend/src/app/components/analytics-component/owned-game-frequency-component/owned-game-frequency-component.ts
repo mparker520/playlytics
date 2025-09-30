@@ -25,6 +25,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   selectedOwnedGame: GameResponseDTO | null = null;
   selectedOwnedGameName: string | null = null;
+  barChartColors: string[] = [];
 
   selectedView: string = "topFive";
 
@@ -55,6 +56,35 @@ export class OwnedGameFrequencyComponent implements OnInit{
   }
   //</editor-fold>
 
+
+
+  buildColors(responseLength: number): void {
+       this.barChartColors = [];
+       const baseColors =  ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267']
+       const colorAllocation =  responseLength / 5;
+
+       if(responseLength == 1) {
+
+         function getRandomInt(min: number, max: number): number {
+           return Math.floor(Math.random() * (max - min + 1)) + min;
+         }
+
+         const random = getRandomInt(0, 4);
+
+         this.barChartColors.push(baseColors[random]);
+
+       }
+
+       else {
+         for(let i = 0; i < 5; i++) {
+           for (let j = 0; j < colorAllocation; j++)
+             this.barChartColors.push(baseColors[i]);
+
+         }
+       }
+
+}
+
   //<editor-fold desc="Chart Data">
   chartData: ChartData<'bar'> = {
     labels: [],
@@ -71,16 +101,19 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
     const params = this.buildParams();
 
-    this.analyticsService.getOwnedGameFrequency(params).subscribe({
-      next: (ownedGameFrequencyResponse: BasicAnalyticsResponseDto) => {
 
+
+    this.analyticsService.getOwnedGameFrequency(params).subscribe({
+      next: (winLossResponse: BasicAnalyticsResponseDto) => {
+
+        this.buildColors(winLossResponse.data.length);
 
         this.chartData = {
-          labels: ownedGameFrequencyResponse.labels,
+          labels: winLossResponse.labels,
           datasets: [{
-            data: ownedGameFrequencyResponse.data,
-            label: ownedGameFrequencyResponse.label ?? 'Play Rate',
-            backgroundColor: ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267'],
+            data: winLossResponse.data,
+            label: winLossResponse.label ?? 'Play Rate',
+            backgroundColor: this.barChartColors,
 
             barPercentage: 0.8,
             categoryPercentage: 1
@@ -98,11 +131,16 @@ export class OwnedGameFrequencyComponent implements OnInit{
   filterResults() {
 
 
+
     const params = this.buildParams();
 
 
     this.analyticsService.getOwnedGameFrequency(params).subscribe({
       next: (winLossResponse: BasicAnalyticsResponseDto) => {
+
+        this.buildColors(winLossResponse.data.length);
+
+
 
         if(this.selectedOwnedGame) {
           this.selectedOwnedGameName = this.selectedOwnedGame.title;
@@ -114,7 +152,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
           datasets: [{
             data: winLossResponse.data,
             label: winLossResponse.label ?? 'Win Rate',
-            backgroundColor:  ['#F25C54','#F27059', '#F4845F','#F79D65', '#F7B267']
+            backgroundColor: this.barChartColors,
           }
           ]
         }

@@ -5,13 +5,15 @@ import {GameResponseDTO} from '../../dtos/game-response-dto';
 import {OwnedGameFrequencyComponent} from './owned-game-frequency-component/owned-game-frequency-component';
 import {InventoryService} from '../../services/inventory-service';
 import {OwnedGameResponseDTO} from '../../dtos/owned-game-response-dto'
+import {PlayTrendsComponent} from './play-trends-component/play-trends-component';
 
 @Component({
   selector: 'app-analytics-component',
   standalone: true,
   imports: [
     WinLossComponent,
-    OwnedGameFrequencyComponent
+    OwnedGameFrequencyComponent,
+    PlayTrendsComponent
   ],
   templateUrl: './analytics-component.html',
   styleUrl: './analytics-component.css'

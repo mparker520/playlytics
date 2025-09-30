@@ -1,4 +1,15 @@
 <div class="flex w-full">
-<app-win-loss-component [playedGames]="playedGames"></app-win-loss-component>
-<app-owned-game-frequency-component [ownedGames]="ownedGames"></app-owned-game-frequency-component>
+
+<section >
+    <app-win-loss-component [playedGames]="playedGames"></app-win-loss-component>
+  </section>
+
+  <section>
+    <app-owned-game-frequency-component [ownedGames]="ownedGames"></app-owned-game-frequency-component>
+  </section>
+
+  <section>
+    <app-play-trends-component></app-play-trends-component>
+  </section>
+
 </div>

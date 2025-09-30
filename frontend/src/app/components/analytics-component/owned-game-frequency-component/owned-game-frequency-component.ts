@@ -5,6 +5,7 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
 import {AnalyticsService} from '../../../services/analytics-service';
 import {ChartData, ChartOptions} from 'chart.js';
 import {BasicAnalyticsResponseDto} from '../../../dtos/analytic-dtos/basic-analytics-response-dto';
+import {OwnedGameResponseDTO} from '../../../dtos/owned-game-response-dto';
 
 @Component({
   selector: 'app-owned-game-frequency-component',
@@ -20,10 +21,11 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   //<editor-fold desc="Constructor and Variables">
 
-  @Input() ownedGames: GameResponseDTO[]  = [];
+  @Input() ownedGames: OwnedGameResponseDTO[]  = [];
 
-  selectedGame: GameResponseDTO | null = null;
-  selectedGameName: string | null = null;
+  selectedOwnedGame: GameResponseDTO | null = null;
+  selectedOwnedGameName: string | null = null;
+
   selectedView: string = "topFive";
 
   constructor(private analyticsService: AnalyticsService) {
@@ -33,9 +35,22 @@ export class OwnedGameFrequencyComponent implements OnInit{
   //<editor-fold desc="Build Params">
   buildParams(): any {
 
-    return {
-      selectedView: this.selectedView
-    };
+    if (this.selectedView === "byGame")  {
+
+      return {
+        selectedView: this.selectedView,
+        selectedGameId: this.selectedOwnedGame?.gameId
+
+      }
+    }
+
+    else {
+      return {
+        selectedView: this.selectedView
+      };
+    }
+
+
 
   }
   //</editor-fold>
@@ -59,7 +74,6 @@ export class OwnedGameFrequencyComponent implements OnInit{
     this.analyticsService.getOwnedGameFrequency(params).subscribe({
       next: (ownedGameFrequencyResponse: BasicAnalyticsResponseDto) => {
 
-        console.log(ownedGameFrequencyResponse);
 
         this.chartData = {
           labels: ownedGameFrequencyResponse.labels,
@@ -85,13 +99,13 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
 
     const params = this.buildParams();
-    console.log(params);
+
 
     this.analyticsService.getOwnedGameFrequency(params).subscribe({
       next: (winLossResponse: BasicAnalyticsResponseDto) => {
 
-        if(this.selectedGame) {
-          this.selectedGameName = this.selectedGame.title;
+        if(this.selectedOwnedGame) {
+          this.selectedOwnedGameName = this.selectedOwnedGame.title;
         }
 
 
@@ -126,6 +140,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
     scales: {
       x: {
         beginAtZero: true,
+        suggestedMax: 5,
         ticks: {
           autoSkip: false,
           stepSize: 1,

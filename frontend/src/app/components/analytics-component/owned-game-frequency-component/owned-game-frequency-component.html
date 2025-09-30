@@ -41,10 +41,25 @@
         <option value="topFive">Top 5</option>
         <option value="bottomFive">Bottom 5</option>
         <option value="all">All</option>
+        <option value="byGame">By Game</option>
 
       </select>
 
     </div>
+
+    @if(selectedView === "byGame") {
+      <div class="flex flex-col w-8/12 pt-2 mx-auto">
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+                [(ngModel)]="selectedOwnedGame" (ngModelChange)="filterResults()">
+          <option [ngValue]="null">Filter by Game</option>
+          @for(ownedGame of ownedGames; track ownedGame.gameId){
+            <option [ngValue]=ownedGame>{{ ownedGame.gameName }}</option>
+          }
+        </select>
+
+      </div>
+    }
+
 
   </div>
 

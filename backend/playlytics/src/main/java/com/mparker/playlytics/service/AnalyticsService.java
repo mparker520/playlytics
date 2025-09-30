@@ -45,7 +45,7 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Owned Game Frequency">
 
-    public BasicAnalyticsResponseDTO getOwnedGameFrequency(Long authUserId, String selectedView) {
+    public BasicAnalyticsResponseDTO getOwnedGameFrequency(Long authUserId, String selectedView, Long selectedGameId) {
 
         List<String> labels = List.of();
         List<Long> data = List.of();
@@ -74,6 +74,16 @@ public class AnalyticsService {
 
             labels = rows.stream().map(r -> r.getTitle()).toList();
             data = rows.stream().map(r -> r.getPlayCount()).toList();
+
+        }
+
+        if (selectedView.equals("byGame")) {
+            if (selectedGameId != null) {
+                OwnedGameFrequencyProjection row = analyticsRepository.getOwnedGameFrequencyByName(authUserId, selectedGameId);
+
+                labels = List.of(row.getTitle());
+                data = List.of(row.getPlayCount());
+            }
 
         }
 

@@ -42,7 +42,7 @@ export class AccountCreationComponent {
     this.accountCreationService.createAccount(registeredPlayerDTO).subscribe({
 
         next: (response) => {
-          console.log('Account Created');
+
           this.router.navigate(['/login']);
         },
         error: (error: any) => {

@@ -46,7 +46,7 @@ export class ConfirmedConnectionsComponent {
 
   triggerConnectionLookup(searchConnectionBox: string) {
     this.filteredConnections = this.connections.filter(connections => {
-      console.log(connections.displayName + " " + searchConnectionBox);
+
         const fullName = (connections.firstName + " " + connections.lastName).toLowerCase();
         return connections.loginEmail.toLowerCase().includes(searchConnectionBox.toLowerCase()) ||
           fullName.toLowerCase().includes(searchConnectionBox.toLowerCase()) || connections.displayName.toLowerCase().includes(searchConnectionBox.toLowerCase());

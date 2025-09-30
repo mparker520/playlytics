@@ -111,8 +111,6 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
   filterResults() {
 
 
-    console.log(this.selectedGame)
-    console.log(this.selectedGameName)
 
     const params = this.buildParams();
 

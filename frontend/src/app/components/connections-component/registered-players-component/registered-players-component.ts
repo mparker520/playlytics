@@ -77,7 +77,7 @@ export class RegisteredPlayersComponent implements OnInit {
       next: (response: void) => {
         this.networkService.getAllConnections().subscribe({
           next: (updateResponse: RegisteredPlayerResponseDTO[]) => {
-            console.log(updateResponse);
+
             this.connections = updateResponse;
           },
           error: (error: any) => console.error("fail", error)

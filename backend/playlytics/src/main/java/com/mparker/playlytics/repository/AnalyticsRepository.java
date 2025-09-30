@@ -51,6 +51,31 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
     List<OwnedGameFrequencyProjection> getOwnedGameFrequencyAll(@Param ("playerId") Long authUserId);
     //</editor-fold>
 
+    //<editor-fold desc="Get Owned Game Frequency by Name">
+    @Query (value = """
+            SELECT bg.game_title AS title, COALESCE(COUNT(gps.game_id), 0) AS playCount
+					FROM owned_games AS og
+					JOIN board_games AS bg ON og.game_id = bg.id
+					LEFT JOIN game_play_sessions AS gps ON gps.game_id = bg.id
+					LEFT JOIN session_participants AS sp 
+										    ON gps.id = sp.game_play_session_id
+										    AND sp.player_id = :playerId
+					WHERE og.owner_id = :playerId
+										AND og.game_id = :gameId
+					GROUP BY bg.game_title
+					ORDER BY playCount DESC
+
+            """,
+            nativeQuery = true
+    )
+
+    OwnedGameFrequencyProjection getOwnedGameFrequencyByName(@Param ("playerId") Long authUserId, @Param("gameId") Long gameId);
+    //</editor-fold>
+
+
+
+
+
     //<editor-fold desc="Get Top 10 Owned Game Frequency">
     @Query (value = """
             SELECT sub.title AS title, sub.playCount AS playCount

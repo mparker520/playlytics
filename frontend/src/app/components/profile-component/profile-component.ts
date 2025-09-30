@@ -32,7 +32,7 @@ constructor(private registeredPlayerService: RegisteredPlayerService) {
 ngOnInit(): void {
   this.registeredPlayerService.getSelf().subscribe({
     next: (response: RegisteredPlayerResponseDTO) => {
-      console.log(response)
+
       this.profileInformation = response;
     },
     error: (error: any) => console.error("fail", error)

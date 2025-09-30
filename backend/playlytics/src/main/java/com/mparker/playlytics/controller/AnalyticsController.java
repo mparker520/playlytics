@@ -62,6 +62,29 @@ public class AnalyticsController {
     //</editor-fold>
 
 
+    //<editor-fold desc = "Play Trends">
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/play-trends")
+    public ResponseEntity<BasicAnalyticsResponseDTO> getPlayTrends(
+            @AuthenticationPrincipal CustomUserDetails principal,
+            @RequestParam(required = true) String selectedGameView,
+            @RequestParam(required = true) String selectedGranularity,
+            @RequestParam(required = true) Long selectedStartingYear,
+            @RequestParam(required = true) Long selectedEndingYear,
+            @RequestParam(required = false) Long selectedGameId,
+            @RequestParam(required = false) Long selectedGame1Id,
+            @RequestParam(required = false) Long selectedGame2Id)  {
+
+
+        BasicAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGameView, selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGameId, selectedGame1Id, selectedGame2Id);
+        return ResponseEntity.ok(playTrendsResponseDTO);
+
+    }
+
+    //</editor-fold>
+
+
     //</editor-fold>
 
 }

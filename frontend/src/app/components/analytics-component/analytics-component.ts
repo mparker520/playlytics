@@ -25,20 +25,32 @@ export class AnalyticsComponent implements OnInit {
 
   playedGames: GameResponseDTO[] = [];
   ownedGames: OwnedGameResponseDTO[] = [];
+  // TODO: FIX HARDCODED YEARS
+  rangeOfYears: number[] = [2020, 2021, 2022, 2023, 2024, 2025];
 
   ngOnInit() {
 
     this.gamePlaySessionService.getAllPlayedGames().subscribe({
-      next: (response: GameResponseDTO[]) => {
-        this.playedGames = response;
+      next: (playedGameResponse: GameResponseDTO[]) => {
+        this.playedGames = playedGameResponse;
 
       },
       error: (error: any) => console.error("fail", error)
     })
 
+    //<editor-fold desc="TODO: FIX THIS">
+   // this.gamePlaySessionService.getRangeOfYears().subscribe({
+     // next: (rangeOfYearsResponse: number[]) => {
+       // this.rangeOfYears = rangeOfYearsResponse;
+
+      //},
+     // error: (error: any) => console.error("fail", error)
+   // })
+    //</editor-fold>
+
     this.inventoryService.getInventory().subscribe({
-      next: (response: OwnedGameResponseDTO[]) => {
-        this.ownedGames = response;
+      next: (inventoryResponse: OwnedGameResponseDTO[]) => {
+        this.ownedGames = inventoryResponse;
 
       },
       error: (error: any) => console.error("fail", error)

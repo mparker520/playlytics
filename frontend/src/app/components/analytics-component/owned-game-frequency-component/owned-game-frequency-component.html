@@ -12,9 +12,12 @@
 
 
     @if(selectedView === "all") {
-      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games</h2>
+      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Owned Game Play Frequency</h2>
     }
 
+    @if(selectedView === "byGame") {
+      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGameName}} Play Count</h2>
+    }
 
 
   </section>

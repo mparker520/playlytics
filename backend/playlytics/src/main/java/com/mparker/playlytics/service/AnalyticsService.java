@@ -1,16 +1,12 @@
 package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.dto.analytics.OwnedGameFrequencyProjection;
-import com.mparker.playlytics.dto.analytics.WinLossProjection;
-import com.mparker.playlytics.dto.analytics.BasicAnalyticsResponseDTO;
+import com.mparker.playlytics.dto.analytics.*;
 import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.repository.AnalyticsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import java.util.*;
 
 
 @Service
@@ -95,30 +91,64 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Play Trends">
 
-    public BasicAnalyticsResponseDTO getPlayTrends(Long authUserId, String selectedGameView, String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
+    public AdvancedAnalyticsResponseDTO getPlayTrends(Long authUserId, String selectedGameView, String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
 
+        List<PlayTrendProjection> rows = List.of();
         List<String> labels = List.of();
-        List<Long> data = List.of();
+        Map<String, Integer> labelIndexMap = new HashMap<>();
+
+        Map<String, List<Integer>> dataSets = new HashMap<>();
+
 
         if (selectedGranularity.equals("month")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getPlayTrendsByGameGranularityMonth(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
+            rows = analyticsRepository.getPlayTrendsByGameGranularityMonth(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
+            labels = rows.stream().map(r -> (r.getMonthPlayed() + "-" + r.getYearPlayed())).toList();
 
-            labels = rows.stream().map(r -> r.getTitle()).toList();
-            data = rows.stream().map(r -> r.getPlayCount()).toList();
+            for (int i = 0; i < labels.size(); i++) {
+                labelIndexMap.put(labels.get(i), i);
+            }
+
+            List<String> gameNames = rows.stream().map(r -> (r.getTitle())).toList();
+
+            for(String gameName : gameNames) {
+                dataSets.put(gameName, new ArrayList<>(Collections.nCopies(labels.size(), 0)));
+            }
+
+            for (PlayTrendProjection row : rows) {
+                int index = labelIndexMap.get(row.getMonthPlayed() + "-" + row.getYearPlayed());
+                List<Integer> gameData = dataSets.get(row.getTitle());
+                gameData.set(index, row.getPlayCount().intValue());
+            }
+
+
 
         }
 
         if (selectedGranularity.equals("year")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getPlayTrendsByGameGranularityYear(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
+            rows = analyticsRepository.getPlayTrendsByGameGranularityYear(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
+            labels = rows.stream().map(r -> (r.getYearPlayed())).toList();
 
-            labels = rows.stream().map(r -> r.getTitle()).toList();
-            data = rows.stream().map(r -> r.getPlayCount()).toList();
+            for (int i = 0; i < labels.size(); i++) {
+                labelIndexMap.put(labels.get(i), i);
+            }
+
+            List<String> gameNames = rows.stream().map(r -> (r.getTitle())).toList();
+
+            for(String gameName : gameNames) {
+                dataSets.put(gameName, new ArrayList<>(Collections.nCopies(labels.size(), 0)));
+            }
+
+            for (PlayTrendProjection row : rows) {
+                int index = labelIndexMap.get(row.getYearPlayed());
+                List<Integer> gameData = dataSets.get(row.getTitle());
+                gameData.set(index, row.getPlayCount().intValue());
+            }
+
 
         }
 
 
-
-        return new BasicAnalyticsResponseDTO("Owned Game Play Frequency", labels, data);
+        return new AdvancedAnalyticsResponseDTO("Play Trends", labels, dataSets);
 
     }
 

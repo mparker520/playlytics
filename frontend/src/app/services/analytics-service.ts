@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {List} from 'postcss/lib/list';
+import {AdvancedAnalyticsResponseDTO} from '../dtos/analytic-dtos/advanced-analytics-response-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,10 @@ export class AnalyticsService {
   //</editor-fold>
 
   //<editor-fold desc="Get Play Trends">
-  public getPlayTrends(params: any): Observable<BasicAnalyticsResponseDto> {
-    console.log(params)
-    return this.http.get<BasicAnalyticsResponseDto>(`${environment.apiUrl}/play-trends`, {params, withCredentials: true})
+  public getPlayTrends(params: any): Observable<AdvancedAnalyticsResponseDTO> {
+    console.log(this.http.get<AdvancedAnalyticsResponseDTO>(`${environment.apiUrl}/play-trends`, {params, withCredentials: true}))
+    return this.http.get<AdvancedAnalyticsResponseDTO>(`${environment.apiUrl}/play-trends`, {params, withCredentials: true})
+
   }
   //</editor-fold>
 

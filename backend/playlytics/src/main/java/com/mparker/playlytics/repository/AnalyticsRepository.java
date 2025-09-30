@@ -3,6 +3,7 @@ package com.mparker.playlytics.repository;
 // Imports
 import com.mparker.playlytics.dto.analytics.OwnedGameFrequencyProjection;
 import com.mparker.playlytics.dto.analytics.WinLossProjection;
+import com.mparker.playlytics.dto.analytics.PlayTrendProjection;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.enums.ScoringModel;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -133,8 +134,8 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
 
     @Query (value = """
 
-            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS year_played,  
-                            EXTRACT(MONTH FROM gps.session_date_time) AS month_played,
+            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS yearPlayed,  
+                            EXTRACT(MONTH FROM gps.session_date_time) AS monthPlayed,
                             bg.game_title AS title, 
                             COUNT(gps.game_id) AS playCount
                         FROM session_participants AS sp
@@ -142,19 +143,19 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
                         JOIN board_games AS bg ON gps.game_id = bg.id
                             WHERE sp.player_id = :playerId
                             AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
-                            AND (year_played  >= :startingYear   AND year_played <= :endingYear)       
-                        GROUP BY year_played, 
-                                             month_played,
+                            AND (yearPlayed  >= :startingYear   AND yearPlayed <= :endingYear)       
+                        GROUP BY yearPlayed, 
+                                             monthPlayed,
                                              bg.game_title 
-                        ORDER BY year_played ASC, 
-                                             month_played ASC
+                        ORDER BY yearPlayed ASC, 
+                                             monthPlayed ASC,
                                              bg.game_title ASC	
                                 
             """,
             nativeQuery = true
     )
 
-    List<OwnedGameFrequencyProjection> getPlayTrendsByGameGranularityMonth(
+    List<PlayTrendProjection> getPlayTrendsByGameGranularityMonth(
             @Param ("playerId") Long authUserId,
             @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
             @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
@@ -166,7 +167,7 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
 
     @Query (value = """
 
-            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS year_played, 
+            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS yearPlayed, 
                             bg.game_title AS title, 
                             COUNT(gps.game_id) AS playCount
                         FROM session_participants AS sp
@@ -174,18 +175,17 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
                         JOIN board_games AS bg ON gps.game_id = bg.id
                             WHERE sp.player_id = :playerId
                             AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
-                            AND (year_played  >= :startingYear   AND year_played <= :endingYear) 
-                        GROUP BY year_played, 
+                            AND (yearPlayed  >= :startingYear   AND yearPlayed <= :endingYear) 
+                        GROUP BY yearPlayed, 
                                              bg.game_title 
-                        ORDER BY year_played ASC, 
-
+                        ORDER BY yearPlayed ASC, 
                                              bg.game_title ASC	
                                 
             """,
             nativeQuery = true
     )
 
-    List<OwnedGameFrequencyProjection> getPlayTrendsByGameGranularityYear(
+    List<PlayTrendProjection> getPlayTrendsByGameGranularityYear(
             @Param ("playerId") Long authUserId,
             @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
             @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);

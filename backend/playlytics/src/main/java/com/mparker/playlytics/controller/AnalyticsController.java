@@ -2,6 +2,7 @@ package com.mparker.playlytics.controller;
 
 // Imports
 
+import com.mparker.playlytics.dto.analytics.AdvancedAnalyticsResponseDTO;
 import com.mparker.playlytics.dto.analytics.BasicAnalyticsResponseDTO;
 import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.security.CustomUserDetails;
@@ -66,7 +67,7 @@ public class AnalyticsController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/play-trends")
-    public ResponseEntity<BasicAnalyticsResponseDTO> getPlayTrends(
+    public ResponseEntity<AdvancedAnalyticsResponseDTO> getPlayTrends(
             @AuthenticationPrincipal CustomUserDetails principal,
             @RequestParam(required = true) String selectedGameView,
             @RequestParam(required = true) String selectedGranularity,
@@ -76,7 +77,7 @@ public class AnalyticsController {
             @RequestParam(required = true) Long selectedGame2Id)  {
 
 
-        BasicAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGameView, selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGame1Id, selectedGame2Id);
+        AdvancedAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGameView, selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGame1Id, selectedGame2Id);
         return ResponseEntity.ok(playTrendsResponseDTO);
 
     }

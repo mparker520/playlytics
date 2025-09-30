@@ -40,7 +40,7 @@ export class GamePlaySessionService {
   }
   //</editor-fold>
 
-  //<editor-fold desc="Get Game Play Sessions">
+  //<editor-fold desc="Get Pending Game Play Sessions">
   public getPendingGamePlaySessions() : Observable<GamePlaySessionResponseDTO[]> {
     return this.http.get<GamePlaySessionResponseDTO[]>(`${environment.apiUrl}/pending-game-play-sessions`,  {withCredentials: true});
   }

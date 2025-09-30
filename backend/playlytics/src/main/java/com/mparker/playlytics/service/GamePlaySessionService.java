@@ -160,9 +160,12 @@ public class GamePlaySessionService {
 
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-        RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("No registered player found"));
+        //RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("No registered player found"));
 
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(registeredPlayer.getId());
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
+        if (ghostPlayer == null) {
+            throw new NotFoundException("No Linked Ghost player found");
+        }
         Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
 
         for (SessionParticipant sessionParticipant : associatedSessionParticipants) {

@@ -24,7 +24,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   selectedGame: GameResponseDTO | null = null;
   selectedGameName: string | null = null;
-  selectedView: string = "topTen";
+  selectedView: string = "topFive";
 
   constructor(private analyticsService: AnalyticsService) {
   }

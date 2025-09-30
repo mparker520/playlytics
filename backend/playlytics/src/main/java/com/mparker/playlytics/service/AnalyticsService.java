@@ -59,8 +59,8 @@ public class AnalyticsService {
         }
 
 
-        if (selectedView.equals("topTen")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyTopTen(authUserId);
+        if (selectedView.equals("topFive")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyTopFive(authUserId);
 
             labels = rows.stream().map(r -> r.getTitle()).toList();
             data = rows.stream().map(r -> r.getPlayCount()).toList();
@@ -69,8 +69,8 @@ public class AnalyticsService {
 
 
 
-        if (selectedView.equals("bottomTen")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyBottomTen(authUserId);
+        if (selectedView.equals("bottomFive")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyBottomFive(authUserId);
 
             labels = rows.stream().map(r -> r.getTitle()).toList();
             data = rows.stream().map(r -> r.getPlayCount()).toList();

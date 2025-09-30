@@ -15,7 +15,7 @@ export class OwnedGamesListComponent{
 
 
   @Input() ownedGames: OwnedGameResponseDTO[] = [];
-
+  expanded: boolean = false;
   filteredOwnedGames?: OwnedGameResponseDTO[];
 
   ngOnChanges(changes: SimpleChanges) {
@@ -31,13 +31,15 @@ export class OwnedGamesListComponent{
   }
 
   triggerInventoryLookup(searchInventoryBox: string) {
+
   this.filteredOwnedGames = this.ownedGames.filter(ownedGame =>
     ownedGame.gameName.toLowerCase().includes(searchInventoryBox.toLowerCase())
   );
 }
 
-triggerFilterClear() {
-    this.filteredOwnedGames = this.ownedGames;
-}
+
+  onExpandChange() {
+    this.expanded = !this.expanded;
+  }
 
 }

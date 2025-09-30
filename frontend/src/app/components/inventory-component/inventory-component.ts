@@ -35,7 +35,7 @@ export class InventoryComponent implements OnInit{
   //</editor-fold>
 
   //<editor-fold desc = "On Initiate">
-// TODO: Fix filtering of Games
+
   ngOnInit() : void {
 
     this.inventoryService.getInventory().subscribe({

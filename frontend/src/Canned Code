@@ -35,7 +35,7 @@ onFilterNetworkChange() {
 
 
 
-  /* onTeamRankChange(teamNumber: number): void {
+onTeamRankChange(teamNumber: number): void {
 
    for(const sessionParticipant of this.sessionParticipants) {
 
@@ -45,7 +45,7 @@ onFilterNetworkChange() {
       }
 (ngModelChange)="onTeamRankChange(i)"
    }
-  } */
+  }
 
  /* onTeamAssociationChange(sessionParticipantIndex: number, sessionParticipantId: number): void {
 

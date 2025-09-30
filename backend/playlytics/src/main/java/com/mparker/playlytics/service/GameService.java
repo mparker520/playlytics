@@ -28,8 +28,13 @@ public class GameService {
 
     public Set<GameResponseDTO> findByTitle(String title) {
 
-        Set <Game> gameSet = gameRepository.findByGameTitleContainingOrderByGameTitle(title);
+        Set <Game> gameSet = gameRepository.findByGameTitleStartingWithOrderByGameTitle(title);
         Set<GameResponseDTO> gameResponseDTOSet = new HashSet<>();
+
+        if (gameSet.isEmpty()) {
+            gameSet = gameRepository.findByGameTitleContainingIgnoreCase(title);
+        }
+
 
         for (Game game : gameSet) {
 

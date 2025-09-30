@@ -72,10 +72,6 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
     OwnedGameFrequencyProjection getOwnedGameFrequencyByName(@Param ("playerId") Long authUserId, @Param("gameId") Long gameId);
     //</editor-fold>
 
-
-
-
-
     //<editor-fold desc="Get Top 10 Owned Game Frequency">
     @Query (value = """
             SELECT sub.title AS title, sub.playCount AS playCount
@@ -124,7 +120,78 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
     )
 
     List<OwnedGameFrequencyProjection> getOwnedGameFrequencyBottomFive(@Param ("playerId") Long authUserId);
+
     //</editor-fold>
+
+    //</editor-fold>
+
+
+    //<editor-fold desc="Play Trends">
+
+
+    //<editor-fold desc="Play Trends By Game Granularity Month">
+
+    @Query (value = """
+
+            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS year_played,  
+                            EXTRACT(MONTH FROM gps.session_date_time) AS month_played,
+                            bg.game_title AS title, 
+                            COUNT(gps.game_id) AS playCount
+                        FROM session_participants AS sp
+                        JOIN game_play_sessions AS gps ON sp.game_play_session_id = gps.id
+                        JOIN board_games AS bg ON gps.game_id = bg.id
+                            WHERE sp.player_id = :playerId
+                            AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
+                            AND (year_played  >= :startingYear   AND year_played <= :endingYear)       
+                        GROUP BY year_played, 
+                                             month_played,
+                                             bg.game_title 
+                        ORDER BY year_played ASC, 
+                                             month_played ASC
+                                             bg.game_title ASC	
+                                
+            """,
+            nativeQuery = true
+    )
+
+    List<OwnedGameFrequencyProjection> getPlayTrendsByGameGranularityMonth(
+            @Param ("playerId") Long authUserId,
+            @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
+            @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
+    //</editor-fold>
+
+
+
+    //<editor-fold desc="Play Trends By Game Granularity Year">
+
+    @Query (value = """
+
+            SELECT EXTRACT(YEAR FROM gps.session_date_time) AS year_played, 
+                            bg.game_title AS title, 
+                            COUNT(gps.game_id) AS playCount
+                        FROM session_participants AS sp
+                        JOIN game_play_sessions AS gps ON sp.game_play_session_id = gps.id
+                        JOIN board_games AS bg ON gps.game_id = bg.id
+                            WHERE sp.player_id = :playerId
+                            AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
+                            AND (year_played  >= :startingYear   AND year_played <= :endingYear) 
+                        GROUP BY year_played, 
+                                             bg.game_title 
+                        ORDER BY year_played ASC, 
+
+                                             bg.game_title ASC	
+                                
+            """,
+            nativeQuery = true
+    )
+
+    List<OwnedGameFrequencyProjection> getPlayTrendsByGameGranularityYear(
+            @Param ("playerId") Long authUserId,
+            @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
+            @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
+    //</editor-fold>
+
+
     //</editor-fold>
 
 }

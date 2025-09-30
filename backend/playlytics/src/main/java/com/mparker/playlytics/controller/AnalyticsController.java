@@ -72,12 +72,11 @@ public class AnalyticsController {
             @RequestParam(required = true) String selectedGranularity,
             @RequestParam(required = true) Long selectedStartingYear,
             @RequestParam(required = true) Long selectedEndingYear,
-            @RequestParam(required = false) Long selectedGameId,
-            @RequestParam(required = false) Long selectedGame1Id,
-            @RequestParam(required = false) Long selectedGame2Id)  {
+            @RequestParam(required = true) Long selectedGame1Id,
+            @RequestParam(required = true) Long selectedGame2Id)  {
 
 
-        BasicAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGameView, selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGameId, selectedGame1Id, selectedGame2Id);
+        BasicAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGameView, selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGame1Id, selectedGame2Id);
         return ResponseEntity.ok(playTrendsResponseDTO);
 
     }

@@ -95,45 +95,24 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Play Trends">
 
-    public BasicAnalyticsResponseDTO getPlayTrends(Long authUserId, String selectedGameView, String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGameId, Long selectedGame1Id, Long selectedGame2Id) {
+    public BasicAnalyticsResponseDTO getPlayTrends(Long authUserId, String selectedGameView, String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
 
         List<String> labels = List.of();
         List<Long> data = List.of();
 
-        if (selectedGameView.equals("all")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyAll(authUserId);
+        if (selectedGranularity.equals("month")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getPlayTrendsByGameGranularityMonth(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
 
             labels = rows.stream().map(r -> r.getTitle()).toList();
             data = rows.stream().map(r -> r.getPlayCount()).toList();
 
         }
 
-
-        if (selectedGameView.equals("topFive")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyTopFive(authUserId);
-
-            labels = rows.stream().map(r -> r.getTitle()).toList();
-            data = rows.stream().map(r -> r.getPlayCount()).toList();
-
-        }
-
-
-
-        if (selectedGameView.equals("bottomFive")) {
-            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getOwnedGameFrequencyBottomFive(authUserId);
+        if (selectedGranularity.equals("year")) {
+            List<OwnedGameFrequencyProjection> rows = analyticsRepository.getPlayTrendsByGameGranularityYear(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
 
             labels = rows.stream().map(r -> r.getTitle()).toList();
             data = rows.stream().map(r -> r.getPlayCount()).toList();
-
-        }
-
-        if (selectedGameView.equals("byGame")) {
-            if (selectedGameId != null) {
-                OwnedGameFrequencyProjection row = analyticsRepository.getOwnedGameFrequencyByName(authUserId, selectedGameId);
-
-                labels = List.of(row.getTitle());
-                data = List.of(row.getPlayCount());
-            }
 
         }
 

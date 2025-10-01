@@ -119,41 +119,6 @@ my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
 
         </div>
 
-      <!-- @if(scoringModel===ScoringModelEnum.TEAM) {
-        <div class="p-4 m-2 bg-gradient-to-br from-brand3 to-brand2 rounded-lg shadow-md" id="teamSection">
-
-          <div class="flex flex-col">
-            <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full"
-                    [(ngModel)]="numberTeams" (ngModelChange)="onNumTeamChange()"  type="number" name="numberTeams" id="numberTeams" min="2" max="50">
-
-            <label class="pt-2 block text-sm font-medium text-gray-700" for="numberTeams">Number of Teams</label>
-          </div>
-            @for(sessionTeam of sessionTeams; let i = $index; track i) {
-
-              <div class="flex py-2 justify-start space-x-4">
-
-                <div >
-                  <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full"
-                         [(ngModel)]="sessionTeam.teamName" type="text" [name]="'nameForTeam' + (i + 1)" [id]="'nameForTeam' + (i + 1)" placeholder="Enter Team Name">
-                  <label class="pt-2 block text-sm font-medium text-gray-700" [for]="'nameForTeam' + i">{{  'Team ' + (i + 1) + ' Name:' }}</label>
-                </div>
-
-              <div class="flex flex-col">
-              <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand4 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-lg text-center"
-                     [(ngModel)]="sessionTeam.result"  type="number" [name]="'rankingForTeam' + (i + 1)" [id]="'rankingForTeam' + (i + 1)" min="1" [max]="numberTeams">
-                <label class="pt-2 block text-sm font-medium text-gray-700" [for]="'rankingForTeam' + i">{{  'Team ' + (i + 1) + ' Place:' }}</label>
-              </div>
-
-              </div>
-            }
-
-
-
-        </div>
-
-        } -->
-
-
 
           @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
             <div class="p-4 m-2 bg-gradient-to-br from-brand3 to-brand2 rounded-lg shadow-md flex flex-col" id="cooperativeResultSection">

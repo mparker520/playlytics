@@ -24,10 +24,19 @@ export class GamePlaySessionListComponent{
   selectedGame: GameResponseDTO | null = null;
 
   @Input() playedGames: GameResponseDTO[]  = [];
+  @Input() filteredPlayedGames: GameResponseDTO[] = [];
   @Input() playSessions: GamePlaySessionResponseDTO[] = [];
 
   @Output() delete =  new EventEmitter<number>;
   @Output() sessionLookup = new EventEmitter<GamePlaySessionSearchParamsDTO>();
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['playedGames'] && this.playedGames) {
+      this.filteredPlayedGames = this.playedGames;
+    }
+  }
+
 
   //<editor-fold desc="On Expand Change">
   onExpandChange() {
@@ -42,10 +51,11 @@ export class GamePlaySessionListComponent{
   //</editor-fold>
 
 
-  //<editor-fold desc="Submit">
+  //<editor-fold desc="Look Up Sessions">
 
   triggerSessionLookup(form: NgForm) {
 
+    console.log("form pressed")
     this.sessionSearch = true;
 
 
@@ -53,11 +63,22 @@ export class GamePlaySessionListComponent{
 
     }
 
-
     this.sessionLookup.emit(gamePlaySessionSearchParams)
-    form.resetForm();
+
+
   }
   //</editor-fold>
+
+  filterSessionsByGame(searchGameBox: string) {
+
+    this.selectedGame = this.filteredPlayedGames[0];
+
+    this.filteredPlayedGames = this.playedGames.filter(playedGames => {
+        return playedGames.title.toLowerCase().includes(searchGameBox.toLowerCase());
+      }
+
+    );
+  }
 
 
 }

@@ -14,50 +14,70 @@ my-6 px-6 shadow-md w-10/12 mx-auto navBar:w-full">
 
       <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
         <img ngSrc="assets/ChevronUp.png" alt="Up Chevron" width="40" height="40">
-        <h3 class="text-2xl font-bold  pt-1 text-brand4">Past Game Play Sessions</h3>
+        <h3 class="text-2xl font-bold  pt-1 text-brand4">Past Game Play Sessions Report</h3>
       </div>
 
+    <ng-form autocomplete="off" #gamePlaySessionForm="ngForm" (ngSubmit)="triggerSessionLookup(gamePlaySessionForm)">
 
-    <section class="flex flex-row items-start pb-6 mt-4">
-      <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2  shadow-md table-fixed space-y-4 w-full  mx-0">
-        <colgroup>
-          <col class="w-auto">
-          <col class="w-auto">
-          <col class="w-auto">
-          <col class="w-[100px]">
-        </colgroup>
+      <div class="flex flex-col w-8/12 pt-2 ">
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+                [(ngModel)]="selectedGame">
 
-        <thead class="bg-brand2">
-        <tr>
-          <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
-          <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Date</th>
-          <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Players</th>
-          <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
-        </tr>
-        </thead>
-
-        <tbody>
-          @for(playSession of playSessions; track playSession.id) {
-            <tr>
-              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ playSession.gameName }}</td>
-              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{  playSession.sessionDateTime | date:'medium'}}</td>
-              <td class="border-2 border-brand4 px-4  text-gray-700 truncate"><ul>@for (sessionParticipant of playSession.sessionParticipantDetails; track sessionParticipant.id) {
-                <li>{{sessionParticipant.firstName + " " + sessionParticipant.lastName + " | " + sessionParticipant.identifier}}</li>
-              }</ul>
-                </td>
-              <td class="border-2 border-brand4 px-4 max-w-[100px]">
-                <div class="flex justify-center">
-                  <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(playSession.id)"  id={{playSession.id}}>
-                </div>
-              </td>
-            </tr>
-
+          @for(playedGame of playedGames; track playedGame.gameId){
+            <option [ngValue]=playedGame>{{ playedGame.title }}</option>
           }
-        </tbody>
+        </select>
 
-      </table>
-    </section>
-  }
+      </div>
+
+      <button type="submit" class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+              (click)="triggerSessionLookup()">Run Game Play Session Report</button>
+
+
+    </ng-form>
+
+      @if(sessionSearch) {
+      <section class="flex flex-row items-start pb-6 mt-4">
+        <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2  shadow-md table-fixed space-y-4 w-full  mx-0">
+          <colgroup>
+            <col class="w-[250px]">
+            <col class="w-auto">
+            <col class="w-auto">
+            <col class="w-[100px]">
+          </colgroup>
+
+          <thead class="bg-brand2">
+          <tr>
+            <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 max-w-[250px] text-white">Date</th>
+            <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
+            <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Players</th>
+            <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
+          </tr>
+          </thead>
+
+          <tbody>
+            @for(playSession of playSessions; track playSession.id) {
+              <tr>
+                <td class="border-2 border-brand4 px-4   max-w-[250px] text-gray-700 truncate">{{  playSession.sessionDateTime | date: "medium"}}</td>
+                <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{ playSession.gameName }}</td>
+                <td class="border-2 border-brand4 px-4  text-gray-700 truncate"><ul>@for (sessionParticipant of playSession.sessionParticipantDetails; track sessionParticipant.id) {
+                  <li>{{sessionParticipant.firstName + " " + sessionParticipant.lastName + " | " + sessionParticipant.identifier}}</li>
+                }</ul>
+                  </td>
+                <td class="border-2 border-brand4 px-4 max-w-[100px]">
+                  <div class="flex justify-center">
+                    <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(playSession.id)"  id={{playSession.id}}>
+                  </div>
+                </td>
+              </tr>
+
+            }
+          </tbody>
+
+        </table>
+      </section>
+      }
+    }
   }
 
 

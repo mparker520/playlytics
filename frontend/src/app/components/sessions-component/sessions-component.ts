@@ -10,6 +10,7 @@ import {PlayerResponseDTO} from '../../dtos/PlayerResponseDTO';
 import {NetworkService} from '../../services/network-service';
 import {RegisteredPlayerService} from '../../services/registered-player-service';
 import {PendingGamePlaySessionsComponent} from './pending-game-play-sessions-component/pending-game-play-sessions-component';
+import {GamePlaySessionSearchParamsDTO} from '../../dtos/game-play-session-search-params-dto';
 
 @Component({
   selector: 'app-sessions-component',
@@ -26,8 +27,8 @@ export class SessionsComponent implements OnInit{
 
   //<editor-fold desc="Constructor">
 
+  playedGames: GameResponseDTO[] = [];
   playSessions: GamePlaySessionResponseDTO[] = [];
-  associatedPlaySessions: GamePlaySessionResponseDTO[] = [];
   pendingPlaySessions: GamePlaySessionResponseDTO[] = [];
   games: GameResponseDTO[] = [];
   network: PlayerResponseDTO[] = [];
@@ -42,9 +43,17 @@ export class SessionsComponent implements OnInit{
 
   ngOnInit() : void {
 
-  this.gamePlaySessionService.getGamePlaySessions().subscribe({
+    this.gamePlaySessionService.getGamePlaySessions().subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+    this.gamePlaySessionService.getAllPlayedGames().subscribe({
+      next: (playedGameResponse: GameResponseDTO[]) => {
+        this.playedGames = playedGameResponse;
+
       },
       error: (error: any) => console.error("fail", error)
     })
@@ -116,7 +125,7 @@ export class SessionsComponent implements OnInit{
   //</editor-fold>
 
 
-
+  //<editor-fold desc="Handle Session Accept">
   handleSessionAccept(id: number) {
     this.gamePlaySessionService.acceptGamePlaySession(id).subscribe({
       next: (response: void) => {
@@ -137,6 +146,19 @@ export class SessionsComponent implements OnInit{
       error:(error: any) => console.error('fail', error)
     })
   }
+  //</editor-fold>
 
+
+  handleSessionLookup(params: GamePlaySessionSearchParamsDTO) {
+
+    this.gamePlaySessionService.getGamePlaySessions().subscribe({
+      next: (response: GamePlaySessionResponseDTO[]) => {
+        this.playSessions = response;
+      },
+      error: (error: any) => console.error("fail", error)
+    })
+
+
+  }
 
 }

@@ -43,12 +43,6 @@ export class SessionsComponent implements OnInit{
 
   ngOnInit() : void {
 
-    this.gamePlaySessionService.getGamePlaySessions().subscribe({
-      next: (response: GamePlaySessionResponseDTO[]) => {
-        this.playSessions = response;
-      },
-      error: (error: any) => console.error("fail", error)
-    })
 
     this.gamePlaySessionService.getAllPlayedGames().subscribe({
       next: (playedGameResponse: GameResponseDTO[]) => {
@@ -95,12 +89,7 @@ export class SessionsComponent implements OnInit{
 
       this.gamePlaySessionService.createGamePlaySession(gamePlaySessionDTO).subscribe({
         next: (response: GamePlaySessionDTO) => {
-              this.gamePlaySessionService.getGamePlaySessions().subscribe({
-                next:(gamePlaySessionResponse: GamePlaySessionResponseDTO[]) => {
-                  this.playSessions = gamePlaySessionResponse;
-                },
-                error: (gamePlaySessionError: any) => console.error("fail", gamePlaySessionError)
-              })
+
         },
         error: (error: any) => console.error("fail", error)
       })
@@ -112,12 +101,7 @@ export class SessionsComponent implements OnInit{
   handleSessionDelete(id: number) {
     this.gamePlaySessionService.deleteByIdAndPlayerId(id).subscribe({
       next:(deleteResponse: void) => {
-        this.gamePlaySessionService.getGamePlaySessions().subscribe({
-          next: (gamePlaySessionResponse: GamePlaySessionResponseDTO[]) => {
-            this.playSessions = gamePlaySessionResponse;
-          },
-          error: (gamePlaySessionResponseError: any) => console.error("fail", gamePlaySessionResponseError)
-        })
+
       },
       error: (deleteError: any) => console.error("fail", deleteError)
     })
@@ -129,12 +113,6 @@ export class SessionsComponent implements OnInit{
   handleSessionAccept(id: number) {
     this.gamePlaySessionService.acceptGamePlaySession(id).subscribe({
       next: (response: void) => {
-        this.gamePlaySessionService.getGamePlaySessions().subscribe({
-          next: (response: GamePlaySessionResponseDTO[]) => {
-            this.playSessions = response;
-          },
-          error: (error: any) => console.error("fail", error)
-        })
 
         this.gamePlaySessionService.getPendingGamePlaySessions().subscribe({
           next: (response: GamePlaySessionResponseDTO[]) => {
@@ -151,7 +129,8 @@ export class SessionsComponent implements OnInit{
 
   handleSessionLookup(params: GamePlaySessionSearchParamsDTO) {
 
-    this.gamePlaySessionService.getGamePlaySessions().subscribe({
+
+    this.gamePlaySessionService.getGamePlaySessions(params).subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
       },

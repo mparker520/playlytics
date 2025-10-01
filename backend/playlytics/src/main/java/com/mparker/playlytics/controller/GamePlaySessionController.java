@@ -4,13 +4,12 @@ package com.mparker.playlytics.controller;
 import com.mparker.playlytics.dto.GamePlaySessionDTO;
 import com.mparker.playlytics.dto.GamePlaySessionResponseDTO;
 import com.mparker.playlytics.dto.GameResponseDTO;
-import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,29 +34,27 @@ public class GamePlaySessionController {
 
 //<editor-fold desc="Get Game Play Sessions for Player">
 @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
-    public ResponseEntity<Set<GamePlaySessionResponseDTO>> getGamePlaySessions(
+    public ResponseEntity<List<GamePlaySessionResponseDTO>> getGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(value = "gameTitle", required = false) String gameTitle) {
+            @RequestParam(value = "selectedGame", required = false) Long gameId,
+            @RequestParam(value= "startDate", required = true) String startDate,
+            @RequestParam(value="endDate", required = true) String endDate) {
 
-        if (gameTitle == null) {
-            Set<GamePlaySessionResponseDTO> allGamePlaySessions = gamePlaySessionService.findAllByPlayerId(principal.getAuthenticatedUserId());
-            return ResponseEntity.ok(allGamePlaySessions);
-        }
 
-        else {
-            Set<GamePlaySessionResponseDTO> allGamePlaySessionsByTitle = gamePlaySessionService.findAllByGameName(gameTitle, principal.getAuthenticatedUserId());
-            return ResponseEntity.ok(allGamePlaySessionsByTitle);
-        }
+                List<GamePlaySessionResponseDTO> allGamePlaySessionsParams = gamePlaySessionService.findAllByPlayerIdAndParams(principal.getAuthenticatedUserId(), gameId, startDate, endDate);
+                return ResponseEntity.ok(allGamePlaySessionsParams);
+
+
 
     }
     //</editor-fold>
 
 
-//<editor-fold desc="Get Names of All Games Played">
-@PreAuthorize("isAuthenticated()")
-@GetMapping("/played-games")
-public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
-        @AuthenticationPrincipal CustomUserDetails principal) {
+    //<editor-fold desc="Get Names of All Games Played">
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/played-games")
+    public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
+            @AuthenticationPrincipal CustomUserDetails principal) {
 
 
         List<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
@@ -65,7 +62,6 @@ public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
 
 }
 //</editor-fold>
-
 
     //<editor-fold desc="Get Pending Game Play Sessions for Player">
     @PreAuthorize("isAuthenticated()")    @GetMapping("/pending-game-play-sessions")

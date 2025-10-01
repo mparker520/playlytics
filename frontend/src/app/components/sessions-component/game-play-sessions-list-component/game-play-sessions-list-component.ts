@@ -6,13 +6,15 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
 import {FormsModule, NgForm} from '@angular/forms';
 import {AdvancedAnalyticsResponseDTO} from '../../../dtos/analytic-dtos/advanced-analytics-response-dto';
 import {GamePlaySessionSearchParamsDTO} from '../../../dtos/game-play-session-search-params-dto';
+import {MatDateRangeInput} from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-game-play-sessions-list-component',
   imports: [
     NgOptimizedImage,
     DatePipe,
-    FormsModule
+    FormsModule,
+
   ],
   templateUrl: './game-play-sessions-list-component.html',
   styleUrl: './game-play-sessions-list-component.css'
@@ -22,6 +24,8 @@ export class GamePlaySessionListComponent{
   expanded: boolean = false;
   sessionSearch: boolean = false;
   selectedGame: GameResponseDTO | null = null;
+  startDate?: string;
+  endDate?: string;
 
   @Input() playedGames: GameResponseDTO[]  = [];
   @Input() filteredPlayedGames: GameResponseDTO[] = [];
@@ -47,6 +51,7 @@ export class GamePlaySessionListComponent{
   //<editor-fold desc="Session Delete">
   triggerDelete(id: number) {
     this.delete.emit(id)
+    this.sessionSearch = false;
   }
   //</editor-fold>
 
@@ -55,12 +60,14 @@ export class GamePlaySessionListComponent{
 
   triggerSessionLookup(form: NgForm) {
 
-    console.log("form pressed")
+
     this.sessionSearch = true;
 
 
     const gamePlaySessionSearchParams = {
-
+          selectedGame: this.selectedGame?.gameId,
+          startDate: this.startDate,
+          endDate: this.endDate
     }
 
     this.sessionLookup.emit(gamePlaySessionSearchParams)
@@ -69,6 +76,13 @@ export class GamePlaySessionListComponent{
   }
   //</editor-fold>
 
+  //<editor-fold desc="Clear Report">
+  clearReport() {
+    this.sessionSearch = false;
+  }
+  //</editor-fold>
+
+  //<editor-fold desc="Filter Sessions by Game Name">
   filterSessionsByGame(searchGameBox: string) {
 
     this.selectedGame = this.filteredPlayedGames[0];
@@ -79,6 +93,7 @@ export class GamePlaySessionListComponent{
 
     );
   }
+  //</editor-fold>
 
 
 }

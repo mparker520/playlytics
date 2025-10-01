@@ -14,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 
@@ -127,31 +130,37 @@ public class GamePlaySessionService {
 
         return gamePlaySessionRepository.getAllPlayedGames(authUserId);
 
-
-
     }
     //</editor-fold>
 
 
     //<editor-fold desc="List all GamePlaySessions for a Registered Player">
 
+
+    //<editor-fold desc="List all GamePlaySessions for User by Game and Time">
     @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByPlayerId(Long authUserId) throws CustomAccessDeniedException{
+    public List<GamePlaySessionResponseDTO> findAllByPlayerIdAndParams(Long authenticatedUserId, Long gameId, String startDate, String endDate) {
+
+        List<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new ArrayList<>();
 
 
+        LocalDate startDateConverted = LocalDate.parse(startDate);
+        LocalDate endDateConverted = LocalDate.parse(endDate);
+        LocalDateTime startDateTime = startDateConverted.atStartOfDay();
+        LocalDateTime endDateTime = endDateConverted.atTime(LocalTime.MAX);
 
-            Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
+        List<GamePlaySession> gamePlaySessions = gamePlaySessionRepository.findAllPlayerIdAndParams(authenticatedUserId, gameId, startDateTime, endDateTime);
 
-            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(authUserId);
-            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-            }
-
-            return gamePlaySessionResponseDTOSet;
-
+        for (GamePlaySession gamePlaySession : gamePlaySessions) {
+            gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
         }
+
+        return gamePlaySessionResponseDTOSet;
+
+    }
     //</editor-fold>
+
+
 
     //<editor-fold desc="List all Pending GamePlaySessions for a Registered Player">
 
@@ -180,59 +189,25 @@ public class GamePlaySessionService {
     //</editor-fold>
 
 
-    //<editor-fold desc="List All GamePlaySessions for a Registered Player by Game Title">
-// List of all GamePlaySessions for a RegisteredPlayer by Game Title
-    @Transactional (readOnly = true)
-    public Set<GamePlaySessionResponseDTO> findAllByGameName(String gameTitle, Long authUserId) throws CustomAccessDeniedException, NotFoundException{
-
-
-
-            Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(authUserId);
-
-            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-                String gamePlaySessionName = gamePlaySession.getGame().getGameTitle();
-                if (gamePlaySessionName.contains(gameTitle)) {
-                    gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-                }
-            }
-
-            if (!gamePlaySessionResponseDTOSet.isEmpty()) {
-                return gamePlaySessionResponseDTOSet;
-            }
-
-            else {
-                throw new NotFoundException("No Game Play Sessions found for given Game Title.");
-            }
-
-        }
-
-
-
 //</editor-fold>
 
-    //<editor-fold desc="List All Game PlaySessions By Date ">
+//<editor-fold desc="POST Methods">
+    //<editor-fold desc="Accept Pending Game Play Sessions">
+    @Transactional
+    public void acceptGamePlaySession(Long id, Long authUserId) throws NotFoundException {
 
-        // TODO: Fix time conversion
-        @Transactional (readOnly = true)
-        public Set<GamePlaySessionResponseDTO> getAllGpSessionsByPlayerIdAndDate(Long playerId, Instant sessionDateTime) {
+        RegisteredPlayer player = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("Player doesn't exist."));
+        GamePlaySession gamePlaySession = gamePlaySessionRepository.findById(id).orElseThrow(() -> new NotFoundException("Session doesn't exist."));
+        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
+        Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
 
-            Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-
-            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(playerId);
-            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-                Instant gamePlaySessionDateTime = gamePlaySession.getSessionDateTime();
-
-                if (gamePlaySessionDateTime.equals(sessionDateTime)) {
-                    gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
-                }
+        for(SessionParticipant sessionParticipant : sessionParticipants) {
+            if(sessionParticipant.getPlayer().getId().equals(ghostPlayer.getId())) {
+                sessionParticipant.setPlayer(player);
             }
-
-            return gamePlaySessionResponseDTOSet;
-
         }
+
+    }
     //</editor-fold>
 //</editor-fold>
 
@@ -432,7 +407,6 @@ public class GamePlaySessionService {
 //</editor-fold>
 
 
-
 //<editor-fold desc="Attach GamePlaySession and SessionParticipants Helper Method">
 
     private void linkGpSessionAndParticipants(GamePlaySession gamePlaySession, Set<SessionParticipant> sessionParticipantsSet) {
@@ -491,24 +465,14 @@ public class GamePlaySessionService {
         return new GamePlaySessionResponseDTO(id, sessionDateTime, scoringModel, gameName, sessionParticipantDetails);
 
     }
+
+
+
 //</editor-fold>
 
 
-    @Transactional
-public void acceptGamePlaySession(Long id, Long authUserId) throws NotFoundException {
 
-        RegisteredPlayer player = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("Player doesn't exist."));
-        GamePlaySession gamePlaySession = gamePlaySessionRepository.findById(id).orElseThrow(() -> new NotFoundException("Session doesn't exist."));
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
-        Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
 
-        for(SessionParticipant sessionParticipant : sessionParticipants) {
-            if(sessionParticipant.getPlayer().getId().equals(ghostPlayer.getId())) {
-                sessionParticipant.setPlayer(player);
-            }
-        }
-
-}
 
 //</editor-fold>
 

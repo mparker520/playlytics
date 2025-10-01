@@ -35,8 +35,8 @@ export class GamePlaySessionService {
 
 
   //<editor-fold desc="Get Game Play Sessions">
-  public getGamePlaySessions() : Observable<GamePlaySessionResponseDTO[]> {
-    return this.http.get<GamePlaySessionResponseDTO[]>(`${environment.apiUrl}/game-play-sessions`,  {withCredentials: true});
+  public getGamePlaySessions(params: any) : Observable<GamePlaySessionResponseDTO[]> {
+    return this.http.get<GamePlaySessionResponseDTO[]>(`${environment.apiUrl}/game-play-sessions`,  {params, withCredentials: true});
   }
   //</editor-fold>
 

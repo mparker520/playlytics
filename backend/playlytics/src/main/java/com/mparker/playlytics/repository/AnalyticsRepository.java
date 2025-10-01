@@ -174,7 +174,8 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
                         JOIN game_play_sessions AS gps ON sp.game_play_session_id = gps.id
                         JOIN board_games AS bg ON gps.game_id = bg.id
                             WHERE sp.player_id = :playerId
-                            AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
+                            AND ((:game1Id IS NULL AND :game2Id IS NULL) 
+                                                 OR (bg.id = :game1Id))
                             AND EXTRACT(YEAR FROM gps.session_date_time) BETWEEN :startingYear   AND :endYear     
                         GROUP BY EXTRACT(YEAR FROM gps.session_date_time), 
                                              bg.game_title 

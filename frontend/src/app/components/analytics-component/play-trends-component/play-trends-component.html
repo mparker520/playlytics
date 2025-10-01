@@ -38,7 +38,7 @@
       <div class="flex flex-col w-8/12 pt-2 ">
         <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
                 [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
-          <option [ngValue]="null">Filter by Game</option>
+
           @for(playedGame of playedGames; track playedGame.gameId){
             <option [ngValue]=playedGame>{{ playedGame.title }}</option>
           }
@@ -46,7 +46,7 @@
 
         <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
                 [(ngModel)]="selectedGame2" (ngModelChange)="filterResults()">
-          <option [ngValue]="null">Filter by Game</option>
+
           @for(playedGame of playedGames; track playedGame.gameId){
             <option [ngValue]=playedGame>{{ playedGame.title }}</option>
           }
@@ -63,7 +63,7 @@
                   [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
             <option [ngValue]="null">Filter by Game</option>
             @for(playedGame of playedGames; track playedGame.gameId){
-              <option [ngValue]=playedGame>{{ playedGame.title }}</option>
+              <option  [ngValue]=playedGame>{{ playedGame.title }}</option>
             }
           </select>
         </div>

@@ -134,12 +134,11 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
     const params = this.buildParams();
 
-    console.log(params)
 
     if(this.selectedOwnedGame) {
-      console.log(this.selectedOwnedGame.title)
+
       this.selectedOwnedGameName = this.selectedOwnedGame.title;
-      console.log(this.selectedOwnedGameName)
+
     }
 
 

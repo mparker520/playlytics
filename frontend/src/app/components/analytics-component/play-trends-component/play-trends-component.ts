@@ -31,10 +31,9 @@ export class PlayTrendsComponent implements OnInit {
   selectedGameView: string = "all";
 
   selectedGame1: GameResponseDTO | null = null;
-  selectedGame1Name: string | null = null;
 
   selectedGame2: GameResponseDTO | null = null;
-  selectedGame2Name: string | null = null;
+
   //</editor-fold>
 
 
@@ -65,6 +64,7 @@ export class PlayTrendsComponent implements OnInit {
     if(this.selectedGameView === "all") {
 
 
+
       return {
         selectedGameView: this.selectedGameView,
         selectedGranularity: this.selectedGranularity,
@@ -84,7 +84,7 @@ export class PlayTrendsComponent implements OnInit {
         selectedGranularity: this.selectedGranularity,
         selectedStartingYear: this.selectedStartingYear,
         selectedEndingYear: this.selectedEndingYear,
-        selectedGame1Id: this.selectedGame1?.gameId
+        selectedGame1Id: this.selectedGame1!.gameId
 
 
       }
@@ -98,8 +98,8 @@ export class PlayTrendsComponent implements OnInit {
         selectedGranularity: this.selectedGranularity,
         selectedStartingYear: this.selectedStartingYear,
         selectedEndingYear: this.selectedEndingYear,
-        selectedGame1Id: this.selectedGame1?.gameId,
-        selectedGame2Id: this.selectedGame2?.gameId
+        selectedGame1Id: this.selectedGame1!.gameId,
+        selectedGame2Id: this.selectedGame2!.gameId
 
       }
 
@@ -123,7 +123,7 @@ export class PlayTrendsComponent implements OnInit {
   //<editor-fold desc="On Init">
   ngOnInit() {
 
-    this.startIndex = this.rangeOfYears.length -5;
+    this.startIndex = this.rangeOfYears.length -3;
     this.endIndex = this.rangeOfYears.length - 1;
     this.selectedStartingYear = this.rangeOfYears[this.startIndex];
     this.selectedEndingYear = this.rangeOfYears[this.endIndex];
@@ -157,7 +157,7 @@ export class PlayTrendsComponent implements OnInit {
 
 
     const params = this.buildParams();
-
+    console.log(params)
 
     this.analyticsService.getPlayTrends(params).subscribe({
       next: (playTrendsResponse: AdvancedAnalyticsResponseDTO) => {

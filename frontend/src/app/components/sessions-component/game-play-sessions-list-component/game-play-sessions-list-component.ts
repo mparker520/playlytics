@@ -27,6 +27,7 @@ export class GamePlaySessionListComponent{
   startDate?: string;
   endDate?: string;
 
+  @Input() reportGenerationTime?: Date;
   @Input() playedGames: GameResponseDTO[]  = [];
   @Input() filteredPlayedGames: GameResponseDTO[] = [];
   @Input() playSessions: GamePlaySessionResponseDTO[] = [];
@@ -51,7 +52,7 @@ export class GamePlaySessionListComponent{
   //<editor-fold desc="Session Delete">
   triggerDelete(id: number) {
     this.delete.emit(id)
-    this.sessionSearch = false;
+
   }
   //</editor-fold>
 
@@ -64,10 +65,15 @@ export class GamePlaySessionListComponent{
     this.sessionSearch = true;
 
 
-    const gamePlaySessionSearchParams = {
-          selectedGame: this.selectedGame?.gameId,
+
+
+    const gamePlaySessionSearchParams: any = {
           startDate: this.startDate,
           endDate: this.endDate
+    }
+
+    if (this.selectedGame?.gameId != null) {
+      gamePlaySessionSearchParams.selectedGame = this.selectedGame.gameId;
     }
 
     this.sessionLookup.emit(gamePlaySessionSearchParams)

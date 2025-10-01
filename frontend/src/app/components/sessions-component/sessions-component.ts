@@ -32,6 +32,8 @@ export class SessionsComponent implements OnInit{
   pendingPlaySessions: GamePlaySessionResponseDTO[] = [];
   games: GameResponseDTO[] = [];
   network: PlayerResponseDTO[] = [];
+  storedParams: GamePlaySessionSearchParamsDTO = [];
+  reportGenerationTime?: Date;
 
   constructor(private gamePlaySessionService: GamePlaySessionService, private gameService: GameService, private networkService: NetworkService, private registeredPlayerService: RegisteredPlayerService) {
 
@@ -102,9 +104,20 @@ export class SessionsComponent implements OnInit{
     this.gamePlaySessionService.deleteByIdAndPlayerId(id).subscribe({
       next:(deleteResponse: void) => {
 
+        this.gamePlaySessionService.getGamePlaySessions(this.storedParams).subscribe({
+          next: (response: GamePlaySessionResponseDTO[]) => {
+            this.playSessions = response;
+            this.reportGenerationTime = new Date();
+          },
+          error: (error: any) => console.error("fail", error)
+        })
+
       },
       error: (deleteError: any) => console.error("fail", deleteError)
     })
+
+
+
   }
   //</editor-fold>
 
@@ -127,17 +140,20 @@ export class SessionsComponent implements OnInit{
   //</editor-fold>
 
 
+  //<editor-fold desc="Handle Session Lookup">
   handleSessionLookup(params: GamePlaySessionSearchParamsDTO) {
 
-
+    this.storedParams = params;
     this.gamePlaySessionService.getGamePlaySessions(params).subscribe({
       next: (response: GamePlaySessionResponseDTO[]) => {
         this.playSessions = response;
+        this.reportGenerationTime = new Date();
       },
       error: (error: any) => console.error("fail", error)
     })
 
 
   }
+  //</editor-fold>
 
 }

@@ -43,7 +43,7 @@ public interface GamePlaySessionRepository extends JpaRepository<GamePlaySession
                         FROM session_participants sp
                         JOIN game_play_sessions AS gps ON sp.game_play_session_id = gps.id
                             WHERE sp.player_id = :playerId
-                            AND gps.game_id = :gameId
+                            AND (:gameId IS NULL OR gps.game_id = :gameId)
                             AND gps.session_date_time BETWEEN :startDate AND :endDate
                             ORDER BY gps.session_date_time ASC""",
             nativeQuery = true

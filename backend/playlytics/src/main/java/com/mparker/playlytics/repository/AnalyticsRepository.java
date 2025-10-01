@@ -143,9 +143,9 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
                         JOIN board_games AS bg ON gps.game_id = bg.id
                             WHERE sp.player_id = :playerId
                             AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
-                            AND (yearPlayed  >= :startingYear   AND yearPlayed <= :endingYear)       
-                        GROUP BY yearPlayed, 
-                                             monthPlayed,
+                            AND EXTRACT(YEAR FROM gps.session_date_time) BETWEEN :startingYear   AND :endYear     
+                        GROUP BY EXTRACT(YEAR FROM gps.session_date_time), 
+                                             EXTRACT(MONTH FROM gps.session_date_time),
                                              bg.game_title 
                         ORDER BY yearPlayed ASC, 
                                              monthPlayed ASC,
@@ -158,7 +158,7 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
     List<PlayTrendProjection> getPlayTrendsByGameGranularityMonth(
             @Param ("playerId") Long authUserId,
             @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
-            @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
+            @Param("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
     //</editor-fold>
 
 
@@ -175,8 +175,8 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
                         JOIN board_games AS bg ON gps.game_id = bg.id
                             WHERE sp.player_id = :playerId
                             AND ((bg.id = :game1Id OR :game1Id IS NULL) OR (bg.id = :game2Id OR :game2Id IS NULL))
-                            AND (yearPlayed  >= :startingYear   AND yearPlayed <= :endingYear) 
-                        GROUP BY yearPlayed, 
+                            AND EXTRACT(YEAR FROM gps.session_date_time) BETWEEN :startingYear   AND :endYear     
+                        GROUP BY EXTRACT(YEAR FROM gps.session_date_time), 
                                              bg.game_title 
                         ORDER BY yearPlayed ASC, 
                                              bg.game_title ASC	
@@ -188,7 +188,7 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
     List<PlayTrendProjection> getPlayTrendsByGameGranularityYear(
             @Param ("playerId") Long authUserId,
             @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
-            @Parama("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
+            @Param("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
     //</editor-fold>
 
 

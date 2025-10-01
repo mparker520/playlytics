@@ -6,6 +6,7 @@ import com.mparker.playlytics.enums.ScoringModel;
 import com.mparker.playlytics.repository.AnalyticsRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Month;
 import java.util.*;
 
 
@@ -91,22 +92,33 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Play Trends">
 
-    public AdvancedAnalyticsResponseDTO getPlayTrends(Long authUserId, String selectedGameView, String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
+    public AdvancedAnalyticsResponseDTO getPlayTrends(Long authUserId,  String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
 
-        List<PlayTrendProjection> rows = List.of();
-        List<String> labels = List.of();
-        Map<String, Integer> labelIndexMap = new HashMap<>();
+        List<PlayTrendProjection> rows;
+        List<String> labels =  new ArrayList<>();
 
         Map<String, List<Integer>> dataSets = new HashMap<>();
 
 
         if (selectedGranularity.equals("month")) {
             rows = analyticsRepository.getPlayTrendsByGameGranularityMonth(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
-            labels = rows.stream().map(r -> (r.getMonthPlayed() + "-" + r.getYearPlayed())).toList();
 
+
+            int y;
+
+
+            for(y = selectedStartingYear.intValue(); y <= selectedEndingYear.intValue(); y++) {
+                for (Month m : Month.values()) {
+                    String monthName = m.name().substring(0, 1) + m.name().substring(1).toLowerCase();
+                    labels.add(monthName + "-" + y);
+                }
+            }
+
+            Map<String, Integer> labelIndexMap = new HashMap<>();
             for (int i = 0; i < labels.size(); i++) {
                 labelIndexMap.put(labels.get(i), i);
             }
+
 
             List<String> gameNames = rows.stream().map(r -> (r.getTitle())).toList();
 
@@ -115,7 +127,9 @@ public class AnalyticsService {
             }
 
             for (PlayTrendProjection row : rows) {
-                int index = labelIndexMap.get(row.getMonthPlayed() + "-" + row.getYearPlayed());
+                int monthNum = Integer.parseInt(row.getMonthPlayed());
+                String monthName = Month.of(monthNum).getDisplayName(java.time.format.TextStyle.FULL, java.util.Locale.ENGLISH);
+                int index = labelIndexMap.get(monthName + "-" + row.getYearPlayed());
                 List<Integer> gameData = dataSets.get(row.getTitle());
                 gameData.set(index, row.getPlayCount().intValue());
             }
@@ -126,8 +140,15 @@ public class AnalyticsService {
 
         if (selectedGranularity.equals("year")) {
             rows = analyticsRepository.getPlayTrendsByGameGranularityYear(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);
-            labels = rows.stream().map(r -> (r.getYearPlayed())).toList();
 
+
+            Long y;
+
+            for(y = selectedStartingYear; y <= selectedEndingYear; y++) {
+                    labels.add(Long.toString(y));
+            }
+
+            Map<String, Integer> labelIndexMap = new HashMap<>();
             for (int i = 0; i < labels.size(); i++) {
                 labelIndexMap.put(labels.get(i), i);
             }
@@ -146,7 +167,6 @@ public class AnalyticsService {
 
 
         }
-
 
         return new AdvancedAnalyticsResponseDTO("Play Trends", labels, dataSets);
 

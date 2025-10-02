@@ -23,11 +23,13 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
   @Input() ownedGames: OwnedGameResponseDTO[]  = [];
 
-  selectedOwnedGame: GameResponseDTO | null = null;
+  selectedOwnedGame: OwnedGameResponseDTO | null = null;
   selectedOwnedGameName: string | null = null;
   barChartColors: string[] = [];
 
   selectedView: string = "topFive";
+
+  stepSize?: number;
 
   constructor(private analyticsService: AnalyticsService) {
   }
@@ -108,6 +110,9 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
         this.buildColors(winLossResponse.data.length);
 
+        const max = Math.max(...winLossResponse.data);
+        this.stepSize = (max / 10);
+
         this.chartData = {
           labels: winLossResponse.labels,
           datasets: [{
@@ -131,16 +136,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
   filterResults() {
 
 
-
     const params = this.buildParams();
-
-
-    if(this.selectedOwnedGame) {
-
-      this.selectedOwnedGameName = this.selectedOwnedGame.title;
-
-    }
-
 
 
     this.analyticsService.getOwnedGameFrequency(params).subscribe({
@@ -148,6 +144,8 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
         this.buildColors(winLossResponse.data.length);
 
+        const max = Math.max(...winLossResponse.data);
+        this.stepSize = (max / 10);
 
         this.chartData = {
           labels: winLossResponse.labels,
@@ -155,6 +153,8 @@ export class OwnedGameFrequencyComponent implements OnInit{
             data: winLossResponse.data,
             label: winLossResponse.label ?? 'Win Rate',
             backgroundColor: this.barChartColors,
+            barPercentage: 0.8,
+            categoryPercentage: 1
           }
           ]
         }
@@ -184,7 +184,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
         suggestedMax: 5,
         ticks: {
           autoSkip: false,
-          stepSize: 1,
+          stepSize: this.stepSize,
           precision: 0
         }
       }

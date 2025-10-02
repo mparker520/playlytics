@@ -1,46 +1,46 @@
-<section class="w-10/12  h-[40vh]  shadow-[0_0_20px_rgba(0,0,0,0.3)] mx-auto rounded-md">
+<section class="overflow-y-hidden w-10/12  h-[600px]  shadow-[0_0_20px_rgba(0,0,0,0.3)] mx-auto rounded-md">
 
   <section class="mx-auto flex justify-center max-w-xs">
 
 
     @if(selectedView === "topFive") {
-      <h2 class="text-2xl analytics:text-lg font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Top 5)</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Top 5)</h2>
     }
 
 
     @if(selectedView === "bottomFive") {
-      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Bottom 5)</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Bottom 5)</h2>
     }
 
 
     @if(selectedView === "all") {
-      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Owned Game Play Frequency</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Owned Game Play Frequency</h2>
     }
 
     @if(selectedView === "byGame") {
-      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGameName}} Play Count</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGame?.gameName}} Play Count</h2>
     }
 
 
   </section>
 
 
-  <div class="flex justify-center mx-auto">
-    <div class="p-2 w-full mx-auto">
+  <div class="mx-auto">
+    <div class="p-2  overflow-y-scroll  w-full mx-auto h-[400px]">
       <canvas  baseChart
                [data]="chartData"
                [type]=" 'bar' "
                [options]="chartOptions"
-               class="w-full">
+               [style.height]=" '2000px' ">
       </canvas>
     </div>
   </div>
 
-  <div class="flex flex-col p-4 justify-evenly navBar:flex-row navBar:space-x-4">
+  <div class="flex flex-col p-4  justify-evenly ">
 
 
 
-    <div class="flex flex-col w-8/12 pt-2 mx-auto">
+    <div class="flex flex-col w-8/12 pt-2 mx-auto max-w-auto">
       <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
               [(ngModel)]="selectedView" (ngModelChange)="filterResults()">
         <option value="topFive">Top 5</option>

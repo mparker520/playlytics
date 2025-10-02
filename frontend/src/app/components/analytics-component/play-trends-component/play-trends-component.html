@@ -1,14 +1,14 @@
-<section class="w-12/12 h-[85vh] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
+<section class=" overflow-y-hidden w-12/12   h-[1150px] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
 
   <section class="mx-auto flex justify-center">
 
-      <h2 class="text-2xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Game Play Trends</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Game Play Trends</h2>
 
   </section>
 
 
   <div class="overflow-x-auto flex justify-center mx-auto">
-    <div class="w-10/12 min-w-[600px] h-[50vh] mx-auto">
+    <div class="w-10/12 min-w-[600px] max-w-[1000px] min-h-[800px] mx-auto">
       <canvas  baseChart
                [data]="chartData"
                [type]="'bar'"
@@ -18,98 +18,113 @@
     </div>
   </div>
 
-  <div class="flex flex-col p-4 justify-evenly navBar:flex-row navBar:space-x-4">
 
-    <div class="flex flex-col w-8/12 pt-2 mx-auto">
+  <div class="flex  justify-center">
 
-    <div>
-      <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
-              [(ngModel)]="selectedGameView" (ngModelChange)="filterResults()">
-        <option value="all">All</option>
-        <option value="compareGames">Compare Games</option>
-        <option value="byGame">By Game</option>
 
-      </select>
-      <label class="pt-2 block text-sm font-medium text-gray-700">Game View</label>
+    <div class="flex flex-col mt-4 ml-6 justify-around ">
 
-    </div>
+        <div>
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none min-w-40 "
+                [(ngModel)]="selectedGameView" (ngModelChange)="filterResults()">
+          <option value="all">All</option>
+          <option value="compareGames">Compare Games</option>
+          <option value="byGame">By Game</option>
 
-      @if(selectedGameView === "compareGames") {
-
-      <div class="flex flex-col w-8/12 pt-2 ">
-        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
-                [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
-
-          @for(playedGame of playedGames; track playedGame.gameId){
-            <option [ngValue]=playedGame>{{ playedGame.title }}</option>
-          }
         </select>
-
-        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
-                [(ngModel)]="selectedGame2" (ngModelChange)="filterResults()">
-
-          @for(playedGame of playedGames; track playedGame.gameId){
-            <option [ngValue]=playedGame>{{ playedGame.title }}</option>
-          }
-        </select>
+        <label class="pt-2 block text-sm font-medium text-gray-700">Game View</label>
 
       </div>
 
-    }
+        @if(selectedGameView === "compareGames") {
 
-      @if(selectedGameView === "byGame") {
+        <div class="flex flex-col justify-around w-8/12  ">
+          <div class="flex flex-col">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none min-w-24 "
+                    [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
 
-        <div class="flex flex-col w-8/12 pt-2">
-          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
-                  [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
-            <option [ngValue]="null">Filter by Game</option>
-            @for(playedGame of playedGames; track playedGame.gameId){
-              <option  [ngValue]=playedGame>{{ playedGame.title }}</option>
-            }
-          </select>
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+            <label class="pt-2 block text-sm font-medium text-gray-700">Game Name</label>
+          </div>
+
+          <div class="flex flex-col">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none min-w-24 "
+                    [(ngModel)]="selectedGame2" (ngModelChange)="filterResults()">
+
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+            <label class="pt-2 block text-sm font-medium text-gray-700">Game Name</label>
+          </div>
         </div>
 
       }
 
-      </div>
+        @if(selectedGameView === "byGame") {
 
-  </div>
+          <div class="flex flex-col w-8/12 pt-2">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+                    [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
+              <option [ngValue]="null">Filter by Game</option>
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option  [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+          </div>
 
-  <div class="flex flex-col p-4 justify-evenly navBar:flex-row navBar:space-x-4">
+        }
 
-    <div class="flex flex-col w-8/12 pt-2 mx-auto">
+
+    </div>
+
+
+    <div class="w-full mt-4 flex flex-col justify-around space-y-2">
 
       <div>
-        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none min-w-24 "
                 [(ngModel)]="selectedGranularity" (ngModelChange)="filterResults()">
           <option value="year">Year</option>
           <option value="month">Month</option>
         </select>
+        <label class="pt-2 block text-sm font-medium text-gray-700">Granularity</label>
 
       </div>
 
 
-        <div class="flex flex-col w-8/12 pt-2 ">
-          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+
+        <div class="mt-4 flex flex-col justify-around">
+
+          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-24 "
                   [(ngModel)]="selectedStartingYear" (ngModelChange)="filterResults()">
             @for(year of rangeOfYears; track year){
               <option [defaultSelected]="selectedStartingYear" [ngValue]=year>{{ year }}</option>
             }
           </select>
+          <label class="pt-2 block text-sm font-medium text-gray-700">Start Year</label>
 
-          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+
+          <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-24 "
                   [(ngModel)]="selectedEndingYear" (ngModelChange)="filterResults()">
+
             @for(year of rangeOfYears; track year){
-              <option [defaultSelected]="selectedEndingYear" [ngValue]=year>{{ year }}</option>
+              <option [defaultSelected]="selectedEndingYear" [ngValue]="year">{{ year }}</option>
             }
           </select>
+          <label class="pt-2 block text-sm font-medium text-gray-700">End Year</label>
 
         </div>
 
 
 
 
+
     </div>
+
+
 
   </div>
 

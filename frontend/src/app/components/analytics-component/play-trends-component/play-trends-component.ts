@@ -156,8 +156,8 @@ export class PlayTrendsComponent implements OnInit {
             label: title,
             data: values,
             backgroundColor: this.colorPalette[index],
-            barPercentage: 1.0,
-            categoryPercentage: 0.5
+            barPercentage: 0.8,
+            categoryPercentage: 0.8
           })
         );
 
@@ -190,7 +190,7 @@ export class PlayTrendsComponent implements OnInit {
             label: title,
             data: values,
             backgroundColor: this.colorPalette[index],
-            barPercentage: 1.0,
+            barPercentage: 0.8,
             categoryPercentage: 1
           })
         );

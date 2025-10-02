@@ -1,4 +1,4 @@
-<section class="w-full  m-6 shadow-md">
+<section class="w-full h-[85vh] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
 
   <section class="mx-auto flex justify-center">
 
@@ -8,12 +8,12 @@
 
 
   <div class="flex justify-center mx-auto">
-    <div class="w-full h-[50vh] mx-auto">
+    <div class="w-10/12 h-[50vh] mx-auto">
       <canvas  baseChart
                [data]="chartData"
-               [type]=" 'bar' "
+               [type]="'bar'"
                [options]="chartOptions"
-               class="w-full h-full overflow-y-auto">
+               class="w-full h-full">
       </canvas>
     </div>
   </div>
@@ -30,6 +30,7 @@
         <option value="byGame">By Game</option>
 
       </select>
+      <label class="pt-2 block text-sm font-medium text-gray-700">Game View</label>
 
     </div>
 

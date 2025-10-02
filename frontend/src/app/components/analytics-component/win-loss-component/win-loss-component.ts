@@ -142,6 +142,7 @@ ScoringModelEnum.TEAM, ScoringModelEnum.COOPERATIVE]
   //<editor-fold desc="Options">
   chartOptions: ChartOptions<'pie'> = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'bottom',

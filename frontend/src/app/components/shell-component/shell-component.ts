@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {AuthService} from '../../services/auth-service';
+import {LogoutService} from '../../services/logout-service';
 
 
 @Component({
@@ -17,7 +18,7 @@ export class ShellComponent {
 
   menuOpen = false;
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private logoutService: LogoutService, private router: Router) {
 
   }
 
@@ -27,6 +28,17 @@ export class ShellComponent {
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen;
+  }
+
+  logOut() {
+    this.logoutService.logout().subscribe({
+      next: () => {
+        this.authService.authenticated = false;
+        this.authService.currentUser = undefined;
+        this.router.navigate(['/login']).then(r =>{} );
+      },
+      error: (error: any) => console.error('fail', error)
+    })
   }
 
 }

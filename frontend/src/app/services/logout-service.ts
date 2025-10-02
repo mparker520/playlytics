@@ -7,14 +7,15 @@ import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class LogoutService {
 
 
   constructor(private http: HttpClient) {
   }
 
-  public login(authRequestDTO: AuthRequestDTO) : Observable<any> {
-    return this.http.post(`${environment.apiUrl}/login`, authRequestDTO, {withCredentials: true});
+  public logout() : Observable<any> {
+
+    return this.http.post(`${environment.apiUrl}/logout`, {}, {withCredentials: true});
   }
 
 }

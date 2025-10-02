@@ -26,6 +26,9 @@ export class GuestPlayersComponent implements OnInit {
   associations: GhostPlayerResponseDTO[] = [];
   guestPlayer?: GhostPlayerResponseDTO;
   expandedAssociationsManagement: boolean = false;
+  lookUpGhostErrorMessage?: string;
+  addGhostErrorMessage?: string;
+  createGhostErrorMessage?: string;
 
   constructor(private networkService: NetworkService, private ghostPlayerService: GhostPlayerService) {
 
@@ -65,10 +68,16 @@ export class GuestPlayersComponent implements OnInit {
   //<editor-fold desc="Get Guest / Ghost Player from Database">
   handleLookup(databaseFilter: string) {
     this.networkService.getGuestPlayers(databaseFilter).subscribe({
-      next:(response: GhostPlayerResponseDTO) => {
+      next: (response: GhostPlayerResponseDTO) => {
         this.guestPlayer = response;
       },
-      error: (error: any) => console.error("fail", error)
+      error: (error: any) => {
+        this.lookUpGhostErrorMessage = error.error.message
+
+        setTimeout(() => {
+          this.lookUpGhostErrorMessage = undefined;
+        }, 3000);
+      }
     })
   }
   //</editor-fold>
@@ -82,7 +91,13 @@ export class GuestPlayersComponent implements OnInit {
                 this.associations = updateResponse;
                 this.guestPlayer = undefined;
               },
-              error: (error: any) => console.error("fail", error)
+              error: (error: any) => {
+                this.addGhostErrorMessage = error.error.message
+
+                setTimeout(() => {
+                  this.addGhostErrorMessage = undefined;
+                }, 3000);
+              }
         })
       }
     })
@@ -96,8 +111,19 @@ export class GuestPlayersComponent implements OnInit {
           this.networkService.getAllAssociations().subscribe({
             next:(updateResponse: GhostPlayerResponseDTO[]) => {
               this.associations = updateResponse;
+            },
+            error: (error: any) => {
+
             }
           })
+        },
+        error: (error: any) => {
+
+          this.createGhostErrorMessage = error.error.message
+
+          setTimeout(() => {
+            this.createGhostErrorMessage = undefined;
+          }, 3000);
         }
       })
   }

@@ -10,9 +10,12 @@ import com.mparker.playlytics.enums.GhostStatus;
 import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Set;
 
 
@@ -86,7 +89,10 @@ public class RegisteredPlayerService {
         }
 
         else {
-            throw new CustomAccessDeniedException("An Account with that login email already exists");
+                throw new ResponseStatusException(
+                        HttpStatus.FORBIDDEN,
+                        "An Account with that login email already exists"
+                );
         }
 
     }

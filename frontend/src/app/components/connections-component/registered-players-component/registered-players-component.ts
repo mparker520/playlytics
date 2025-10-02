@@ -30,6 +30,7 @@ export class RegisteredPlayersComponent implements OnInit {
   sentRequests?: ConnectionRequestResponseDTO[];
   pendingRequests?: ConnectionRequestResponseDTO[];
   blockedPlayers?: RegisteredPlayerResponseDTO[];
+  errorMessage?: string;
 
   constructor(private networkService: NetworkService) {
   }
@@ -133,10 +134,16 @@ export class RegisteredPlayersComponent implements OnInit {
       next: (response: RegisteredPlayerResponseDTO) => {
         this.registeredPlayer = response;
       },
-      error: (error: any) => console.error("fail", error)
+      error: (error: any) => {
+        this.errorMessage = error.error.message
+
+        setTimeout(() => {
+          this.errorMessage = undefined;
+        }, 3000);
+
+      }
     })
   }
-
   //</editor-fold>
 
   //<editor-fold desc="Send Connection Request">
@@ -148,7 +155,10 @@ export class RegisteredPlayersComponent implements OnInit {
           next: (sentRequestsResponse: ConnectionRequestResponseDTO[]) => {
             this.sentRequests = sentRequestsResponse;
           },
-          error: (error: any) => console.error("fail", error)
+          error: (error: any) => {
+
+            console.log(typeof error.error)
+          }
         })
       }
     })

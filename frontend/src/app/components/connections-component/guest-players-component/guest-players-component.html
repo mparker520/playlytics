@@ -18,11 +18,11 @@ my-6 px-6 shadow-md w-10/12 mx-auto navBar:w-full">
     </div>
 
   <section>
-    <app-add-association-component (add)="handleAdd($event)" (lookup)="handleLookup($event)" [guestPlayer]="guestPlayer"></app-add-association-component>
+    <app-add-association-component (add)="handleAdd($event)" (lookup)="handleLookup($event)" [guestPlayer]="guestPlayer" [addGhostErrorMessage]="addGhostErrorMessage" [lookUpGhostErrorMessage]="lookUpGhostErrorMessage"></app-add-association-component>
   </section>
 
   <section>
-    <app-create-guest-component (create)="handleCreate($event)"></app-create-guest-component>
+    <app-create-guest-component (create)="handleCreate($event)" [createGhostErrorMessage]="createGhostErrorMessage"></app-create-guest-component>
   </section>
   }
 </section>

@@ -9,6 +9,8 @@ import {GhostPlayerResponseDTO} from '../../../../dtos/ghost-player-response-dto
 })
 export class AddAssociationComponent {
   @Input() guestPlayer?: GhostPlayerResponseDTO;
+  @Input() addGhostErrorMessage?: string;
+  @Input() lookUpGhostErrorMessage?: string;
 
   @Output() lookup = new EventEmitter<string>;
   triggerLookup(searchValue: string) {

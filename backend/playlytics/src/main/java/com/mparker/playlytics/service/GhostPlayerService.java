@@ -41,11 +41,11 @@ public class GhostPlayerService {
         String identifierEmail = ghostPlayerDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase();
 
         if (ghostPlayerRepository.existsByIdentifierEmail(identifierEmail)) {
-            throw new ExistingResourceException("Ghost player with email " + identifierEmail + "already exists");
+            throw new ExistingResourceException("Guest player with email " + identifierEmail + " already exists");
         }
 
         else if (registeredPlayerRepository.existsByLoginEmail(identifierEmail)) {
-            throw new ExistingResourceException("Registered player with email " + identifierEmail + "already exists.  Please send Connection Request");
+            throw new ExistingResourceException("Registered player with email " + identifierEmail + " already exists.  Please send Connection Request");
         }
 
         else {
@@ -79,7 +79,7 @@ public class GhostPlayerService {
             }
 
             else {
-                throw new ExistingResourceException("A New Ghost Player Cannot  Be Created That Has an Existing Registered Player");
+                throw new ExistingResourceException("A New Guest Player Cannot  Be Created That Has an Existing Registered Player");
             }
 
         }
@@ -121,7 +121,7 @@ public class GhostPlayerService {
         }
 
         else {
-            throw new CustomAccessDeniedException("You Do Not Have Permission to Update This Ghost Player");
+            throw new CustomAccessDeniedException("You Do Not Have Permission to Update This Guest Player");
         }
 
 

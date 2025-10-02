@@ -173,7 +173,7 @@ public class GamePlaySessionService {
 
         GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
         if (ghostPlayer == null) {
-            throw new NotFoundException("No Linked Ghost player found");
+            throw new NotFoundException("No Linked Guest player found");
         }
         Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
 

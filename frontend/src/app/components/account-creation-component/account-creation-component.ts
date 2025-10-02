@@ -24,6 +24,7 @@ export class AccountCreationComponent {
   avatar?: Uint8Array;
 
 
+
   constructor( private accountCreationService: AccountCreationService, private router: Router) {
 
   }
@@ -45,9 +46,7 @@ export class AccountCreationComponent {
 
           this.router.navigate(['/login']);
         },
-        error: (error: any) => {
-
-        }
+        error: (error: any) => console.error(error.message)
         }
 
     );

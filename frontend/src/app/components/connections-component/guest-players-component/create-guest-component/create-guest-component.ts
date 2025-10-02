@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {GhostPlayerDTO} from '../../../../dtos/ghost-player-dto';
 
@@ -15,7 +15,7 @@ export class CreateGuestComponent {
   firstName: string = '';
   lastName: string = '';
   identifierEmail: string = '';
-
+  @Input() createGhostErrorMessage?: string;
 
 
   @Output() create = new EventEmitter<GhostPlayerDTO>

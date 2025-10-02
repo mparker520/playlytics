@@ -17,6 +17,7 @@ export class ManageConnectionsComponent {
 
   //<editor-fold desc="Discover Players / Send Requests / Block">
   @Input() registeredPlayer?: RegisteredPlayerResponseDTO;
+  @Input() errorMessage?: string;
 
   @Output() lookup = new EventEmitter<string>;
   triggerLookup(searchValue: string) {

@@ -10,6 +10,7 @@ import com.mparker.playlytics.enums.GhostStatus;
 import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Set;
@@ -26,13 +27,17 @@ public class RegisteredPlayerService {
     private final GamePlaySessionRepository gamePlaySessionRepository;
     private final SessionParticipantRepository sessionParticipantRepository;
     private final PlayerRepository playerRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository, GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository, PlayerRepository playerRepository) {
+    public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository,
+                                   GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository,
+                                   PlayerRepository playerRepository, PasswordEncoder passwordEncoder) {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
         this.playerRepository = playerRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //</editor-fold>
@@ -63,14 +68,14 @@ public class RegisteredPlayerService {
         if (!registeredPlayerRepository.existsByLoginEmail(loginEmail)) {
 
 
+            String encodedPassword = passwordEncoder.encode(registeredPlayerDTO.password());
 
-            String password = registeredPlayerDTO.password();
             String firstName = registeredPlayerDTO.firstName();
             String lastName = registeredPlayerDTO.lastName();
             String displayName = registeredPlayerDTO.displayName();
             byte[] avatar = registeredPlayerDTO.avatar();
 
-            RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, ("{noop}" + password));
+            RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, (encodedPassword));
             Long newRegisteredPlayerId = registeredPlayerRepository.saveAndFlush(registeredPlayer).getId();
             if(ghostPlayerRepository.existsByIdentifierEmail(loginEmail)) {
                     GhostPlayer ghostPlayer = ghostPlayerRepository.findByIdentifierEmail(loginEmail);

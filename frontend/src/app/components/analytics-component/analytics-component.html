@@ -1,18 +1,21 @@
-<div class="overflow-y-scroll h-screen grid grid-cols-[55%_45%] grid-rows-[40%_40%] gap-4">
+<div class="flex flex-col analytics:flex-row">
 
 
-  <section class="col-start-1 col-end-2 row-start-1">
+  <section class="w-full">
+
     <app-play-trends-component [playedGames]="playedGames" [rangeOfYears]="rangeOfYears"></app-play-trends-component>
+
   </section>
 
 
-  <section class="row-start-1 col-start-2 col-end-3">
-    <app-win-loss-component [playedGames]="playedGames"></app-win-loss-component>
-  </section>
+  <div class="flex flex-col w-10/12">
+      <section >
+        <app-win-loss-component [playedGames]="playedGames"></app-win-loss-component>
+      </section>
 
-  <section class=" row-start-2 col-start-2 col-end-3">
-    <app-owned-game-frequency-component [ownedGames]="ownedGames"></app-owned-game-frequency-component>
-  </section>
-
+      <section>
+        <app-owned-game-frequency-component [ownedGames]="ownedGames"></app-owned-game-frequency-component>
+      </section>
+  </div>
 
 </div>

@@ -1,4 +1,4 @@
-<section class="w-full h-[85vh] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
+<section class="w-12/12 h-[85vh] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
 
   <section class="mx-auto flex justify-center">
 
@@ -7,8 +7,8 @@
   </section>
 
 
-  <div class="flex justify-center mx-auto">
-    <div class="w-10/12 h-[50vh] mx-auto">
+  <div class="overflow-x-auto flex justify-center mx-auto">
+    <div class="w-10/12 min-w-[600px] h-[50vh] mx-auto">
       <canvas  baseChart
                [data]="chartData"
                [type]="'bar'"

@@ -168,6 +168,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
   chartOptions: ChartOptions<'bar'> = {
     indexAxis: 'y',
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false,

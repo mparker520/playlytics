@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        navBar: "1100px"
+        navBar: "1100px",
+        analytics: "800px",
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif']
@@ -14,7 +15,7 @@ module.exports = {
         brand2: "#F79D65",
         brand3: "#F4845F",
         brand4: "#F27059",
-        brand5: "#F25C54",
+        brand5: "#F25C54"
       }
     },
   },

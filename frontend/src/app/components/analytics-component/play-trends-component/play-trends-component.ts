@@ -150,6 +150,7 @@ export class PlayTrendsComponent implements OnInit {
     this.analyticsService.getPlayTrends(params).subscribe({
       next: (playTrendsResponse: AdvancedAnalyticsResponseDTO) => {
 
+
         const datasets = Object.entries(playTrendsResponse.data).map(
           ([title, values], index) => ({
             label: title,
@@ -159,6 +160,7 @@ export class PlayTrendsComponent implements OnInit {
             categoryPercentage: 0.5
           })
         );
+
 
         this.chartData = {
           labels: playTrendsResponse.labels,
@@ -189,7 +191,7 @@ export class PlayTrendsComponent implements OnInit {
             data: values,
             backgroundColor: this.colorPalette[index],
             barPercentage: 1.0,
-            categoryPercentage: 0.5
+            categoryPercentage: 1
           })
         );
 
@@ -223,16 +225,15 @@ export class PlayTrendsComponent implements OnInit {
       x: {
         stacked: true,
 
-        beginAtZero: true,
-        suggestedMax: 5,
         ticks: {
           autoSkip: false,
-          stepSize: 5,
           precision: 0
         }
       },
       y: {
         stacked: true,
+        beginAtZero: true,
+
         ticks: {
           autoSkip: false,
           stepSize: 1,

@@ -24,7 +24,7 @@ export class PlayTrendsComponent implements OnInit {
   //<editor-fold desc="Constructor and Variables">
 
   @Input() playedGames: GameResponseDTO[]  = [];
-  @Input() rangeOfYears!: number[];
+
 
 
   //<editor-fold desc="Game Views">
@@ -61,7 +61,6 @@ export class PlayTrendsComponent implements OnInit {
   selectedGranularity: string = "year";
 
 
-  baseIndex!: number;
   selectedBaseYear!: number;
 
 
@@ -147,8 +146,7 @@ export class PlayTrendsComponent implements OnInit {
   ngOnInit() {
 
 
-    this.baseIndex = this.rangeOfYears.length - 2;
-    this.selectedBaseYear = this.rangeOfYears[this.baseIndex];
+    this.selectedBaseYear = new Date().getFullYear() - 1;
 
     const params = this.buildParams();
 

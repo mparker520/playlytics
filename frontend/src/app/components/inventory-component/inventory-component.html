@@ -6,7 +6,7 @@
 
 
   <section class="w-full navBar:w-full navBar:px-6 max-w-[2000px]">
-    <app-add-owned-game-component (lookup)="handleLookup($event)" (add)="handleAdd($event)" [games]=games></app-add-owned-game-component>
+    <app-add-owned-game-component (lookup)="handleLookup($event)" (add)="handleAdd($event)" [games]=games [gameLookUpErrorMessage]="gameLookUpErrorMessage" ></app-add-owned-game-component>
   </section>
 
   <section class="w-full navBar:w-full navBar:px-6 max-w-[2000px]">

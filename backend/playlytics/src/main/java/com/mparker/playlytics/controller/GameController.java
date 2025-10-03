@@ -2,6 +2,7 @@ package com.mparker.playlytics.controller;
 
 // Imports
 import com.mparker.playlytics.dto.GameResponseDTO;
+import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.service.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +29,14 @@ public class GameController {
     //<editor-fold desc = "Get Mappings">
 
     @GetMapping("/board-games")
-    public ResponseEntity<Set<GameResponseDTO>> getBoardGames(
+    public ResponseEntity<Set<GameResponseDTO>> getBoardGames (
             @RequestParam(value = "databaseFilter") String title
-    ) {
+    ) throws NotFoundException {
 
             Set <GameResponseDTO> boardGameResponseDTO = gameService.findByTitle(title);
+            if(boardGameResponseDTO.isEmpty()) {
+                throw new NotFoundException("No games found for filter " + title);
+            }
             return ResponseEntity.ok(boardGameResponseDTO);
 
     }

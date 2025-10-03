@@ -16,6 +16,7 @@ export class AddOwnedGameComponent {
 
         expanded: boolean = false;
         clicked: boolean = false;
+         @Input()gameLookUpErrorMessage?: string;
 
   //</editor-fold>
 

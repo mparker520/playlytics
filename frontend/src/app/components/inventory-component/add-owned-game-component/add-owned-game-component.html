@@ -29,8 +29,10 @@ my-6 px-6 shadow-md w-10/12 mx-auto navBar:w-full">
             (click)="triggerLookup(searchBox.value)">Search Game Database</button>
   </section>
 
+    <h4 class="text-md font-bold  text-[#ff3254] ">{{ gameLookUpErrorMessage }}</h4>
 
-  <section class="pb-6">
+
+    <section class="pb-6">
 
     @if(clicked) {
 

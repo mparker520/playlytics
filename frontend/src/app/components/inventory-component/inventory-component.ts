@@ -26,6 +26,7 @@ export class InventoryComponent implements OnInit{
   ownedGames: OwnedGameResponseDTO[] = [];
 
   games: GameResponseDTO[] = [];
+  gameLookUpErrorMessage?: string;
 
 
   constructor(private inventoryService: InventoryService, private gameService: GameService) {
@@ -76,7 +77,14 @@ export class InventoryComponent implements OnInit{
 
           },
 
-          error: (error: any) => console.error("fail", error)
+      error: (error: any) => {
+
+        this.gameLookUpErrorMessage = error.error.message
+
+        setTimeout(() => {
+          this.gameLookUpErrorMessage = undefined;
+        }, 3000);
+      }
     })
   }
 

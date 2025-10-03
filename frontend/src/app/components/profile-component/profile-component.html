@@ -1,12 +1,12 @@
 <div class="flex flex-col justify-center items-center">
 
 
-  <h2 class="text-3xl font-bold p-6 pb-2 text-brand4 border-b-4 border-b-brand1">My Profile</h2>
+  <h2 class="text-3xl font-bold p-6 pb-2 text-brand4 border-b-4 border-b-brand1">Edit Profile</h2>
 
   <section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
 my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
 
-    <h3 class="text-2xl font-bold  text-brand4 pt-1 text-center">Edit Profile</h3>
+
 
     <div>
       <h4 class="text-xl font-bold  mt-4 text-brand4">Your Current Information</h4>
@@ -22,7 +22,7 @@ my-6 px-6 shadow-md w-7/12 max-w-4xl mx-auto navBar:w-full">
     <div>
       <h4 class="text-xl font-bold  mt-4 text-brand4">Update Information</h4>
 
-      <form autocomplete="off" (ngSubmit)="updateAccount()">
+      <form autocomplete="off"   #profileForm="ngForm"(ngSubmit)="updateAccount(profileForm)">
 
         <div class="flex flex-col navBar:grid  grid-cols-1 gap-4 py-2 m-2 sm:grid-cols-2">
 

@@ -134,12 +134,12 @@ public class RegisteredPlayerService {
         if(registeredPlayerUpdateDTO.loginEmail() != null && !registeredPlayerUpdateDTO.loginEmail().isBlank()) {
 
             String currentLoginEmail = registeredPlayerRepository.getReferenceById(authUserId).getLoginEmail();
+            String proposedLoginEmail = registeredPlayerUpdateDTO.loginEmail().replaceAll("\\s+", "").toLowerCase();
 
-            if(registeredPlayerRepository.existsByLoginEmail(registeredPlayerUpdateDTO.loginEmail().replaceAll("\\s+", "").toLowerCase())
-            && !registeredPlayerUpdateDTO.loginEmail().equals(currentLoginEmail)) {
+            if(registeredPlayerRepository.existsByLoginEmail(proposedLoginEmail)  && !registeredPlayerUpdateDTO.loginEmail().equals(currentLoginEmail)) {
                 throw new CustomAccessDeniedException("An Account with that login email already exists");
             }
-            registeredPlayer.setLoginEmail(registeredPlayerUpdateDTO.loginEmail());
+            registeredPlayer.setLoginEmail(proposedLoginEmail);
         }
 
         registeredPlayerRepository.save(registeredPlayer);

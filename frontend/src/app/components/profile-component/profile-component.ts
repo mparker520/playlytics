@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../dtos/registered-player-response-dto';
 import {RegisteredPlayerService} from '../../services/registered-player-service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, NgForm, ReactiveFormsModule} from '@angular/forms';
 
 
 @Component({
@@ -58,7 +58,7 @@ ngOnInit(): void {
     this.confirmTriggered = false;
   }
 
-  updateAccount() {
+  updateAccount(form: NgForm) {
 
     const registeredPlayerUpdateDTO = {
       loginEmail: this.loginEmail,
@@ -81,6 +81,7 @@ ngOnInit(): void {
       }
     })
 
+    form.resetForm();
 
   }
 

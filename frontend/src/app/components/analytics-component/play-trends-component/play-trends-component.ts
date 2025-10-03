@@ -83,7 +83,7 @@ export class PlayTrendsComponent implements OnInit {
 
 
       return {
-        selectedGameView: this.selectedGameView,
+
         selectedGranularity: this.selectedGranularity,
         selectedBaseYear: this.selectedBaseYear,
 
@@ -95,8 +95,12 @@ export class PlayTrendsComponent implements OnInit {
 
     if(this.selectedGameView === "byGame") {
 
+      if(this.selectedGame1?.gameId == null) {
+        this.selectedGame1 = this.playedGames[0];
+      }
+
       return {
-        selectedGameView: this.selectedGameView,
+
         selectedGranularity: this.selectedGranularity,
         selectedBaseYear: this.selectedBaseYear,
         selectedGame1Id: this.selectedGame1!.gameId
@@ -109,7 +113,7 @@ export class PlayTrendsComponent implements OnInit {
     if(this.selectedGameView === "compareGames") {
 
       return {
-        selectedGameView: this.selectedGameView,
+
         selectedGranularity: this.selectedGranularity,
         selectedBaseYear: this.selectedBaseYear,
         selectedGame1Id: this.selectedGame1!.gameId,
@@ -173,7 +177,7 @@ export class PlayTrendsComponent implements OnInit {
   filterResults() {
 
     const params = this.buildParams();
-
+    console.log(params)
 
     this.analyticsService.getPlayTrends(params).subscribe({
       next: (playTrendsResponse: AdvancedAnalyticsResponseDTO) => {

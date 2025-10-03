@@ -69,15 +69,13 @@ public class AnalyticsController {
     @GetMapping("/play-trends")
     public ResponseEntity<AdvancedAnalyticsResponseDTO> getPlayTrends(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(required = true) String selectedGameView,
             @RequestParam(required = true) String selectedGranularity,
-            @RequestParam(required = true) Long selectedStartingYear,
-            @RequestParam(required = true) Long selectedEndingYear,
+            @RequestParam(required = true) Long selectedBaseYear,
             @RequestParam(required = false) Long selectedGame1Id,
             @RequestParam(required = false) Long selectedGame2Id)  {
 
 
-        AdvancedAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGranularity, selectedStartingYear, selectedEndingYear, selectedGame1Id, selectedGame2Id);
+        AdvancedAnalyticsResponseDTO playTrendsResponseDTO = analyticsService.getPlayTrends(principal.getAuthenticatedUserId(), selectedGranularity, selectedBaseYear, selectedGame1Id, selectedGame2Id);
         return ResponseEntity.ok(playTrendsResponseDTO);
 
     }

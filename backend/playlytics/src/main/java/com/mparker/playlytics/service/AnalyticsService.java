@@ -92,13 +92,15 @@ public class AnalyticsService {
 
     //<editor-fold desc="Get Play Trends">
 
-    public AdvancedAnalyticsResponseDTO getPlayTrends(Long authUserId,  String selectedGranularity, Long selectedStartingYear, Long selectedEndingYear, Long selectedGame1Id, Long selectedGame2Id) {
+    public AdvancedAnalyticsResponseDTO getPlayTrends(Long authUserId,  String selectedGranularity, Long selectedBaseYear, Long selectedGame1Id, Long selectedGame2Id) {
 
         List<PlayTrendProjection> rows;
         List<String> labels =  new ArrayList<>();
 
         Map<String, List<Integer>> dataSets = new HashMap<>();
 
+        Long selectedStartingYear = selectedBaseYear - 1;
+        Long selectedEndingYear  = selectedBaseYear +1;
 
         if (selectedGranularity.equals("month")) {
             rows = analyticsRepository.getPlayTrendsByGameGranularityMonth(authUserId, selectedGame1Id, selectedGame2Id, selectedStartingYear, selectedEndingYear);

@@ -4,21 +4,21 @@
 
 
     @if(selectedView === "topFive") {
-      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Top 5)</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games <br> (Ranked by Top 5)</h2>
     }
 
 
     @if(selectedView === "bottomFive") {
-      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games (Ranked by Bottom 5)</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games <br> (Ranked by Bottom 5)</h2>
     }
 
 
     @if(selectedView === "all") {
-      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Owned Game Play Frequency</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6  text-center text-brand4 border-b-4 border-b-brand1">Owned Game <br> Play Frequency</h2>
     }
 
     @if(selectedView === "byGame") {
-      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGame?.gameName}} Play Count</h2>
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGame?.gameName}} <br> Play Count</h2>
     }
 
 

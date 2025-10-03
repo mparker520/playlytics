@@ -112,6 +112,15 @@ export class PlayTrendsComponent implements OnInit {
 
     if(this.selectedGameView === "compareGames") {
 
+      if(this.selectedGame1?.gameId == null && this.selectedGame2?.gameId == null) {
+        this.selectedGame1 = this.playedGames[0];
+        this.selectedGame2 = this.playedGames[1];
+      }
+
+      if(this.selectedGame1?.gameId != null && this.selectedGame2?.gameId == null) {
+        this.selectedGame2 = this.playedGames[1];
+      }
+
       return {
 
         selectedGranularity: this.selectedGranularity,

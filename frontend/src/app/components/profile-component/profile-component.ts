@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   firstName: string = '';
   lastName: string = '';
   displayName: string = '';
+  errorMessage?: string;
 
 
 constructor(private registeredPlayerService: RegisteredPlayerService) {
@@ -70,7 +71,14 @@ ngOnInit(): void {
             next: (response: RegisteredPlayerResponseDTO) => {
                 this.profileInformation = response;
           },
-          error: (error: any) => console.error('fail', error)
+      error: (error: any) => {
+
+        this.errorMessage = error.error.message
+
+        setTimeout(() => {
+          this.errorMessage = undefined;
+        }, 3000);
+      }
     })
 
 

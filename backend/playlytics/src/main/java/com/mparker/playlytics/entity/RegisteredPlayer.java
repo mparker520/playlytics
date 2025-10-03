@@ -82,6 +82,10 @@ public class RegisteredPlayer extends Player {
         return loginEmail;
     }
 
+    public void setLoginEmail(String loginEmail) {
+        this.loginEmail = loginEmail;
+    }
+
     public Set<GhostPlayer> getAssociations() {
         return associations;
     }

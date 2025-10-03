@@ -67,15 +67,18 @@ public class RegisteredPlayerService {
     public RegisteredPlayerResponseDTO createRegisteredPlayer(RegisteredPlayerDTO registeredPlayerDTO) throws CustomAccessDeniedException {
 
         String loginEmail = registeredPlayerDTO.loginEmail().replaceAll("\\s+", "").toLowerCase();
+        String displayName = registeredPlayerDTO.displayName();
 
         if (!registeredPlayerRepository.existsByLoginEmail(loginEmail)) {
+
+            if(!registeredPlayerRepository.existsByDisplayName(displayName)){
 
 
             String encodedPassword = passwordEncoder.encode(registeredPlayerDTO.password());
 
             String firstName = registeredPlayerDTO.firstName();
             String lastName = registeredPlayerDTO.lastName();
-            String displayName = registeredPlayerDTO.displayName();
+
             byte[] avatar = registeredPlayerDTO.avatar();
 
             RegisteredPlayer registeredPlayer = new RegisteredPlayer(firstName, lastName, avatar,  displayName, loginEmail, (encodedPassword));
@@ -86,13 +89,16 @@ public class RegisteredPlayerService {
             }
             return new RegisteredPlayerResponseDTO(newRegisteredPlayerId, firstName, lastName, avatar, loginEmail, displayName);
 
+
+            }
+            else {
+                throw new CustomAccessDeniedException("An Account with that Display Name Already Exists.");
+            }
         }
 
+
         else {
-                throw new ResponseStatusException(
-                        HttpStatus.FORBIDDEN,
-                        "An Account with that login email already exists"
-                );
+                throw new CustomAccessDeniedException("An Account with that Username Already Exists.");
         }
 
     }
@@ -116,14 +122,24 @@ public class RegisteredPlayerService {
 
 
         if(registeredPlayerUpdateDTO.displayName() != null && !registeredPlayerUpdateDTO.displayName().isBlank()) {
+
+            String currentDisplayName = registeredPlayerRepository.getReferenceById(authUserId).getDisplayName();
+
+            if(registeredPlayerRepository.existsByDisplayName(registeredPlayerUpdateDTO.displayName()) && !registeredPlayerUpdateDTO.displayName().equals(currentDisplayName)) {
+                throw new CustomAccessDeniedException("An Account with that display name already exists");
+            }
             registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
         }
 
         if(registeredPlayerUpdateDTO.loginEmail() != null && !registeredPlayerUpdateDTO.loginEmail().isBlank()) {
-            if(registeredPlayerRepository.existsByLoginEmail(registeredPlayerUpdateDTO.loginEmail())) {
+
+            String currentLoginEmail = registeredPlayerRepository.getReferenceById(authUserId).getLoginEmail();
+
+            if(registeredPlayerRepository.existsByLoginEmail(registeredPlayerUpdateDTO.loginEmail().replaceAll("\\s+", "").toLowerCase())
+            && !registeredPlayerUpdateDTO.loginEmail().equals(currentLoginEmail)) {
                 throw new CustomAccessDeniedException("An Account with that login email already exists");
             }
-            registeredPlayer.setDisplayName(registeredPlayerUpdateDTO.displayName());
+            registeredPlayer.setLoginEmail(registeredPlayerUpdateDTO.loginEmail());
         }
 
         registeredPlayerRepository.save(registeredPlayer);

@@ -20,4 +20,6 @@ public interface RegisteredPlayerRepository extends JpaRepository<RegisteredPlay
 
     RegisteredPlayer getReferenceByLoginEmail(String username);
 
+    boolean existsByDisplayName(String displayName);
+
 }

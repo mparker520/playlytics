@@ -39,20 +39,20 @@ export class PlayTrendsComponent implements OnInit {
   //<editor-fold desc="Color Palette">
   colorPalette = [
 
-    '#ff3254', '#f54659', '#ff5a5f', '#ff7365', '#ff8867',
-
-   '#fa7c5f', '#F27059', '#F4845F', '#F79D65', '#F7B267',
-
-    '#f25c2a', '#f2701e', '#f48428', '#f79d32', '#f7b232',
+    '#fc294b', '#fa7c5f', '#f25c2a', '#f89777',
 
 
-    '#f89777', '#f2ac6e', '#f4c06e', '#f7d978', '#f7ee78',
+    '#f54659', '#F27059', '#f2701e', '#f2ac6e',
 
 
+    '#ff5a5f', '#F4845F', '#f48428', '#f4c06e',
 
 
+    '#ff7365', '#F79D65', '#f79d32', '#f7d978',
 
-  ];
+
+    '#ff8867', '#F7B267', '#f7b232', '#f7ee78',
+  ]
   //</editor-fold>
 
 

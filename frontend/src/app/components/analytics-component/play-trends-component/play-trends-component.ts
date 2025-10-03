@@ -60,11 +60,9 @@ export class PlayTrendsComponent implements OnInit {
 
   selectedGranularity: string = "year";
 
-  startIndex!: number;
-  selectedStartingYear!: number;
 
-  endIndex!: number;
-  selectedEndingYear!: number;
+  baseIndex!: number;
+  selectedBaseYear!: number;
 
 
   //</editor-fold>
@@ -87,8 +85,7 @@ export class PlayTrendsComponent implements OnInit {
       return {
         selectedGameView: this.selectedGameView,
         selectedGranularity: this.selectedGranularity,
-        selectedStartingYear: this.selectedStartingYear,
-        selectedEndingYear: this.selectedEndingYear,
+        selectedBaseYear: this.selectedBaseYear,
 
       }
 
@@ -101,8 +98,7 @@ export class PlayTrendsComponent implements OnInit {
       return {
         selectedGameView: this.selectedGameView,
         selectedGranularity: this.selectedGranularity,
-        selectedStartingYear: this.selectedStartingYear,
-        selectedEndingYear: this.selectedEndingYear,
+        selectedBaseYear: this.selectedBaseYear,
         selectedGame1Id: this.selectedGame1!.gameId
 
 
@@ -115,8 +111,7 @@ export class PlayTrendsComponent implements OnInit {
       return {
         selectedGameView: this.selectedGameView,
         selectedGranularity: this.selectedGranularity,
-        selectedStartingYear: this.selectedStartingYear,
-        selectedEndingYear: this.selectedEndingYear,
+        selectedBaseYear: this.selectedBaseYear,
         selectedGame1Id: this.selectedGame1!.gameId,
         selectedGame2Id: this.selectedGame2!.gameId
 
@@ -139,10 +134,8 @@ export class PlayTrendsComponent implements OnInit {
   ngOnInit() {
 
 
-    this.startIndex = this.rangeOfYears.length -3;
-    this.endIndex = this.rangeOfYears.length - 1;
-    this.selectedStartingYear = this.rangeOfYears[this.startIndex];
-    this.selectedEndingYear = this.rangeOfYears[this.endIndex];
+    this.baseIndex = this.rangeOfYears.length - 2;
+    this.selectedBaseYear = this.rangeOfYears[this.baseIndex];
 
     const params = this.buildParams();
 

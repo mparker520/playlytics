@@ -34,6 +34,7 @@ export class SessionsComponent implements OnInit{
   network: PlayerResponseDTO[] = [];
   storedParams: GamePlaySessionSearchParamsDTO = [];
   reportGenerationTime?: Date;
+  gameLookUpErrorMessage?: string;
 
   constructor(private gamePlaySessionService: GamePlaySessionService, private gameService: GameService, private networkService: NetworkService, private registeredPlayerService: RegisteredPlayerService) {
 
@@ -80,7 +81,13 @@ export class SessionsComponent implements OnInit{
         this.games = response;
       },
 
-      error: (error: any) => console.error("fail", error)
+      error: (error: any) => {
+        this.gameLookUpErrorMessage = error.error.message
+
+        setTimeout(() => {
+          this.gameLookUpErrorMessage = undefined;
+        }, 3000);
+      }
     })
   }
   //</editor-fold>

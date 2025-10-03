@@ -1,6 +1,7 @@
 package com.mparker.playlytics.controller;
 
 // Imports
+import com.mparker.playlytics.dto.AuthResponseDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,15 @@ public class AuthController {
         }
 
         CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
-        return ResponseEntity.ok(user);
+
+       AuthResponseDTO userdto = new AuthResponseDTO(
+               true,
+               user.getAuthenticatedUserId(),
+               user.getEmail(),
+               user.getFirstName(),
+               user.getDisplayName()
+        );
+        return ResponseEntity.ok(userdto);
 
     }
 

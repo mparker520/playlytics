@@ -20,7 +20,7 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
 export class AddGamePlaySessionComponent {
 
 expanded: boolean = false
-
+  @Input()gameLookUpErrorMessage?: string;
 
   protected readonly ScoringModelEnum = ScoringModelEnum;
 

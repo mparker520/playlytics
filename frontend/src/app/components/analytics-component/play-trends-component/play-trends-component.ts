@@ -52,6 +52,8 @@ export class PlayTrendsComponent implements OnInit {
 
 
     '#ff8867', '#F7B267', '#f7b232', '#f7ee78',
+
+
   ]
   //</editor-fold>
 
@@ -79,15 +81,12 @@ export class PlayTrendsComponent implements OnInit {
 
     if(this.selectedGameView === "all") {
 
-
-
       return {
 
         selectedGranularity: this.selectedGranularity,
         selectedBaseYear: this.selectedBaseYear,
 
       }
-
 
     }
 
@@ -104,7 +103,6 @@ export class PlayTrendsComponent implements OnInit {
         selectedBaseYear: this.selectedBaseYear,
         selectedGame1Id: this.selectedGame1!.gameId
 
-
       }
 
     }
@@ -118,6 +116,9 @@ export class PlayTrendsComponent implements OnInit {
 
       if(this.selectedGame1?.gameId != null && this.selectedGame2?.gameId == null) {
         this.selectedGame2 = this.playedGames[1];
+        if (this.selectedGame1 == this.selectedGame2) {
+          this.selectedGame2 = this.playedGames[2];
+        }
       }
 
       return {
@@ -156,10 +157,11 @@ export class PlayTrendsComponent implements OnInit {
 
 
         const datasets = Object.entries(playTrendsResponse.data).map(
+
           ([title, values], index) => ({
             label: title,
             data: values,
-            backgroundColor: this.colorPalette[index],
+            backgroundColor: this.colorPalette[index % 20],
             barPercentage: 0.8,
             categoryPercentage: 0.8
           })
@@ -193,7 +195,7 @@ export class PlayTrendsComponent implements OnInit {
           ([title, values], index) => ({
             label: title,
             data: values,
-            backgroundColor: this.colorPalette[index],
+            backgroundColor: this.colorPalette[index % 20],
             barPercentage: 0.8,
             categoryPercentage: 1
           })

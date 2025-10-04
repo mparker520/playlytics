@@ -15,18 +15,20 @@ public class CustomUserDetails implements UserDetails {
     Long authenticatedUserId;
     String email;
     String firstName;
+    String lastName;
     String displayName;
 
 
     public CustomUserDetails() {
     }
 
-    public CustomUserDetails(String username, String password, Long authenticatedUserId, String email, String firstName, String displayName) {
+    public CustomUserDetails(String username, String password, Long authenticatedUserId, String email, String firstName, String lastName, String displayName) {
         this.username = username;
         this.password = password;
         this.authenticatedUserId = authenticatedUserId;
         this.email = email;
         this.firstName = firstName;
+        this.lastName = lastName;
         this.displayName = displayName;
     }
 
@@ -56,6 +58,10 @@ public class CustomUserDetails implements UserDetails {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
     }
 
     public String getDisplayName() {

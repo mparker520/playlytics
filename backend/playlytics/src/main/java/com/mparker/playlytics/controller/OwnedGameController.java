@@ -25,6 +25,7 @@ public class OwnedGameController {
         this.gameInventoryService = gameInventoryService;
     }
 
+
     //</editor-fold>
 
     //<editor-fold desc = "GET Mapping">
@@ -37,7 +38,9 @@ public class OwnedGameController {
             List<OwnedGameResponseDTO> allOwnedGames = gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allOwnedGames);
 
+
     }
+
 
     //</editor-fold>
 
@@ -48,10 +51,13 @@ public class OwnedGameController {
     public ResponseEntity<OwnedGameResponseDTO> addOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable("gameId") Long gameId)  {
+
         OwnedGameResponseDTO ownedGameResponseDTO = gameInventoryService.saveOwnedGame(gameId, principal.getAuthenticatedUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ownedGameResponseDTO);
 
+
     }
+
 
     //</editor-fold>
 
@@ -62,11 +68,18 @@ public class OwnedGameController {
     public ResponseEntity<Void> deleteOwnedGame(
             @AuthenticationPrincipal CustomUserDetails principal,
             @PathVariable ("ownedGameId") Long ownedGameId) {
+
             gameInventoryService.deleteByIdAndPlayerId(ownedGameId, principal.getAuthenticatedUserId());
+
+            // TODO: Test if this is needed
             gameInventoryService.findAllByRegisteredPlayerId(principal.getAuthenticatedUserId());
+
             return ResponseEntity.noContent().build();
+
+
     }
 
     //</editor-fold>
+
 
 }

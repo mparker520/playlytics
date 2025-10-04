@@ -27,30 +27,37 @@ public class GhostPlayerController {
     //</editor-fold>
 
     //<editor-fold desc = "POST Mapping">
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/ghost-players")
-    public ResponseEntity<GhostPlayerResponseDTO> createGhostPlayer(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestBody GhostPlayerDTO ghostPlayerDTO) {
 
-        GhostPlayerResponseDTO ghostPlayerResponseDTO = ghostPlayerService.createNewGhostPlayer(ghostPlayerDTO, principal.getAuthenticatedUserId());
-        return ResponseEntity.ok(ghostPlayerResponseDTO);
+        @PreAuthorize("isAuthenticated()")
+        @PostMapping("/ghost-players")
+        public ResponseEntity<GhostPlayerResponseDTO> createGhostPlayer(
+                @AuthenticationPrincipal CustomUserDetails principal,
+                @RequestBody GhostPlayerDTO ghostPlayerDTO) {
 
-    }
+            GhostPlayerResponseDTO ghostPlayerResponseDTO = ghostPlayerService.createNewGhostPlayer(ghostPlayerDTO, principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(ghostPlayerResponseDTO);
+
+        }
+
+
     //</editor-fold>
 
     //<editor-fold desc = "PATCH Mapping">
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/ghost-players/{ghostPlayerId}")
-    public ResponseEntity<GhostPlayerResponseDTO> updateGhostPlayer(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable Long ghostPlayerId,
-            @RequestBody GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
 
-        GhostPlayerResponseDTO ghostPlayerResponseDTO = ghostPlayerService.updateGhostPlayer(ghostPlayerId, ghostPlayerUpdateDTO, principal.getAuthenticatedUserId());
-        return ResponseEntity.ok(ghostPlayerResponseDTO);
+            // This Controller has not yet been utilized
 
-    }
+            @PreAuthorize("isAuthenticated()")
+            @PatchMapping("/ghost-players/{ghostPlayerId}")
+            public ResponseEntity<GhostPlayerResponseDTO> updateGhostPlayer(
+                    @AuthenticationPrincipal CustomUserDetails principal,
+                    @PathVariable Long ghostPlayerId,
+                    @RequestBody GhostPlayerUpdateDTO ghostPlayerUpdateDTO) {
+
+                GhostPlayerResponseDTO ghostPlayerResponseDTO = ghostPlayerService.updateGhostPlayer(ghostPlayerId, ghostPlayerUpdateDTO, principal.getAuthenticatedUserId());
+                return ResponseEntity.ok(ghostPlayerResponseDTO);
+
+            }
+
 
     //</editor-fold>
 

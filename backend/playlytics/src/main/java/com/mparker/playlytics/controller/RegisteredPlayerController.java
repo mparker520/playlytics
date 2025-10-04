@@ -25,9 +25,11 @@ public class RegisteredPlayerController {
         this.registeredPlayerService = registeredPlayerService;
     }
 
+
     //</editor-fold>
 
     //<editor-fold desc="GET Mapping">
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public ResponseEntity<RegisteredPlayerResponseDTO> getProfile(
@@ -35,12 +37,13 @@ public class RegisteredPlayerController {
 
         RegisteredPlayerResponseDTO playerResponseDTO = registeredPlayerService.getProfile(principal.getAuthenticatedUserId());
         return ResponseEntity.ok(playerResponseDTO);
+
     }
+
+
     //</editor-fold>
 
-
     //<editor-fold desc = "POST Mapping">
-
 
     @PostMapping("/create-account")
     public ResponseEntity<RegisteredPlayerResponseDTO> createRegisteredPlayer(
@@ -49,10 +52,11 @@ public class RegisteredPlayerController {
         RegisteredPlayerResponseDTO registeredPlayerResponseDTO = registeredPlayerService.createRegisteredPlayer(registeredPlayerDTO);
         return ResponseEntity.ok(registeredPlayerResponseDTO);
 
+
     }
 
-    //</editor-fold>
 
+    //</editor-fold>
 
     //<editor-fold desc = "PATCH Mapping">
 
@@ -65,10 +69,8 @@ public class RegisteredPlayerController {
         RegisteredPlayerUpdateDTO registeredPlayerResponseDTO = registeredPlayerService.updateRegisteredPlayer(principal.getAuthenticatedUserId(), registeredPlayerUpdateDTO);
         return ResponseEntity.ok(registeredPlayerResponseDTO);
 
+
     }
-
-
-
 
 
     //</editor-fold>
@@ -83,7 +85,9 @@ public class RegisteredPlayerController {
             registeredPlayerService.deleteRegisteredPlayer(principal.getAuthenticatedUserId());
             return ResponseEntity.noContent().build();
 
+
     }
+
 
     //</editor-fold>
 

@@ -13,7 +13,6 @@ import java.util.Set;
 
 
 @RestController
-
 public class GameController {
 
     //<editor-fold desc = "Constructor">
@@ -23,23 +22,27 @@ public class GameController {
         this.gameService = gameService;
     }
 
+
     //</editor-fold>
 
 
-    //<editor-fold desc = "Get Mappings">
+    //<editor-fold desc = "GET Mappings">
 
-    @GetMapping("/board-games")
-    public ResponseEntity<Set<GameResponseDTO>> getBoardGames (
-            @RequestParam(value = "databaseFilter") String title
-    ) throws NotFoundException {
+        @GetMapping("/board-games")
+        public ResponseEntity<Set<GameResponseDTO>> getBoardGames (
+                @RequestParam(value = "databaseFilter") String title) throws NotFoundException {
 
-            Set <GameResponseDTO> boardGameResponseDTO = gameService.findByTitle(title);
-            if(boardGameResponseDTO.isEmpty()) {
-                throw new NotFoundException("No games found for filter " + title);
-            }
-            return ResponseEntity.ok(boardGameResponseDTO);
+                Set <GameResponseDTO> boardGameResponseDTO = gameService.findByTitle(title);
 
-    }
+                // If no games found by filter, throw NotFoundException
+                if(boardGameResponseDTO.isEmpty()) {
+                    throw new NotFoundException("No games found for filter " + title);
+                }
+
+                // Else return DTO
+                return ResponseEntity.ok(boardGameResponseDTO);
+
+        }
 
     //</editor-fold>
 

@@ -39,10 +39,11 @@ public class AppUserDetailsService implements UserDetailsService {
             Long authenticatedUserId = registeredPlayer.getId();
             String email = registeredPlayer.getLoginEmail();
             String firstName = registeredPlayer.getFirstName();
+            String lastName = registeredPlayer.getLastName();
             String displayName = registeredPlayer.getDisplayName();
 
 
-            return   new CustomUserDetails(username, password, authenticatedUserId, email, firstName, displayName );
+            return   new CustomUserDetails(username, password, authenticatedUserId, email, firstName, lastName, displayName);
 
         }
 

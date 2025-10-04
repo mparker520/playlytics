@@ -24,6 +24,7 @@ public class AnalyticsController {
 
     public AnalyticsController(AnalyticsService analyticsService) {
         this.analyticsService = analyticsService;
+
     }
 
     //</editor-fold>
@@ -51,7 +52,7 @@ public class AnalyticsController {
     @GetMapping("/owned-game-frequency")
     public ResponseEntity<BasicAnalyticsResponseDTO> getOwnedGameFrequency(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(required = true) String selectedView,
+            @RequestParam String selectedView,
             @RequestParam(required = false) Long selectedGameId)  {
 
 
@@ -62,15 +63,14 @@ public class AnalyticsController {
 
     //</editor-fold>
 
-
     //<editor-fold desc = "Play Trends">
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/play-trends")
     public ResponseEntity<AdvancedAnalyticsResponseDTO> getPlayTrends(
             @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(required = true) String selectedGranularity,
-            @RequestParam(required = true) Long selectedBaseYear,
+            @RequestParam String selectedGranularity,
+            @RequestParam Long selectedBaseYear,
             @RequestParam(required = false) Long selectedGame1Id,
             @RequestParam(required = false) Long selectedGame2Id)  {
 
@@ -82,7 +82,5 @@ public class AnalyticsController {
 
     //</editor-fold>
 
-
-    //</editor-fold>
 
 }

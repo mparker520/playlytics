@@ -9,9 +9,7 @@ import com.mparker.playlytics.service.GamePlaySessionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Set;
 
@@ -22,48 +20,53 @@ public class GamePlaySessionController {
 
     //<editor-fold desc = "Constructor">
 
-    private final GamePlaySessionService gamePlaySessionService;
+        private final GamePlaySessionService gamePlaySessionService;
 
-    public GamePlaySessionController(GamePlaySessionService gamePlaySessionService) {
-        this.gamePlaySessionService = gamePlaySessionService;
-    }
+        public GamePlaySessionController(GamePlaySessionService gamePlaySessionService) {
+            this.gamePlaySessionService = gamePlaySessionService;
+        }
+
 
     //</editor-fold>
 
-//<editor-fold desc = "GET Mapping">
+    //<editor-fold desc = "GET Mapping">
 
-//<editor-fold desc="Get Game Play Sessions for Player">
-@PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
-    public ResponseEntity<List<GamePlaySessionResponseDTO>> getGamePlaySessions(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestParam(value = "selectedGame", required = false) Long gameId,
-            @RequestParam(value= "startDate", required = true) String startDate,
-            @RequestParam(value="endDate", required = true) String endDate) {
+    //<editor-fold desc="Get Game Play Sessions for Player">
 
-
-                List<GamePlaySessionResponseDTO> allGamePlaySessionsParams = gamePlaySessionService.findAllByPlayerIdAndParams(principal.getAuthenticatedUserId(), gameId, startDate, endDate);
-                return ResponseEntity.ok(allGamePlaySessionsParams);
+        @PreAuthorize("isAuthenticated()")    @GetMapping("/game-play-sessions")
+            public ResponseEntity<List<GamePlaySessionResponseDTO>> getGamePlaySessions(
+                    @AuthenticationPrincipal CustomUserDetails principal,
+                    @RequestParam(value = "selectedGame", required = false) Long gameId,
+                    @RequestParam(value= "startDate") String startDate,
+                    @RequestParam(value="endDate") String endDate) {
 
 
+                    List<GamePlaySessionResponseDTO> allGamePlaySessionsParams = gamePlaySessionService.findAllByPlayerIdAndParams(principal.getAuthenticatedUserId(), gameId, startDate, endDate);
+                    return ResponseEntity.ok(allGamePlaySessionsParams);
 
-    }
-    //</editor-fold>
 
+
+            }
+
+        //</editor-fold>
 
     //<editor-fold desc="Get Names of All Games Played">
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/played-games")
-    public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
-            @AuthenticationPrincipal CustomUserDetails principal) {
+
+        @PreAuthorize("isAuthenticated()")
+        @GetMapping("/played-games")
+        public ResponseEntity<List<GameResponseDTO>> getPlayedGames(
+                @AuthenticationPrincipal CustomUserDetails principal) {
+
+            List<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(allPlayedGames);
+
+        }
 
 
-        List<GameResponseDTO> allPlayedGames = gamePlaySessionService.getAllPlayedGames(principal.getAuthenticatedUserId());
-        return ResponseEntity.ok(allPlayedGames);
-
-}
-//</editor-fold>
+    //</editor-fold>
 
     //<editor-fold desc="Get Pending Game Play Sessions for Player">
+
     @PreAuthorize("isAuthenticated()")    @GetMapping("/pending-game-play-sessions")
     public ResponseEntity<Set<GamePlaySessionResponseDTO>> getPendingGamePlaySessions(
             @AuthenticationPrincipal CustomUserDetails principal) {
@@ -71,52 +74,59 @@ public class GamePlaySessionController {
             Set<GamePlaySessionResponseDTO> allPendingGamePlaySessions = gamePlaySessionService.getAllPendingGpSessions(principal.getAuthenticatedUserId());
             return ResponseEntity.ok(allPendingGamePlaySessions);
 
-
     }
+
+
     //</editor-fold>
 
 
 //</editor-fold>
 
- //<editor-fold desc = "POST Mapping">
+    //<editor-fold desc = "POST Mapping">
 
-    @PostMapping("/game-play-sessions")
-    public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
+        @PostMapping("/game-play-sessions")
+        public ResponseEntity<GamePlaySessionResponseDTO> createGamePlaySession(
+                @AuthenticationPrincipal CustomUserDetails principal,
+                @RequestBody GamePlaySessionDTO gamePlaySessionDTO)  {
 
-        GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO, principal.getAuthenticatedUserId());
-        return ResponseEntity.ok(gamePlaySessionResponseDTO);
+            GamePlaySessionResponseDTO gamePlaySessionResponseDTO = gamePlaySessionService.assembleGpSession(gamePlaySessionDTO, principal.getAuthenticatedUserId());
+            return ResponseEntity.ok(gamePlaySessionResponseDTO);
 
-    }
+        }
 
-    //</editor-fold>
-
- //<editor-fold desc = "DELETE Mapping">
-
-    @DeleteMapping("/game-play-sessions/{sessionId}")
-    public ResponseEntity<String> deleteGamePlaySession(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable ("sessionId") Long sessionId) {
-
-        gamePlaySessionService.deleteByIdAndPlayerId(sessionId, principal.getAuthenticatedUserId());
-        return ResponseEntity.noContent().build();
-
-    }
 
     //</editor-fold>
 
-//<editor-fold desc="PATCH Mapping">
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/game-play-sessions/{id}")
-    public ResponseEntity<Void> acceptGamePlaySession(
-            @AuthenticationPrincipal CustomUserDetails principal,
-            @PathVariable ("id") Long id) {
+    //<editor-fold desc = "DELETE Mapping">
 
-        gamePlaySessionService.acceptGamePlaySession(id, principal.getAuthenticatedUserId());
-        return ResponseEntity.ok().build();
+        @DeleteMapping("/game-play-sessions/{sessionId}")
+        public ResponseEntity<String> deleteGamePlaySession(
+                @AuthenticationPrincipal CustomUserDetails principal,
+                @PathVariable ("sessionId") Long sessionId) {
 
-    }
+            gamePlaySessionService.deleteByIdAndPlayerId(sessionId, principal.getAuthenticatedUserId());
+            return ResponseEntity.noContent().build();
+
+        }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="PATCH Mapping">
+
+    // Allows a newly created User to Accept Games that were played by their "Ghost"
+
+        @PreAuthorize("isAuthenticated()")
+        @PatchMapping("/game-play-sessions/{id}")
+        public ResponseEntity<Void> acceptGamePlaySession(
+                @AuthenticationPrincipal CustomUserDetails principal,
+                @PathVariable ("id") Long id) {
+
+            gamePlaySessionService.acceptGamePlaySession(id, principal.getAuthenticatedUserId());
+            return ResponseEntity.ok().build();
+
+        }
+
     //</editor-fold>
 
 

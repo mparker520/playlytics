@@ -46,23 +46,34 @@ public class LoginController {
             HttpServletRequest request,
             HttpServletResponse response) {
 
-
+        // Call Authentication Service
         Authentication authentication = authenticationService.login(authRequestDTO.username(), authRequestDTO.password());
 
+        // Ensure there is a session
         request.getSession(true);
+
+        // Create an Empty Security Context
         SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+        // Set Security Context with Authentication
         context.setAuthentication(authentication);
+
+        // Save Security Context in the Security Context Repository
         securityContextRepository.saveContext(context, request, response);
 
+        // CSRF Token
         CsrfToken token = csrfTokenRepository.generateToken(request);
         csrfTokenRepository.saveToken(token, request, response);
 
-      CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        // Create Custom User Detail from Authentication Principal
+        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new AuthResponseDTO(true, principal.getAuthenticatedUserId(), principal.getEmail(), principal.getFirstName(), principal.getDisplayName()));
+        // Return AuthResponseDTO
+        return ResponseEntity.ok(new AuthResponseDTO(true, principal.getAuthenticatedUserId(), principal.getEmail(), principal.getFirstName(), principal.getLastName(), principal.getDisplayName()));
 
     }
 
-    //<editor-fold>
+
+    //</editor-fold>
 
 }

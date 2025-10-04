@@ -172,9 +172,7 @@ public class GamePlaySessionService {
         //RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("No registered player found"));
 
         GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
-        if (ghostPlayer == null) {
-            throw new NotFoundException("No Linked Guest player found");
-        }
+
         Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
 
         for (SessionParticipant sessionParticipant : associatedSessionParticipants) {

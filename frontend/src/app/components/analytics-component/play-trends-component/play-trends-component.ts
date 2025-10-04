@@ -63,7 +63,8 @@ export class PlayTrendsComponent implements OnInit {
   selectedGranularity: string = "year";
 
 
-  selectedBaseYear!: number;
+  selectedBaseYear: number = new Date().getFullYear() - 1;
+  maxYear: number = new Date().getFullYear();
 
 
   //</editor-fold>
@@ -146,8 +147,6 @@ export class PlayTrendsComponent implements OnInit {
   //<editor-fold desc="On Init">
   ngOnInit() {
 
-
-    this.selectedBaseYear = new Date().getFullYear() - 1;
 
     const params = this.buildParams();
 

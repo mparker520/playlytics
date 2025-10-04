@@ -24,8 +24,8 @@ export class GamePlaySessionListComponent{
   expanded: boolean = false;
   sessionSearch: boolean = false;
   selectedGame: GameResponseDTO | null = null;
-  startDate?: string;
-  endDate?: string;
+  startDate: string = new Date().toISOString().split("T")[0];
+  endDate: string = new Date().toISOString().split("T")[0];
 
   @Input() reportGenerationTime?: Date;
   @Input() playedGames: GameResponseDTO[]  = [];
@@ -63,8 +63,6 @@ export class GamePlaySessionListComponent{
 
 
     this.sessionSearch = true;
-
-
 
 
     const gamePlaySessionSearchParams: any = {

@@ -23,6 +23,16 @@ export class AccountCreationComponent {
   displayName: string = '';
   avatar?: Uint8Array;
 
+  emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+  isEmailValid(): boolean {
+    return this.emailRegex.test(this.loginEmail);
+  }
+
+  isPasswordValid(): boolean {
+    return this.passwordRegex.test(this.password);
+  }
 
 
   constructor( private accountCreationService: AccountCreationService, private router: Router) {

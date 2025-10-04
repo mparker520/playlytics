@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, SimpleChanges} from '@angular/core';
 import {FormsModule, NgForm} from '@angular/forms';
 import {ScoringModelEnum} from '../../../enums/scoring-model-enum';
 import {SessionParticipantDTO} from '../../../dtos/session-participant-dto';
@@ -17,10 +17,14 @@ import {GameResponseDTO} from '../../../dtos/game-response-dto';
   templateUrl: './add-game-play-session-component.html',
   styleUrl: './add-game-play-session-component.css'
 })
-export class AddGamePlaySessionComponent {
+export class AddGamePlaySessionComponent implements OnInit{
 
-expanded: boolean = false
+
+  expanded: boolean = false
   @Input()gameLookUpErrorMessage?: string;
+  @Input()gameSelectErrorMessage?: string;
+  @Input()participantErrorMessage?: string;
+  @Input()resultsErrorMessage?: string;
 
   protected readonly ScoringModelEnum = ScoringModelEnum;
 
@@ -30,24 +34,25 @@ expanded: boolean = false
   @Input() games: GameResponseDTO[] = [];
 
 
-  //</editor-fold>
+
 
   //<editor-fold desc="Variables">
-  numberPlayers: number = 0;
-  numberTeams: number = 0;
+
+
+  numberPlayers: number = 1;
   cooperativeResult: number = 1;
   selectedGameName?: string;
-
+  now = new Date();
+  local = new Date(this.now.getTime() - this.now.getTimezoneOffset() * 60000);
+  formattedDateTime = this.local.toISOString().slice(0, 16);
 
   //</editor-fold>
 
   //<editor-fold desc="GamePlaySessionDTO Constructor">
-  sessionDateTime!: string;
+  sessionDateTime: string = this.formattedDateTime;
   scoringModel: ScoringModelEnum = ScoringModelEnum.RANKING;
-  gameId!: number;
+  gameId: number = 0;
   sessionParticipants: SessionParticipantDTO[] = [];
-
-
 
 
   //</editor-fold>
@@ -55,11 +60,22 @@ expanded: boolean = false
   //<editor-fold desc="On Change Methods">
 
 
+  onScoringModelChange(): void {
+    if(this.scoringModel === 'RANKING') {
+      this.numberPlayers = 1;
+    }
+    if(this.scoringModel === 'TEAM') {
+      this.numberPlayers = 3;
+    }
+    if(this.scoringModel === 'COOPERATIVE') {
+      this.numberPlayers = 2;
+    }
+  }
 
 
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
-        this.sessionParticipants[i] || {result: 0, playerId: 0}
+        this.sessionParticipants[i] || {result: i + 1, playerId: ""}
       );
   }
 
@@ -71,15 +87,19 @@ expanded: boolean = false
 
   //</editor-fold>
 
-
+ ngOnInit() {
+    this.onNumPlayerChange();
+ }
 
   @Output() lookup = new EventEmitter<string>;
+
   triggerGameLookup(searchValue: string) {
     this.lookup.emit(searchValue);
   }
 
   triggerGameFilterClear() {
     this.games = [];
+    this.gameId = 0;
   }
 
   triggerAddGame(id: number, gameTitle: string) {
@@ -115,7 +135,13 @@ expanded: boolean = false
 
 
     this.sessionSubmit.emit(gamePlayerSessionDTO)
-    form.resetForm();
+    this.sessionDateTime = this.formattedDateTime;
+    this.scoringModel = ScoringModelEnum.RANKING;
+    this.sessionParticipants = [];
+    this.gameId = 0;
+    this.numberPlayers = 1;
+    this.onNumPlayerChange();
+
   }
   //</editor-fold>
 

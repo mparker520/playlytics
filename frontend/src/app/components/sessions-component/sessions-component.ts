@@ -35,6 +35,9 @@ export class SessionsComponent implements OnInit{
   storedParams: GamePlaySessionSearchParamsDTO = [];
   reportGenerationTime?: Date;
   gameLookUpErrorMessage?: string;
+  gameSelectErrorMessage?: string;
+  participantErrorMessage?: string;
+  resultsErrorMessage?: string;
 
   constructor(private gamePlaySessionService: GamePlaySessionService, private gameService: GameService, private networkService: NetworkService, private registeredPlayerService: RegisteredPlayerService) {
 
@@ -100,7 +103,35 @@ export class SessionsComponent implements OnInit{
         next: (response: GamePlaySessionDTO) => {
 
         },
-        error: (error: any) => console.error("fail", error)
+        error: (error: any) => {
+
+          if(error.error.message === "Board Game Not Found.") {
+            this.gameSelectErrorMessage = error.error.message
+
+            setTimeout(() => {
+              this.gameSelectErrorMessage = undefined;
+            }, 3000);
+          }
+
+          if(error.error.message === "You must be a Session Participant in the Game Play Session") {
+            this.participantErrorMessage = error.error.message
+
+            setTimeout(() => {
+              this.participantErrorMessage = undefined;
+            }, 3000);
+
+          }
+
+          if(error.error.message === "There must be at least one winner!") {
+            this.resultsErrorMessage = error.error.message
+
+            setTimeout(() => {
+              this.resultsErrorMessage = undefined;
+            }, 3000);
+
+          }
+
+        }
       })
   }
   //</editor-fold>

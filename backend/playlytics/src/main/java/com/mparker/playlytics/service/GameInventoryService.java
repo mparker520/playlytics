@@ -32,6 +32,7 @@ public class GameInventoryService {
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.gameRepository = gameRepository;
 
+
     }
 
     //</editor-fold>
@@ -67,7 +68,6 @@ public class GameInventoryService {
                 throw new NotFoundException("Game Not Found");
 
             }
-
 
 
     }

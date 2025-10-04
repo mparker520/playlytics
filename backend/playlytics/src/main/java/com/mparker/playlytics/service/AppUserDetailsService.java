@@ -16,17 +16,20 @@ public class AppUserDetailsService implements UserDetailsService {
 
     //<editor-fold desc = "Constructors and Dependencies">
 
-    private final RegisteredPlayerRepository registeredPlayerRepository;
+        private final RegisteredPlayerRepository registeredPlayerRepository;
 
-    public AppUserDetailsService(RegisteredPlayerRepository registeredPlayerRepository) {
+        public AppUserDetailsService(RegisteredPlayerRepository registeredPlayerRepository) {
 
-        this.registeredPlayerRepository = registeredPlayerRepository;
+            this.registeredPlayerRepository = registeredPlayerRepository;
 
-    }
+        }
+
 
     //</editor-fold>
 
 
+    //<editor-fold desc="Load User by Username">
+    //TODO: Can this be deleted
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -50,6 +53,7 @@ public class AppUserDetailsService implements UserDetailsService {
         else throw new UsernameNotFoundException(username);
 
     }
+    //</editor-fold>
 
 
 }

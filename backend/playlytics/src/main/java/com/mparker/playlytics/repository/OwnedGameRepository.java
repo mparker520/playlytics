@@ -8,10 +8,10 @@ import java.util.List;
 
 public interface OwnedGameRepository  extends JpaRepository<OwnedGame, Long> {
 
-        // Custom Method to Delete OwnedGame
+        // Delete OwnedGame by id and registered player id
         void deleteByIdAndRegisteredPlayer_Id(Long id, Long playerId);
 
-        // Custom Method to find all OwnedGames belonging to a RegisteredPlayer
+        // Find all OwnedGames belonging to a RegisteredPlayer
         List<OwnedGame> findAllByRegisteredPlayer_IdOrderByGameGameTitle(Long playerId);
 
 

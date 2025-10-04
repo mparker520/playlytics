@@ -9,7 +9,6 @@ import com.mparker.playlytics.enums.ScoringModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
 
 
@@ -126,7 +125,6 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
 
     //</editor-fold>
 
-
     //<editor-fold desc="Play Trends">
 
 
@@ -161,7 +159,6 @@ public interface AnalyticsRepository extends JpaRepository<GhostPlayer, Long> {
             @Param("game1Id") Long selectedGame1Id, @Param("game2Id") Long selectedGame2Id,
             @Param("startingYear") Long selectedStartingYear, @Param("endYear") Long selectedEndingYear);
     //</editor-fold>
-
 
 
     //<editor-fold desc="Play Trends By Game Granularity Year">

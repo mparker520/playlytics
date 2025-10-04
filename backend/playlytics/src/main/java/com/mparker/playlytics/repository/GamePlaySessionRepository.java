@@ -16,10 +16,13 @@ import java.util.Set;
 
 public interface GamePlaySessionRepository extends JpaRepository<GamePlaySession, Long> {
 
-    Set<GamePlaySession> findAllByCreator_Id(Long registeredPlayerId);
 
+    //<editor-fold desc="Get all game play sessions by creator">
+        Set<GamePlaySession> findAllByCreator_Id(Long registeredPlayerId);
+    //</editor-fold>
 
     //<editor-fold desc="Select Titles of all games played by user">
+
     @Query (("""
 
     SELECT DISTINCT new com.mparker.playlytics.dto.GameResponseDTO(g.id, g.gameTitle)
@@ -29,13 +32,18 @@ public interface GamePlaySessionRepository extends JpaRepository<GamePlaySession
     WHERE sp.player.id = :playerId
     ORDER BY g.gameTitle ASC
 
-"""))
+                                                                """))
+
     List<GameResponseDTO> getAllPlayedGames(@Param ("playerId") Long authUserId);
+
+
     //</editor-fold>
 
+    // TODO: Check if this is used
     List<GamePlaySession> game(@NotNull Game game);
 
 
+    //<editor-fold desc="Find all game play sessions by player id and paramaters">
 
     @Query (value = """
 
@@ -49,4 +57,9 @@ public interface GamePlaySessionRepository extends JpaRepository<GamePlaySession
             nativeQuery = true
     )
     List<GamePlaySession> findAllPlayerIdAndParams(@Param("playerId") Long authenticatedUserId, @Param("gameId") Long gameId, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+
+    //</editor-fold>
+
+
 }

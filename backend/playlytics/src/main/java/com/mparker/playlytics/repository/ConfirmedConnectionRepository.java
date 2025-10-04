@@ -13,12 +13,14 @@ import java.util.Set;
 
 
 public interface ConfirmedConnectionRepository extends JpaRepository<ConfirmedConnection, ConfirmedConnectionId> {
+
+    // Get all confirmed Connections by Peer A, Where Peer A is User
     Set<ConfirmedConnection> getAllByPeerA_Id(Long registeredPlayerId);
 
+    // Get all confirmed Connections by Peer B, Where Peer B is User
     Collection<? extends ConfirmedConnection> getAllByPeerB_Id(Long registeredPlayerId);
 
-    ConfirmedConnection getReferenceByConnectionRequest_Id(Long id);
-
+    // Check if connection exists by Peer A and Peer B or Peer B and Peer A
     boolean existsByPeerAAndPeerBOrPeerAAndPeerB(RegisteredPlayer registeredPlayer, Player peer, Player peer1, RegisteredPlayer registeredPlayer1);
 
 }

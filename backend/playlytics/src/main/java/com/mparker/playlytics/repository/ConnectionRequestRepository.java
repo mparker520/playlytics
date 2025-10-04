@@ -5,9 +5,11 @@ import com.mparker.playlytics.entity.ConnectionRequest;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.enums.ConnectionRequestStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.Set;
 
+
+@Repository
 public interface ConnectionRequestRepository extends JpaRepository<ConnectionRequest, Long> {
 
     //  Get all connection requests by status for user (SENT)

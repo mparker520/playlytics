@@ -6,9 +6,10 @@ import com.mparker.playlytics.entity.BlockedRelationship;
 import com.mparker.playlytics.entity.BlockedRelationshipId;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.Set;
 
+@Repository
 public interface BlockedRelationshipRepository extends JpaRepository<BlockedRelationship, BlockedRelationshipId> {
 
     // Check if block exists by user and peer or peer and user

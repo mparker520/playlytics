@@ -7,11 +7,11 @@ import com.mparker.playlytics.entity.ConfirmedConnectionId;
 import com.mparker.playlytics.entity.Player;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.Set;
 
-
+@Repository
 public interface ConfirmedConnectionRepository extends JpaRepository<ConfirmedConnection, ConfirmedConnectionId> {
 
     // Get all confirmed Connections by Peer A, Where Peer A is User

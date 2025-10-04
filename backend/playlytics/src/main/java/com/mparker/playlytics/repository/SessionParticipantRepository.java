@@ -3,8 +3,12 @@ package com.mparker.playlytics.repository;
 // Imports
 import com.mparker.playlytics.entity.SessionParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.Set;
 
+
+@Repository
 public interface SessionParticipantRepository extends JpaRepository<SessionParticipant, Long> {
 
     // Is Player a participant in GamePlaySession

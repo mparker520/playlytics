@@ -4,9 +4,12 @@ package com.mparker.playlytics.repository;
 import com.mparker.playlytics.entity.GhostPlayer;
 import com.mparker.playlytics.entity.RegisteredPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
+@Repository
 public interface RegisteredPlayerRepository extends JpaRepository<RegisteredPlayer, Long> {
 
     // TODO: Check if this needs fix

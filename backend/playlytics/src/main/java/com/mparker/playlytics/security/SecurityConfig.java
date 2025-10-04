@@ -19,7 +19,6 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
 import java.util.List;
 
 
@@ -27,31 +26,52 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
+    //<editor-fold desc="Security Config Constructor">
 
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
-        this.authenticationConfiguration = authenticationConfiguration;
-    }
+        private final AuthenticationConfiguration authenticationConfiguration;
 
 
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
-        return CookieCsrfTokenRepository.withHttpOnlyFalse();
-    }
+        public SecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+            this.authenticationConfiguration = authenticationConfiguration;
+        }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+    //</editor-fold>
+
+    //<editor-fold desc="CSRF Repository">
+
+        @Bean
+        public CsrfTokenRepository csrfTokenRepository() {
+            return CookieCsrfTokenRepository.withHttpOnlyFalse();
+        }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="Password Encoder">
+
+        @Bean
+        PasswordEncoder passwordEncoder() {
+            return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="Authentication Manager">
+
+        @Bean
+        public AuthenticationManager authenticationManagerBean() throws Exception {
+            return authenticationConfiguration.getAuthenticationManager();
+        }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="Security Filter Chain">
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
 
         http
                 .cors(Customizer.withDefaults())
@@ -75,22 +95,28 @@ public class SecurityConfig {
                 );
 
 
-
-
         return http.build();
-    }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE", "PATCH", "OPTIONS"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(List.of("Authorization","Content-Type","X-XSRF-TOKEN"));
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
+    //</editor-fold>
+
+    //<editor-fold desc="CORS Configuration">
+
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
+            CorsConfiguration configuration = new CorsConfiguration();
+            configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+            configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE", "PATCH", "OPTIONS"));
+            configuration.setAllowCredentials(true);
+            configuration.setAllowedHeaders(List.of("Authorization","Content-Type","X-XSRF-TOKEN"));
+
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            source.registerCorsConfiguration("/**", configuration);
+            return source;
+        }
+
+
+    //</editor-fold>
 
 }

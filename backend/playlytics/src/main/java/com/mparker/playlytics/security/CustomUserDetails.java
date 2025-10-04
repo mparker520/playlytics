@@ -9,44 +9,58 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
-    Collection<? extends GrantedAuthority> authorities;
-    String username;
-    String password;
-    Long authenticatedUserId;
-    String email;
-    String firstName;
-    String lastName;
-    String displayName;
+
+    //<editor-fold desc="Variables">
+
+        String username;
+        String password;
+        Long authenticatedUserId;
+        String email;
+        String firstName;
+        String lastName;
+        String displayName;
 
 
-    public CustomUserDetails() {
-    }
+    //</editor-fold>
 
-    public CustomUserDetails(String username, String password, Long authenticatedUserId, String email, String firstName, String lastName, String displayName) {
-        this.username = username;
-        this.password = password;
-        this.authenticatedUserId = authenticatedUserId;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.displayName = displayName;
-    }
+    //<editor-fold desc="Constructor">
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
+        public CustomUserDetails(String username, String password, Long authenticatedUserId, String email, String firstName, String lastName, String displayName) {
+            this.username = username;
+            this.password = password;
+            this.authenticatedUserId = authenticatedUserId;
+            this.email = email;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.displayName = displayName;
+        }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+    //</editor-fold>
 
+    //<editor-fold desc="Override Methods">
+
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return List.of();
+        }
+
+        // Get UserName
+        @Override
+        public String getPassword() {
+            return password;
+        }
+
+        // Get Password
+        @Override
+        public String getUsername() {
+            return username;
+        }
+
+
+    //</editor-fold>
+
+    //<editor-fold desc="Getters">
 
     public Long getAuthenticatedUserId() {
             return authenticatedUserId;
@@ -67,5 +81,8 @@ public class CustomUserDetails implements UserDetails {
     public String getDisplayName() {
         return displayName;
     }
+
+
+    //</editor-fold>
 
 }

@@ -96,6 +96,8 @@ public class OwnedGame {
         return id;
     }
 
+
+
     public Game getGame() {
         return game;
     }

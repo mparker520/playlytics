@@ -53,13 +53,13 @@ public class GameInventoryService {
                 OwnedGame ownedGame = new OwnedGame(player, gameObj);
 
                 // Save OwnedGame
-                ownedGameRepository.save(ownedGame);
+                Long ownedGameId = ownedGameRepository.save(ownedGame).getId();
 
 
                 // Create and Return GameResponseDTO
                 String gameName = ownedGame.getGame().getGameTitle();
 
-                return  new OwnedGameResponseDTO(gameId, gameName);
+                return  new OwnedGameResponseDTO(ownedGameId, gameId, gameName);
 
             }
 
@@ -119,10 +119,11 @@ public class GameInventoryService {
 
         for (OwnedGame ownedGame : ownedGamesList) {
 
-            Long gameId = ownedGame.getId();
+            Long ownedGameId = ownedGame.getId();
+            Long gameId = ownedGame.getGame().getId();
             String gameName = ownedGame.getGame().getGameTitle();
 
-            OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(gameId, gameName);
+            OwnedGameResponseDTO ownedGamesResponseDTO = new OwnedGameResponseDTO(ownedGameId,  gameId, gameName);
             ownedGamesResponseDTOList.add(ownedGamesResponseDTO);
 
         }

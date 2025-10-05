@@ -15,9 +15,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "connection_requests", indexes = {
         @Index(name = "ix_connection_request_status", columnList = "connection_request_status"),
-        @Index(name="multiIndex_status_recipient", columnList = "connection_request_status, request_recipient"),
-        @Index(name="ix_connection_request_initiator", columnList =  "request_initiator"),
-        @Index(name = "ix_connection_request_recipient", columnList = "request_recipient")
+        @Index(name = "multiIndex_status_recipient", columnList = "connection_request_status, recipient"),
+        @Index(name = "ix_connection_request_sender", columnList = "sender"),
+        @Index(name = "ix_connection_request_recipient", columnList = "recipient")
 })
 
 public class ConnectionRequest {

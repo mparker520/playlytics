@@ -10,8 +10,8 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "blocked_players", indexes = {
-        @Index(name = "multiIndex_a_b", columnList = "blocker, blocked"),
-        @Index(name = "multiIndex_b_a", columnList = "blocked, blocker")
+        @Index(name = "multiIndex_blocked_a_b", columnList = "blocker, blocked"),
+        @Index(name = "multiIndex_blocked_b_a", columnList = "blocked, blocker")
 })
 
 public class BlockedRelationship {

@@ -7,9 +7,11 @@ import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
 import com.mparker.playlytics.security.CustomUserDetails;
 import com.mparker.playlytics.service.RegisteredPlayerService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -80,9 +82,14 @@ public class RegisteredPlayerController {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/profile")
     public ResponseEntity<Void> deleteRegisteredPlayer(
-            @AuthenticationPrincipal CustomUserDetails principal) {
+            @AuthenticationPrincipal CustomUserDetails principal,
+            HttpServletRequest request) {
 
             registeredPlayerService.deleteRegisteredPlayer(principal.getAuthenticatedUserId());
+
+            request.getSession().invalidate();
+            SecurityContextHolder.clearContext();
+
             return ResponseEntity.noContent().build();
 
 

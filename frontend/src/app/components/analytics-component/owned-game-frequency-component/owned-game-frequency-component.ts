@@ -116,7 +116,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
         this.buildColors(winLossResponse.data.length);
 
         const max = Math.max(...winLossResponse.data);
-        //this.stepSize = (max / 10);
+        this.stepSize = (max / 10);
 
         this.chartData = {
           labels: winLossResponse.labels,
@@ -142,7 +142,7 @@ export class OwnedGameFrequencyComponent implements OnInit{
 
 
     const params = this.buildParams();
-    //this.chartHeight = this.setChartHeight(21);
+    this.chartHeight = this.setChartHeight(21);
 
 
     this.analyticsService.getOwnedGameFrequency(params).subscribe({
@@ -187,10 +187,16 @@ export class OwnedGameFrequencyComponent implements OnInit{
     },
     scales: {
       x: {
+
+        ticks: {
+          autoSkip: false,
+          font: {size: 10}
+        }
+      },
+      y: {
         beginAtZero: true,
         suggestedMax: 5,
         ticks: {
-          autoSkip: false,
           stepSize: 1,
           precision: 0
         }

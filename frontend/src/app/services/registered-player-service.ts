@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {RegisteredPlayerResponseDTO} from '../dtos/registered-player-response-dto';
-import {RegisteredPlayerUpdateDTO} from '../dtos/RegisteredPlayerUpdateDTO';
+
 import {environment} from '../../environments/environment';
+
 
 
 @Injectable({
@@ -36,7 +37,9 @@ export class RegisteredPlayerService {
   //<editor-fold desc="Delete Registered Player">
   public deleteRegisteredPlayer(): Observable<void> {
     return this.http.delete<void>(`${environment.apiUrl}/profile`, {withCredentials: true})
+
   }
+
   //</editor-fold>
 
 

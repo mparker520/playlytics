@@ -2,6 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {RegisteredPlayerResponseDTO} from '../../dtos/registered-player-response-dto';
 import {RegisteredPlayerService} from '../../services/registered-player-service';
 import {FormsModule, NgForm, ReactiveFormsModule} from '@angular/forms';
+import {AuthService} from '../../services/auth-service';
+import {Router} from '@angular/router';
+import {LogoutService} from '../../services/logout-service';
 
 
 @Component({
@@ -26,7 +29,7 @@ export class ProfileComponent implements OnInit {
   errorMessage?: string;
 
 
-constructor(private registeredPlayerService: RegisteredPlayerService) {
+constructor(private registeredPlayerService: RegisteredPlayerService, private logoutService: LogoutService, private router: Router) {
 
 }
 
@@ -48,6 +51,8 @@ ngOnInit(): void {
   triggerDelete() {
     this.registeredPlayerService.deleteRegisteredPlayer().subscribe({
       next:(response: void) => {
+            this.logoutService.logout();
+            this.router.navigate(['/login']);
 
       },
       error: (error: any) => console.error('fail', error)

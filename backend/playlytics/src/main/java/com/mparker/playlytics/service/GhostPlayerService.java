@@ -98,31 +98,42 @@ public class GhostPlayerService {
         GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceById(ghostPlayerId);
 
         // If Current Player is Creator of GhostPlayer, Allow for Update
-        if (ghostPlayer.getCreator().getId().equals(authUserId) && !ghostPlayer.getStatus().equals(GhostStatus.UPGRADED)) {
+        if (ghostPlayer.getCreator().getId() != null) {
 
-            if (ghostPlayerUpdateDTO.firstName() != null) {
-                ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName());
+            if (ghostPlayer.getCreator().getId().equals(authUserId) && !ghostPlayer.getStatus().equals(GhostStatus.UPGRADED)) {
+
+                if (ghostPlayerUpdateDTO.firstName() != null) {
+                    ghostPlayer.setFirstName(ghostPlayerUpdateDTO.firstName());
+                }
+
+                if (ghostPlayerUpdateDTO.lastName() != null) {
+                    ghostPlayer.setLastName(ghostPlayerUpdateDTO.lastName());
+                }
+
+                if (ghostPlayerUpdateDTO.avatar() != null) {
+                    ghostPlayer.setAvatar(ghostPlayerUpdateDTO.avatar());
+                }
+
+                if (ghostPlayerUpdateDTO.identifierEmail() != null) {
+                    ghostPlayer.setIdentifierEmail(ghostPlayerUpdateDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase());
+                }
+
+                return createGhostPlayerResponseDTO(ghostPlayer);
+
             }
 
-            if (ghostPlayerUpdateDTO.lastName() != null) {
-                ghostPlayer.setLastName(ghostPlayerUpdateDTO.lastName());
-            }
 
-            if (ghostPlayerUpdateDTO.avatar() != null) {
-                ghostPlayer.setAvatar(ghostPlayerUpdateDTO.avatar());
+            else {
+                throw new CustomAccessDeniedException("You Do Not Have Permission to Update This Guest Player");
             }
-
-            if (ghostPlayerUpdateDTO.identifierEmail() != null) {
-                ghostPlayer.setIdentifierEmail(ghostPlayerUpdateDTO.identifierEmail().replaceAll("\\s+", "").toLowerCase());
-            }
-
-            return createGhostPlayerResponseDTO(ghostPlayer);
 
         }
 
         else {
             throw new CustomAccessDeniedException("You Do Not Have Permission to Update This Guest Player");
         }
+
+
 
 
 

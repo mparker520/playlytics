@@ -38,7 +38,7 @@ public class GhostPlayer extends Player {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator")
-    private RegisteredPlayer creator;
+    private Player creator;
 
     // Associations to Registered Players mapped in RegisteredPlayers.java
 
@@ -86,11 +86,11 @@ public class GhostPlayer extends Player {
         this.linkedRegisteredPlayer = linkedRegisteredPlayer;
     }
 
-    public RegisteredPlayer getCreator() {
+    public Player getCreator() {
         return creator;
     }
 
-    public void setCreator(RegisteredPlayer creator) {
+    public void setCreator(Player creator) {
         this.creator = creator;
     }
 

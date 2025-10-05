@@ -163,7 +163,7 @@ public class RegisteredPlayerService {
                 GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByLinkedRegisteredPlayer_Id(authUserId);
                 ghostPlayer.setStatus(GhostStatus.REACTIVATED);
                 ghostPlayer.setLinkedRegisteredPlayer(null);
-                ghostPlayer.setCreator(null);
+                ghostPlayer.setCreator(ghostPlayer);
 
                updatePlayerReferences(authUserId, ghostPlayer);
         }

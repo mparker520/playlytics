@@ -507,7 +507,7 @@ public class NetworkService {
                 }
 
                 else if(registeredPlayer.getLoginEmail().equals(identifierEmail)) {
-                    throw new CustomAccessDeniedException("You cannot associate with your own ghost player.");
+                    throw new ExistingResourceException("You cannot associate with your own ghost player.");
                 }
 
                 else {

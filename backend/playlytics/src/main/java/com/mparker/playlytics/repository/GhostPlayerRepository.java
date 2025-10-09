@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -41,7 +42,7 @@ public interface GhostPlayerRepository extends JpaRepository<GhostPlayer, Long> 
 
         // Get Ghost player by Linked Registered Player ID
         //TODO: Possible Duplicate
-        GhostPlayer findByLinkedRegisteredPlayer_Id(Long id);
+        Optional<GhostPlayer> findByLinkedRegisteredPlayer_Id(Long id);
 
 
     //</editor-fold>

@@ -155,7 +155,7 @@ my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
                         [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
 
                   @for(member of network; track member.id) {
-                    <option   [value]="member[$index].id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
+                    <option   [value]="network[$index].id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
                   }
 
                 </select>

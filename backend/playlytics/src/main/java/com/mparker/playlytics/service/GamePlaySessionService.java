@@ -167,17 +167,14 @@ public class GamePlaySessionService {
 
 
         Set<GamePlaySessionResponseDTO> gamePlaySessionResponseDTOSet = new HashSet<>();
-        //RegisteredPlayer registeredPlayer = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("No registered player found"));
 
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
 
-        Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
+        Optional<GhostPlayer> ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
 
-        if(associatedSessionParticipants.isEmpty()) {
-            throw new NotFoundException("No associated session participants found for this player");
-        }
+        if(ghostPlayer.isPresent()) {
+            GhostPlayer ghostPlayerEntity = ghostPlayer.get();
+            Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayerEntity.getId());
 
-        else {
 
             for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
                 GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
@@ -186,6 +183,12 @@ public class GamePlaySessionService {
 
             return gamePlaySessionResponseDTOSet;
         }
+
+        else {
+            throw new NotFoundException("No Ghost player found with a LinkedRegistered Player ID of Current .");
+        }
+
+
 
     }
 
@@ -201,14 +204,27 @@ public class GamePlaySessionService {
 
         RegisteredPlayer player = registeredPlayerRepository.findById(authUserId).orElseThrow(() -> new NotFoundException("Player doesn't exist."));
         GamePlaySession gamePlaySession = gamePlaySessionRepository.findById(id).orElseThrow(() -> new NotFoundException("Session doesn't exist."));
-        GhostPlayer ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
-        Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
 
-        for(SessionParticipant sessionParticipant : sessionParticipants) {
-            if(sessionParticipant.getPlayer().getId().equals(ghostPlayer.getId())) {
-                sessionParticipant.setPlayer(player);
+        Optional<GhostPlayer> ghostPlayer = ghostPlayerRepository.findByLinkedRegisteredPlayer_Id(authUserId);
+
+        if(ghostPlayer.isPresent()) {
+
+            GhostPlayer ghostPlayerEntity = ghostPlayer.get();
+
+            Set<SessionParticipant> sessionParticipants = gamePlaySession.getSessionParticipants();
+
+            for(SessionParticipant sessionParticipant : sessionParticipants) {
+                if(sessionParticipant.getPlayer().getId().equals(ghostPlayerEntity.getId())) {
+                    sessionParticipant.setPlayer(player);
+                }
             }
         }
+
+        else {
+            throw new NotFoundException("Ghost Player Does Not Exist with Linked Registered Player ID of Current User.");
+        }
+
+
 
     }
     //</editor-fold>

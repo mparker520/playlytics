@@ -29,7 +29,7 @@ export class ProfileComponent implements OnInit {
   errorMessage?: string;
 
 
-constructor(private registeredPlayerService: RegisteredPlayerService, private logoutService: LogoutService, private router: Router) {
+constructor(private registeredPlayerService: RegisteredPlayerService, private logoutService: LogoutService, private authService: AuthService, private router: Router) {
 
 }
 
@@ -54,6 +54,8 @@ ngOnInit(): void {
         console.log("deleting player")
             this.logoutService.logout().subscribe({
               next:(response: void) => {
+                this.authService.authenticated = false;
+                this.authService.currentUser = undefined;
                 this.router.navigate(['/login']);
               },
               error: (error: any) => console.error("fail", error)

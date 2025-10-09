@@ -24,7 +24,7 @@ export class GamePlaySessionListComponent{
   expanded: boolean = false;
   sessionSearch: boolean = false;
   selectedGame: GameResponseDTO | null = null;
-  startDate: string = new Date().toISOString().split("T")[0];
+  startDate: string = new Date(new Date().setUTCDate(new Date().getUTCDate() - 1)).toISOString().split("T")[0];
   endDate: string = new Date().toISOString().split("T")[0];
 
   @Input() reportGenerationTime?: Date;

@@ -75,7 +75,7 @@ export class AddGamePlaySessionComponent implements OnInit{
 
   onNumPlayerChange(): void {
       this.sessionParticipants = Array.from({length: this.numberPlayers}, (_, i) =>
-        this.sessionParticipants[i] || {result: i + 1, playerId: ""}
+        this.sessionParticipants[i] || {result: i + 1, playerId: null}
       );
   }
 
@@ -84,6 +84,8 @@ export class AddGamePlaySessionComponent implements OnInit{
   onExpandChange() {
     this.expanded = !this.expanded;
   }
+
+
 
   //</editor-fold>
 

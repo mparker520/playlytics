@@ -1,7 +1,6 @@
 package com.mparker.playlytics.service;
 
 // Imports
-import com.mparker.playlytics.dto.PlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerResponseDTO;
 import com.mparker.playlytics.dto.RegisteredPlayerUpdateDTO;
@@ -10,12 +9,9 @@ import com.mparker.playlytics.enums.GhostStatus;
 import com.mparker.playlytics.exception.CustomAccessDeniedException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.*;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
-
 import java.util.Set;
 
 
@@ -35,12 +31,14 @@ public class RegisteredPlayerService {
     public RegisteredPlayerService(RegisteredPlayerRepository registeredPlayerRepository, GhostPlayerRepository ghostPlayerRepository,
                                    GamePlaySessionRepository gamePlaySessionRepository, SessionParticipantRepository sessionParticipantRepository,
                                    PlayerRepository playerRepository, PasswordEncoder passwordEncoder) {
+
         this.registeredPlayerRepository = registeredPlayerRepository;
         this.ghostPlayerRepository = ghostPlayerRepository;
         this.gamePlaySessionRepository = gamePlaySessionRepository;
         this.sessionParticipantRepository = sessionParticipantRepository;
         this.playerRepository = playerRepository;
         this.passwordEncoder = passwordEncoder;
+
     }
 
     //</editor-fold>
@@ -182,6 +180,7 @@ public class RegisteredPlayerService {
 
         // Remove row from table
         registeredPlayerRepository.delete(registeredPlayer);
+
 
 
 

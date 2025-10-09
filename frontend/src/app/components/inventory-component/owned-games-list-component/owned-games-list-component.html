@@ -63,7 +63,7 @@ my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
               <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{filteredOwnedGame.gameName }}</td>
               <td class="border-2 border-brand4 px-4 max-w-[100px]">
                 <div class="flex justify-center">
-                  <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(filteredOwnedGame.gameId)"  id={{filteredOwnedGame.gameId}}>
+                  <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(filteredOwnedGame.ownedGameId)"  id={{filteredOwnedGame.ownedGameId}}>
                 </div>
               </td>
             </tr>

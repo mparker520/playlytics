@@ -497,12 +497,19 @@ public class NetworkService {
 
 
             GhostPlayer ghostPlayer = ghostPlayerRepository.getReferenceByIdentifierEmail(identifierEmail.replaceAll("\\s+", "").toLowerCase());
+            RegisteredPlayer registeredPlayer = registeredPlayerRepository.getReferenceById(authUserId);
             boolean isAssociate = registeredPlayerRepository.existsByIdAndAssociations(authUserId, ghostPlayer);
 
-            if (ghostPlayer == null || isAssociate) {
+            if (ghostPlayer == null || isAssociate || registeredPlayer.getLoginEmail().equals(identifierEmail)) {
+
                 if(ghostPlayer == null) {
                     throw new NotFoundException("No guest players available for connection by that filter.");
                 }
+
+                else if(registeredPlayer.getLoginEmail().equals(identifierEmail)) {
+                    throw new CustomAccessDeniedException("You cannot associate with your own ghost player.");
+                }
+
                 else {
                     throw new ExistingResourceException("You're already associated with this guest player!");
                 }

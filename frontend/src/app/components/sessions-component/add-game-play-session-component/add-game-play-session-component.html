@@ -153,9 +153,9 @@ my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
 
                 <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
                         [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
-                  <option value="" disabled selected>Select a Player</option>
+
                   @for(member of network; track member.id) {
-                    <option   [value]="member.id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
+                    <option   [value]="member[$index].id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
                   }
 
                 </select>

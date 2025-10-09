@@ -51,8 +51,13 @@ ngOnInit(): void {
   triggerDelete() {
     this.registeredPlayerService.deleteRegisteredPlayer().subscribe({
       next:(response: void) => {
-            this.logoutService.logout();
-            this.router.navigate(['/login']);
+        console.log("deleting player")
+            this.logoutService.logout().subscribe({
+              next:(response: void) => {
+                this.router.navigate(['/login']);
+              },
+              error: (error: any) => console.error("fail", error)
+            })
 
       },
       error: (error: any) => console.error('fail', error)

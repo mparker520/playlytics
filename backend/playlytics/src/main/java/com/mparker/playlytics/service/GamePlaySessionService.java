@@ -134,8 +134,6 @@ public class GamePlaySessionService {
     //</editor-fold>
 
 
-    //<editor-fold desc="List all GamePlaySessions for a Registered Player">
-
 
     //<editor-fold desc="List all GamePlaySessions for User by Game and Time">
     @Transactional (readOnly = true)
@@ -175,12 +173,19 @@ public class GamePlaySessionService {
 
         Set<SessionParticipant> associatedSessionParticipants = sessionParticipantRepository.findAllByPlayer_Id(ghostPlayer.getId());
 
-        for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
-            GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
-            gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+        if(associatedSessionParticipants.isEmpty()) {
+            throw new NotFoundException("No associated session participants found for this player");
         }
 
-        return gamePlaySessionResponseDTOSet;
+        else {
+
+            for (SessionParticipant sessionParticipant : associatedSessionParticipants) {
+                GamePlaySession gamePlaySession = sessionParticipant.getGamePlaySession();
+                gamePlaySessionResponseDTOSet.add(createGpSessionResponseDTO(gamePlaySession));
+            }
+
+            return gamePlaySessionResponseDTOSet;
+        }
 
     }
 

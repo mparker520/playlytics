@@ -15,7 +15,9 @@ export class LogoutService {
 
   public logout() : Observable<any> {
 
+    console.log("Logout reached")
     return this.http.post(`${environment.apiUrl}/logout`, {}, {withCredentials: true});
+
   }
 
 }

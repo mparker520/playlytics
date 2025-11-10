@@ -108,7 +108,8 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration.setAllowedOrigins(List.of(
                     "http://localhost:4200",
-                    "https://playlytics.netlify.app"));
+                    "https://playlytics.netlify.app",
+                            "https://playlytics.onrender.com"));
             configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE", "PATCH", "OPTIONS"));
             configuration.setAllowCredentials(true);
             configuration.setAllowedHeaders(List.of("Authorization","Content-Type","X-XSRF-TOKEN"));

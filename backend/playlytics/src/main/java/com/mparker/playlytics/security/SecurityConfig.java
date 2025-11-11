@@ -77,6 +77,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(a -> a
                         .requestMatchers("/login", "/create-account").permitAll()
+                        .requestMatchers("/index.html", "/", "/index.html", "/favicon.ico", "/*.js", "/*.css", "/assets/**", "/static/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .anyRequest().authenticated()
                 )

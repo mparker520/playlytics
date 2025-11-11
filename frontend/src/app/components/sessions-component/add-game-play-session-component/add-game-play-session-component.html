@@ -1,0 +1,229 @@
+<section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
+my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
+
+  @if(!expanded) {
+    <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+      <img ngSrc="assets/PlusSign.png" alt="Plus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  text-brand4 pt-1">Log a Game Play Session</h3>
+    </div>
+  }
+
+  @if(expanded) {
+    <div class="flex flex-col">
+
+      <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+        <img ngSrc="assets/MinusSign.png" alt="Minus Sign Icon" width="40" height="40">
+        <h3 class="text-2xl font-bold  pt-1 text-brand4">Log a Game Play Session</h3>
+      </div>
+
+      <form autocomplete="off" #gameForm="ngForm" (ngSubmit)="triggerSubmit(gameForm)">
+
+        <div class="p-4 m-2 bg-gradient-to-br from-brand2 to-brand1 rounded-lg shadow-md">
+
+        <div class="py-2 flex flex-col" id="gameSection">
+
+
+          <section>
+
+            <div class="flex flex-col mt-4">
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     type="text" placeholder="Enter Game Title" #searchGameBox id="gameSearchBox">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="gameSearchBox">Game Title</label>
+            </div>
+
+            <div class="flex flex-col navBar:flex-row navBar:space-x-4">
+              <button type="button" class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+                      (click)="triggerGameLookup(searchGameBox.value)">Search for Game</button>
+
+              <button type="button" class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+                      (click)="triggerGameFilterClear()">Clear Search Filter</button>
+
+            </div>
+
+            <h4 class="text-md font-bold  text-[#ff3254] ">{{ gameLookUpErrorMessage }}</h4>
+          </section>
+
+
+          <section class="pb-6">
+
+
+
+              @if(games.length > 0) {
+
+                <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand4 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-6/12"
+                        [(ngModel)]="gameId" name="gameSelector">
+                  <option value="0" disabled selected>Select a Game</option>
+                  @for(game of games; track game.gameId) {
+                    <option [value]="game.gameId">{{ game.title }}</option>
+                  }
+                </select>
+
+                <h4 class="text-md font-bold  text-[#ff3254] ">{{ gameSelectErrorMessage }}</h4>
+
+            }
+
+          </section>
+
+
+
+        </div>
+
+
+          <div class="flex flex-col space-x-0 navBar:flex-row navBar:space-x-4">
+            <div class="py-2 flex flex-col" id="sessionDateTimeSection">
+
+              <input required type="datetime-local" class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full "
+                     [(ngModel)]="sessionDateTime" name="sessionDateTime" id="sessionDateTime">
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="sessionDateTime">Session Date / Time</label>
+
+            </div>
+
+
+            <div class="py-2 flex flex-col" id="scoringModelSection">
+
+              <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand4 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full "
+                      [(ngModel)]="scoringModel" (ngModelChange)="onScoringModelChange()" name="scoringModel" id="scoringModel">
+                <option value="RANKING">Ranking</option>
+                <option value="TEAM">Teams</option>
+                <option value="COOPERATIVE">Cooperative</option>
+              </select>
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="scoringModel">Scoring Model</label>
+
+            </div>
+          </div>
+
+        </div>
+
+
+          @if(scoringModel===ScoringModelEnum.COOPERATIVE) {
+            <div class="p-4 m-2 bg-gradient-to-br from-brand3 to-brand2 rounded-lg shadow-md flex flex-col" id="cooperativeResultSection">
+
+              <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand3 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                      [(ngModel)]="cooperativeResult" name="cooperativeResult" id="cooperativeResult">
+                <option value=1 selected="selected">We Won!</option>
+                <option value=0>We Lost!</option>
+              </select>
+
+              <label class="pt-2 block text-sm font-medium text-gray-700" for="cooperativeResult">Group Result</label>
+            </div>
+          }
+
+
+
+
+
+        <div class="p-4 m-2 bg-gradient-to-br from-brand4 to-brand3 rounded-lg shadow-md" id="playerLoopSection">
+
+          <div class="py-2 flex flex-col" id="numberOfPlayersSection">
+
+            @if(scoringModel === ScoringModelEnum.COOPERATIVE) {
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand3 border-r-brand2 border-b-brand2 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" id="numberPlayers" min="2" max="100">
+            }
+
+            @if(scoringModel === ScoringModelEnum.TEAM) {
+
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand3 border-r-brand2 border-b-brand2 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers"  min="3" max="100">
+
+            }
+
+            @if(scoringModel === ScoringModelEnum.RANKING) {
+              <input class="p-2  h-10 border-2 rounded-md border-t-brand3 border-r-brand2 border-b-brand2 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                     [(ngModel)]="numberPlayers" (ngModelChange)="onNumPlayerChange()" type="number" name="numberPlayers" min="1" max="100">
+            }
+
+
+            <label class="pt-2 block text-sm font-medium text-gray-700" for="numberPlayers">Number of Players</label>
+
+          </div>
+
+          <div>
+
+          </div>
+
+          @if(gameForm.invalid === true) {
+            <h4 class="text-md font-bold  text-white ">Please Enter All Player Names</h4>
+          }
+
+
+          @for(sessionParticipant of sessionParticipants; let i = $index; track i) {
+
+
+
+            <div class="flex py-2 space-x-4" id="playerSelectSection">
+
+              <div>
+
+
+
+                <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+                        required [(ngModel)]="sessionParticipant.playerId" [name]="'playerSelectionMenu' + i" [id]="'playerSelectionMenu' + i">
+                  <option [ngValue]="null" disabled selected>Select Player</option>
+                  @for(member of network; track member.id) {
+                    <option [value]="member.id" [id]="'infoForPlayer' + (i + 1)">{{member.firstName + " " + member.lastName + " | " + member.identifier}}</option>
+                  }
+
+                </select>
+
+                <label class="pt-2 block text-sm font-medium text-gray-700">{{  'Player ' + (i + 1) + ' Name' }}</label>
+
+              </div>
+
+              <div>
+
+                @if(scoringModel===ScoringModelEnum.RANKING || scoringModel===ScoringModelEnum.TEAM) {
+
+                  <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg text-center"
+                         [(ngModel)]="sessionParticipant.result" type="number" [name]="'rankingForPlayer' + i" [id]="'rankingForPlayer' + i" min="1" [max]="numberPlayers">
+
+                  <label class="pt-2 block text-sm font-medium text-gray-700" [for]="'rankingForPlayer' + i">{{  'Player ' + (i + 1) + ' Place' }}</label>
+
+                }
+
+
+              </div>
+
+            </div>
+
+            <div id="teamAssociationSection">
+
+
+
+            </div>
+
+
+
+            <div id="playerRankingSection">
+
+
+
+
+            </div>
+            <h4 class="text-md font-bold  text-[#ff3254] ">{{ participantErrorMessage }}</h4>
+            <h4 class="text-md font-bold  text-[#ff3254] ">{{ resultsErrorMessage }}</h4>
+
+          }
+
+
+        </div>
+
+        <div class="flex justify-center">
+          <button [disabled]="gameForm.invalid" class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+                  type="submit">Submit Game Play Session</button>
+        </div>
+
+
+
+      </form>
+    </div>
+  }
+
+
+</section>
+
+
+
+
+
+

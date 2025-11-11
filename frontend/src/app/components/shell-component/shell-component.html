@@ -1,0 +1,72 @@
+
+
+
+
+    @if (isAuthenticated) {
+      <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-6 pt-6 pb-4 text-white">
+      <section class="flex justify-between">
+
+
+          <h1 routerLink="/" class="text-4xl pl-3 cursor-pointer" >PlayLytics</h1>
+
+
+
+        <nav class="py-2">
+          <div class="flex justify-end">
+            <button class="navBar:hidden mx-3 text-white text-xl" (click)="toggleMenu()">☰</button>
+          </div>
+
+
+            <div class="hidden navBar:flex">
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand1" routerLinkActive="border-brand1" [routerLinkActiveOptions]="{ exact: true }" routerLink = "/analytics">Analytics</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand2" routerLinkActive="border-brand2"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/sessions">Game Play Sessions</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/network">My Network</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/inventory">My Inventory</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/profile">Edit Profile</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLinkActive="border-brand5"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/about">About</a>
+              <a class="cursor-pointer text-lg mx-3 border-b-4 border-transparent hover:border-brand5"   (click)="logOut()">Logout</a>
+            </div>
+
+
+          @if(menuOpen) {
+            <div class="flex flex-col items-end navBar:hidden">
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/analytics">Analytics</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/sessions">Game Play Sessions</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/network">My Network</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/inventory">My Inventory</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/profile">Edit Profile</a>
+              <a class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLinkActive="border-brand5"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/about">About</a>
+              <a class="cursor-pointer text-lg mx-3 border-b-4 border-transparent hover:border-brand4"   (click)="logOut()">Logout</a>
+            </div>
+          }
+
+        </nav>
+      </section>
+
+      </header>
+    } @else {
+      <header class="bg-gradient-to-r from-brand5 via-brand3 to-brand1 px-4 pt-6 pb-4 text-white">
+        <section class="flex justify-between">
+
+            <h1 routerLink="/" class="text-4xl pl-3 cursor-pointer" >PlayLytics</h1>
+
+          <nav class="py-2 flex justify-end">
+            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand4" routerLinkActive="border-brand4"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/sign-up">Create Account</a>
+            <a  class="text-lg mx-3 border-b-4 border-transparent hover:border-brand5" routerLinkActive="border-brand5"  [routerLinkActiveOptions]="{ exact: true }" routerLink = "/login">Login</a>
+          </nav>
+        </section>
+      </header>
+
+    }
+
+
+
+<main>
+
+</main>
+
+<router-outlet></router-outlet>
+
+<footer>
+
+</footer>

@@ -1,0 +1,82 @@
+
+<section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white
+my-6 px-6 shadow-md w-10/12  mx-auto navBar:w-full">
+
+
+
+@if(ownedGames.length < 1) {
+  <h3 class="text-2xl font-bold  py-6 text-brand4 text-center">Your Current Inventory</h3>
+  <div class="flex justify-center">
+    <h4 class="text-xl font-bold  mt-4 text-brand2 pb-6">>> You Currently Don't Have Any Games in Your PlayLytics Inventory! <<</h4>
+  </div>
+
+}
+
+@if(ownedGames.length  > 0) {
+
+  @if(!expanded) {
+    <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+      <img ngSrc="assets/PlusSign.png" alt="Plus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  text-brand4 pt-1">Your Current Inventory</h3>
+    </div>
+  }
+
+  @if(expanded) {
+
+    <div class="cursor-pointer flex py-4 justify-center" (click)="onExpandChange()">
+      <img ngSrc="assets/MinusSign.png" alt="Minus Sign Icon" width="40" height="40">
+      <h3 class="text-2xl font-bold  pt-1 text-brand4">Your Current Inventory</h3>
+    </div>
+
+
+
+    <section>
+
+      <div class="flex flex-col mt-4">
+        <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+               type="text" placeholder="Enter Game Title" (input)="triggerInventoryLookup(searchInventoryBox.value)" #searchInventoryBox id="inventorySearchBox">
+        <label class="pt-2 block text-sm font-medium text-gray-700" for="inventorySearchBox">Game Title</label>
+      </div>
+
+
+    </section>
+
+  @if((filteredOwnedGames?.length ?? 0) > 0) {
+
+    <section class="flex flex-row items-start pb-6 mt-4">
+      <table class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 px-6 shadow-md table-fixed space-y-4 w-full max-w-6xl ">
+        <colgroup>
+          <col class="w-auto">
+          <col class="w-[100px]">
+        </colgroup>
+
+        <thead class="bg-brand2">
+        <tr>
+          <th class="table-auto border-collapse border-2 border-brand4  px-4 py-2 text-white">Game Name</th>
+          <th class="border-collapse border-2 border-brand4 max-w-[100px]"></th>
+        </tr>
+        </thead>
+
+        <tbody>
+          @for(filteredOwnedGame of  filteredOwnedGames; track filteredOwnedGame.gameId) {
+            <tr>
+              <td class="border-2 border-brand4 px-4  text-gray-700 truncate">{{filteredOwnedGame.gameName }}</td>
+              <td class="border-2 border-brand4 px-4 max-w-[100px]">
+                <div class="flex justify-center">
+                  <img class="cursor-pointer" ngSrc="assets/TrashCan.png" alt="Trash Can Icon" width="40" height="40" (click)="triggerDelete(filteredOwnedGame.ownedGameId)"  id={{filteredOwnedGame.ownedGameId}}>
+                </div>
+              </td>
+            </tr>
+
+          }
+        </tbody>
+
+      </table>
+    </section>
+  }
+
+}
+}
+
+</section>
+

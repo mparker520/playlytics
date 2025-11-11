@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ForwarderController {
 
-    @RequestMapping(value = { "/", "/{path:^(?!api|static|.*\\..*$).*$}", "/**/{path:^(?!api|static|.*\\..*$).*$}" })
+    @RequestMapping(value = "/{path:[^\\.]*}")
     public String forwardToIndex() {
         return "forward:/index.html";
     }

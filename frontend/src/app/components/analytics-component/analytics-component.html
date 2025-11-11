@@ -1,0 +1,22 @@
+<div class="flex flex-col navBar:flex-row">
+
+
+
+  <section class="overflow-y-hidden w-full">
+
+    <app-play-trends-component [playedGames]="playedGames" ></app-play-trends-component>
+
+  </section>
+
+
+  <div class="flex flex-col w-full items-baseline">
+      <section class="w-full" >
+        <app-win-loss-component [playedGames]="playedGames"></app-win-loss-component>
+      </section>
+
+      <section class="w-full mb-2">
+        <app-owned-game-frequency-component [ownedGames]="ownedGames"></app-owned-game-frequency-component>
+      </section>
+  </div>
+
+</div>

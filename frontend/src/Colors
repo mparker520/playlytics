@@ -1,0 +1,29 @@
+brand5 (#F25C54) — Strong red clay
+
+Use for primary actions: main buttons, CTAs, highlights.
+
+Example: bg-brand5 hover:bg-brand4 text-white
+
+brand4 (#F27059) — Burnt orange
+
+Use for hover states or secondary buttons.
+
+Keeps contrast but still on-theme.
+
+brand3 (#F4845F) — Coral
+
+Use for accents: icons, links, small highlights.
+
+Example: link hover underline, chart highlights.
+
+brand2 (#F79D65) — Peach
+
+Use for background sections or cards.
+
+Example: bg-brand2 text-gray-800 for a card background.
+
+brand1 (#F7B267) — Soft amber
+
+Use for neutral background fills (headers, footers, subtle highlights).
+
+Example: bg-brand1 text-gray-900 for a navbar.

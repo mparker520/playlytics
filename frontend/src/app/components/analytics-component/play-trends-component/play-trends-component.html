@@ -1,0 +1,120 @@
+<section class=" overflow-y-hidden w-12/12   h-[90vh] min-h-[1150px] m-6 shadow-[0_0_20px_rgba(0,0,0,0.3)] rounded-md">
+
+  <section class="mx-auto flex justify-center">
+
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-brand4 border-b-4 border-b-brand1">Game Play Trends</h2>
+
+  </section>
+
+
+  <div class="overflow-x-auto flex justify-center mx-auto">
+    <div class="w-10/12 min-w-[600px] max-w-[1000px] min-h-[800px] mx-auto">
+      <canvas  baseChart
+               [data]="chartData"
+               [type]="'bar'"
+               [options]="chartOptions"
+               class="w-full h-full">
+      </canvas>
+    </div>
+  </div>
+
+
+  <div class="flex  flex-col justify-center">
+
+
+    <div class="flex mt-4 ml-6 flex-col ">
+
+        <div class="w-9/12">
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-[405px]"
+                [(ngModel)]="selectedGameView" (ngModelChange)="filterResults()">
+          <option value="all">All</option>
+          <option value="compareGames">Compare Games</option>
+          <option value="byGame">By Game</option>
+
+        </select>
+        <label class="pt-2 block text-sm font-medium text-gray-700">Game View</label>
+
+      </div>
+
+        @if(selectedGameView === "compareGames") {
+
+        <div class="flex  w-full  mt-2 justify-start space-x-4">
+          <div class="flex flex-col">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-48 "
+                    [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
+
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+            <label class="pt-2 block text-sm font-medium text-gray-700">Game Name</label>
+          </div>
+
+          <div class="flex flex-col">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-48 "
+                    [(ngModel)]="selectedGame2" (ngModelChange)="filterResults()">
+
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+            <label class="pt-2 block text-sm font-medium text-gray-700">Game Name</label>
+          </div>
+        </div>
+
+      }
+
+        @if(selectedGameView === "byGame") {
+
+          <div class="flex flex-col mt-2 w-8/12 ">
+            <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-[405px]"
+                    [(ngModel)]="selectedGame1" (ngModelChange)="filterResults()">
+              <option [ngValue]="null">Filter by Game</option>
+              @for(playedGame of playedGames; track playedGame.gameId){
+                <option  [ngValue]=playedGame>{{ playedGame.title }}</option>
+              }
+            </select>
+            <label class="pt-2 block text-sm font-medium text-gray-700">Game Name</label>
+          </div>
+
+        }
+
+
+    </div>
+
+
+    <div class="mt-2 flex ml-6 space-x-4 ">
+
+      <div>
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-48 "
+                [(ngModel)]="selectedGranularity" (ngModelChange)="filterResults()">
+          <option value="year">Year</option>
+          <option value="month">Month</option>
+        </select>
+        <label class="pt-2 block text-sm font-medium text-gray-700">Granularity</label>
+
+      </div>
+
+
+
+        <div class="flex flex-col ">
+
+          <input type="number" min="1990" [max]=maxYear class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none max-w-24 "
+                  [(ngModel)]="selectedBaseYear" (ngModelChange)="filterResults()">
+
+          <label class="pt-2 block text-sm font-medium text-gray-700">Base Year</label>
+
+
+        </div>
+
+
+
+
+
+    </div>
+
+
+
+  </div>
+
+</section>

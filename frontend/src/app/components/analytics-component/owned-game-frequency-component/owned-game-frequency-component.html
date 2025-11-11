@@ -1,0 +1,72 @@
+<section class="overflow-y-hidden w-10/12  h-[40vh] min-h-[650px]  shadow-[0_0_20px_rgba(0,0,0,0.3)] mx-auto rounded-md">
+
+  <section class="mx-auto flex justify-center max-w-xs">
+
+
+    @if(selectedView === "topFive") {
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games <br> (Ranked by Top 5)</h2>
+    }
+
+
+    @if(selectedView === "bottomFive") {
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">Most Frequently Played Owned Games <br> (Ranked by Bottom 5)</h2>
+    }
+
+
+    @if(selectedView === "all") {
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6  text-center text-brand4 border-b-4 border-b-brand1">Owned Game <br> Play Frequency</h2>
+    }
+
+    @if(selectedView === "byGame") {
+      <h2 class="text-xl font-bold p-6 pb-2 mb-6 text-center text-brand4 border-b-4 border-b-brand1">{{selectedOwnedGame?.gameName}} <br> Play Count</h2>
+    }
+
+
+  </section>
+
+
+  <div class="overflow-x-auto flex justify-center mx-auto">
+    <div class="w-8/12 min-w-[500px] max-w-[800px] min-h-[400px] mx-auto">
+      <canvas  baseChart
+               [data]="chartData"
+               [type]=" 'bar' "
+               [options]="chartOptions"
+               class="w-full h-full">
+      </canvas>
+      </div>
+  </div>
+
+  <div class="flex flex-col p-4  justify-evenly ">
+
+
+
+    <div class="flex flex-col w-8/12 pt-2 mx-auto max-w-auto">
+      <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+              [(ngModel)]="selectedView" (ngModelChange)="filterResults()">
+        <option value="topFive">Top 5</option>
+        <option value="bottomFive">Bottom 5</option>
+        <option value="all">All</option>
+        <option value="byGame">By Game</option>
+
+      </select>
+
+    </div>
+
+    @if(selectedView === "byGame") {
+      <div class="flex flex-col w-8/12 pt-2 mx-auto">
+        <select class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none  "
+                [(ngModel)]="selectedOwnedGame" (ngModelChange)="filterResults()">
+          <option [ngValue]="null">Filter by Game</option>
+          @for(ownedGame of ownedGames; track ownedGame.gameId){
+            <option [ngValue]=ownedGame>{{ ownedGame.gameName }}</option>
+          }
+        </select>
+
+      </div>
+    }
+
+
+  </div>
+
+
+</section>

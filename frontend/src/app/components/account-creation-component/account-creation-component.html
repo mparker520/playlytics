@@ -1,0 +1,90 @@
+<div class="flex flex-col justify-center items-center">
+
+  <div class="flex sm:block">
+    <img ngSrc="assets/PlayLyticsLogoOriginalDiceGradientFont.png" alt="PlayLytics Logo" height="600" width="600" priority="priority">
+  </div>
+
+
+    <section class="rounded-lg border-2 border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 bg-white px-6 shadow-md space-y-4 max-w-xxl mx-auto">
+
+      <form autocomplete="off" #form="ngForm" (ngSubmit)="createAccount()" >
+
+        <div class="grid  grid-cols-1 gap-4 py-2 m-2 sm:grid-cols-2">
+
+
+            <div class="py-2 mx-2">
+              <input required class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand2 border-b-brand4 border-l-brand1 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+                     [(ngModel)]="firstName" #firstNameCtrl="ngModel" type = text id = "firstName" name = "firstName" placeholder="First Name">
+              <div class="flex space-x-2">
+                <label class="pt-2 block text-sm font-medium text-gray-700" for = "firstname">First Name</label>
+                @if(firstNameCtrl.invalid && firstNameCtrl.touched) {
+                  <p class="pt-2 block text-sm font-medium text-[#ff3254]">*Field Required*</p>
+                }
+
+              </div>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input required class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+                     [(ngModel)]="lastName"  #lastNameCtrl="ngModel" type = text id = "lastName" name = "lastName" placeholder="Last Name">
+              <div class="flex space-x-2">
+                <label class="pt-2 block text-sm font-medium text-gray-700" for = "lastName">Last Name</label>
+                @if(lastNameCtrl.invalid && lastNameCtrl.touched) {
+                  <p class="pt-2 block text-sm font-medium text-[#ff3254]">*Field Required*</p>
+                }
+                </div>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input required minlength="3" class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+                     [(ngModel)]="displayName" #displayNameCtrl="ngModel" type = text id = "displayName" name = "displayName" placeholder="Display Name">
+              <div class="flex space-x-2">
+                <label class="pt-2 block text-sm font-medium text-gray-700" for = "displayName">Display Name</label>
+                @if(displayNameCtrl.invalid && displayNameCtrl.touched) {
+                  <p class="pt-2 block text-sm font-medium text-[#ff3254]">*Must be 3+ Characters Long*</p>
+                }
+                </div>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input required class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+                     [(ngModel)]="loginEmail" type="email"  id = "loginEmail" name = "loginEmail" placeholder="Email Address">
+              <div class="flex space-x-2">
+                <label class="pt-2 block text-sm font-medium text-gray-700" for = "displayName">Email Address</label>
+                @if(loginEmail && !isEmailValid()) {
+                  <p class="pt-2 block text-sm font-medium text-[#ff3254]">*Must be a Valid Email*</p>
+                }
+              </div>
+            </div>
+
+
+            <div class="py-2 mx-2">
+              <input required minlength="8" class="p-2 w-64  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none"
+                     [(ngModel)]="password"  type=password id = "password" name = "password" placeholder="Password">
+              <div class="flex space-x-2">
+                <label class="pt-2 block text-sm font-medium text-gray-700" for = "displayName">Password</label>
+                @if(password && !isPasswordValid()) {
+                  <p class="pt-2 block text-sm font-medium text-[#ff3254]">*8 Characters or More Including<br> a Number and a Letter*</p>
+                }
+              </div>
+            </div>
+
+        <div class="py-2 mx-2">
+          <button [disabled]="form.invalid" class="w-full bg-brand5 text-white font-semibold py-2 px-4 rounded-md
+             hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3"  type = "submit" id = "createAccountSubmitButton">Create Account</button>
+        </div>
+
+        </div>
+
+      </form>
+
+    </section>
+
+
+
+  <h2 class="text-3xl font-bold p-6 text-brand4 text-center">Create an Account with PlayLytics!</h2>
+
+</div>

@@ -1,57 +1,169 @@
-# 🎲 PlayLytics
-A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics, and connect with other players.
+# <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65" style="vertical-align:middle;"/>PlayLytics
+
+A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics, 
+connect with other players, and track their board game inventory.
+
+---
+## 📖Table of Contents
+
+- [Project Overview](#-project-overview)
+- [Live Application](#-live-application--video-demo)
+- [Technologies Used](#-technologies-used)
+- [Current Release Features](#-current-release-features)
+- [Upcoming Enhancements](#-upcoming-enhancements)
+- [Local Setup](#-local-setup)
+- [License](#-license)
+- [About Me](#-about-me)
+- [Contact](#-contact-me)
 
 ---
 
-## 📁 Project Overview
-PlayLytics consists of:
-- **Frontend:** Angular 20 hosted on **Netlify**
+## 🧭 Project Overview
+PlayLytics was developed the capstone project for my
+B.S. in Software Engineering degree at *Western Governors University*, which I completed in October 2025.
+
+The project demonstrates a well-structured, full-stack architecture designed to deliver a professional, 
+production‑ready experience. It is organized across the following layers:
+- **Frontend:** Angular 20 hosted on **Render**
 - **Backend:** Spring Boot 3 (Java 21) hosted on **Render**
-- **Database:** PostgreSQL 17 hosted on **Neon**
-- **Purpose:** Track board-game sessions, analyze player statistics, and manage player connections.
+- **Database:** PostgreSQL 17, hosted on **Neon**
 
 ---
 
-## 🚀 Live Demo
-🌐 **Frontend (Netlify):** [https://playlytics.netlify.app](https://playlytics.netlify.app)  
-⚙️ **Backend API (Render):** [https://playlytics.onrender.com](https://playlytics.onrender.com)
+## 🚀 Live Application & Video Demo
+ [PlayLytics Application](https://playlytics.onrender.com)
+
+ > **Note Regarding Load Times:** 
+> - This application is hosted on Render’s free tier and automatically spins down after 15 minutes of inactivity.  
+> -  The first request after a period of idling may take up to **2–3 minutes to load** and the initial login can show a slight delay.
+> - Once the app is awake, performance is normal and responsive.
+
+
+<a href="https://onedrive.live.com/?qt=allmyphotos&photosData=%2Fshare%2FE106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c%3Fithint%3Dvideo%26e%3D4%253aaj6GRI%26sharingv2%3Dtrue%26fromShare%3Dtrue%26at%3D9%26migratedtospo%3Dtrue&cid=E106B216D4E61861&id=E106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3YvYy9FMTA2QjIxNkQ0RTYxODYxL0VjMVZ6WkFxb2hCQmlEeFdMbnRWV1N3QmpBNTZ6NUwwa1RJUXRFT3ZXclM5Tmc%5FZT00OmFqNkdSSSZzaGFyaW5ndjI9dHJ1ZSZmcm9tU2hhcmU9dHJ1ZSZhdD05&v=photos">
+  <img src="frontend/src/assets/PlayLyticsLogoOriginalDiceGradientFont.png" width="350" />
+</a>
 
 ---
 
-## 🧩 Technologies Used
+## 🛠️ Technologies Used
 
-### Frontend
+### 🎨 Frontend
 - Angular 20
-- TypeScript 5 + RxJS
-- Tailwind CSS + ng2-charts (Chart.js)
+- TypeScript 5.9 + RxJS 7.8
+- Tailwind CSS 3.4
+- Chart.js 4 + ng2-charts 8
 - Node 20.x / npm 10.x
-- Hosted on **Netlify**
 
-### Backend
-- Java 21 (OpenJDK)
+### ⚙️ Backend
+- Java 24 (OpenJDK)
 - Spring Boot 3.5.5
-- Spring Data JPA / Hibernate 6
-- Spring Security 6
-- PostgreSQL 17 (Neon Cloud DB)
-- Maven 4 project structure
-- Hosted on **Render**
+- Spring Data JPA 3.x  / Hibernate 6.x
+- Spring Security 6.x
+- Maven 3.9
+
+### 🗄️ Database
+- PostgreSQL 17 (Neon Serverless)
+
+### ☁️️ Hosting
+- Render (Frontend + Backend)
+- Neon (Database)
 
 ---
 
-## 🛠️ Local Setup
+## 🧩 Current Release Features
 
+-  **User Accounts**
+    - Secure account creation with unique email and display name
+    - Login and authenticate user
+    - Update profile details
+    - Logout
+
+
+-  **Analytics**
+  - Interactive dashboard with charts and visual insights
+  - Reports for past game play sessions
+
+
+- **Game Play Sessions**
+  - Log  game play sessions
+  - Review and delete past sessions
+  - Accept or decline pending game play sessions added under associated "guest player"
+
+
+- **Networking**
+  - **Connections**
+    - Search for other players by email
+    - Send, cancel, accept, or decline connection requests
+    - Manage blocks and remove connections
+    
+  - **Associations**
+      - Search for existing "guest players"
+      - Add or create new guest players as associations
+      - Manage and remove associations
+
+
+- **Inventory Tracking**
+  - Search across nearly 10,000 board games in the PlayLytics database
+  - Add board games to personal collection
+  - Search board games in collection
+  - Remove board games from collection
+
+
+---
+
+##  🗓️ Upcoming Enhancements
+>PlayLytics currently delivers a complete experience for gaming enthusiasts to track their sessions and gain valuable insights. 
+> As I continue to grow as a developer, I’m excited to build upon this strong foundation with enhancements that will elevate both functionality and user experience.
+
+- **Authentication & User Profiles**
+  - Email verification during account creation
+  - Password reset & update functionality
+  - Avatars for user profiles
+  - Streamlined player entity model for registered and guest users
+  
+
+- **User Experience & Interface**
+  - Modernized user interface
+  - Improved responsive layout
+  - Color scheme selection
+  - Optimized image loading performance
+  
+
+- **Search & Data Insights**
+  - Improved search functionality across application
+  - Enhanced labeling and finer granularity in data visualizations
+  - Additional analytical insights
+  
+
+- **Game Expansion & Integrations**
+  - Add additional board games to database
+  - Add scoring sheets to board games
+  - Integration with future game scoring applications
+
+---
+
+## 🏠 Local Setup
 ### 1️⃣ Clone the Repository
 
-git clone https://gitlab.com/your-wgu-repo-url/d424-software-engineering-capstone.git
+git clone [PlayLytics Repo](https://github.com/mparker520/playlytics.git)
+
 cd d424-software-engineering-capstone
 
-## ⚙️ Backend Deployment (Render)
 
-### 1️⃣ Create a Render Account
+
+---
+
+## ☁️ Deployment
+
+
+
+### ⚙️ Backend Deployment (Render)
+
+#### 1️⃣ Create a Render Account
 - Register at [https://render.com](https://render.com)
 - Select the **Professional Tier** for 24/7 warm instance access.
 
-### 2️⃣ Create a New Web Service
+#### 2️⃣ Create a New Web Service
 - **Repository:** Connect your GitLab repository
 - **Service Name:** `playlytics`
 - **Language:** Docker
@@ -60,7 +172,7 @@ cd d424-software-engineering-capstone
 - **Root Directory:** `backend`
 - **Dockerfile Path:** `playlytics/Dockerfile`
 
-### 3️⃣ Environment Variables
+#### 3️⃣ Environment Variables
 Add the following under **Render → Settings → Environment**:
 
 | Variable | Value |
@@ -72,7 +184,7 @@ Add the following under **Render → Settings → Environment**:
 | `SERVER_PORT` | `8080` |
 | `SPRING_JPA_HIBERNATE_DDL_AUTO` | `update` |
 
-### 4️⃣ Update CORS Configuration
+#### 4️⃣ Update CORS Configuration
 In your backend, open:
 
 /backend/playlytics/src/main/java/com/mparker/playlytics/security/SecurityConfig.java
@@ -84,32 +196,32 @@ corsConfiguration.setAllowedOrigins(List.of(
 "https://playlytics.netlify.app"
 ));
 
-### 5️⃣ Deploy
+#### 5️⃣ Deploy
 - Save and click **Deploy Web Service**.
 - Render automatically builds the backend from the Dockerfile and starts the service.
 - After successful deployment, verify your backend endpoint (e.g., `https://
 
 ---
 
-## 💾 Database Deployment (Neon)
+### 💾 Database Deployment (Neon)
 
-### 1️⃣ Create a Neon Project
+#### 1️⃣ Create a Neon Project
 - Go to [https://neon.tech](https://neon.tech)
 - **Project name:** `playlytics`
 - **Postgres version:** 17
 - **Region:** AWS US East 1 (N. Virginia)
 
-### 2️⃣ Get the Connection String
+#### 2️⃣ Get the Connection String
 - From the Neon dashboard → click **Connect to Your Database**
 - Copy the full string:
 
 
-### 3️⃣ Set Environment Variables on Render
+#### 3️⃣ Set Environment Variables on Render
 - In your **Render** service settings, open the **Environment Variables** section and set the following:
 
 - These values must match your Neon connection string.
 
-### 4️⃣ Upload Board Game Data
+#### 4️⃣ Upload Board Game Data
 - Download the CSV file from `/d424-software-engineering-capstone/data/board_games.csv`
 - Open **Command Prompt** or **PSQL CLI** and connect to your Neon database using the connection string.
 - Once connected, run the following command (adjusting the path to your CSV file):
@@ -120,20 +232,20 @@ FROM 'C:/path/to/board_games.csv'
 DELIMITER ','
 CSV HEADER;
 
-## 🌐 Frontend Deployment (Netlify)
+### 🌐 Frontend Deployment (Netlify)
 
-### 1️⃣ Build the Angular App
+#### 1️⃣ Build the Angular App
 - In IntelliJ or VS Code, open the **frontend** directory.
 - Run the production build command:    ng build --configuration production
 - After the build completes, locate the generated files at:  /frontend/dist/frontend/browser
 
-### 2️⃣ Deploy to Netlify
+#### 2️⃣ Deploy to Netlify
 - Go to [https://www.netlify.com/](https://www.netlify.com/).
 - Choose **Add new site → Deploy manually**.
 - Drag and drop the **browser** folder into the upload area.
 - Once deployed, Netlify will generate a live URL like:
 
-### 4️⃣ Update Frontend Environment Files
+#### 4️⃣ Update Frontend Environment Files
 - Open both files under:  /frontend/src/environments
 
 - **Update the API base URL** to point to your Render backend:
@@ -144,8 +256,31 @@ production: false,
 apiUrl: 'https://playlytics.onrender.com'
 };
 
-### 5️⃣ Rebuild and Redeploy Frontend
+#### 5️⃣ Rebuild and Redeploy Frontend
 
 - Rebuild the Angular production bundle with: ng build --configuration production
 - Then, drag and drop the newly generated folder: /frontend/dist/frontend/browser into Netlify’s drag-and-drop upload area to redeploy.
 
+---
+
+## 📜 License
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🎓 About Me
+My name is Melissa Parker, and I am a recent **Software Engineering graduate** from Western Governors University (Oct 2025).
+
+After a decade in administrative and operational roles, I am transitioning into software engineering, bringing strong organizational, technical, and people skills
+into my technical work.  Through my degree program, I gained hands‑on experience with Java, Spring Boot, Angular, TypeScript, and PostgreSQL, 
+applying these technologies to build full‑stack applications.
+
+My capstone project, PlayLytics, was inspired by my passion for board games — I currently own about 80 titles in my collection! 
+This project reflects both my technical growth and my enthusiasm for creating tools that bring people together.
+
+---
+
+## 📩 Contact Me
+- 📧 **Email:** [melissaparker520pro@gmail.com](mailto:melissaparker520pro@gmail.com)
+- 💼 **LinkedIn:** [linkedin.com/in/mparker520](https://www.linkedin.com/in/mparker520/)
+- 💻 **GitHub:** [github.com/mparker520](https://github.com/mparker520)

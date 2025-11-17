@@ -1,6 +1,6 @@
 # <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65" style="vertical-align:middle;"/>PlayLytics
 
-A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics, 
+A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics,
 connect with other players, and track their board game inventory.
 
 ---
@@ -22,7 +22,7 @@ connect with other players, and track their board game inventory.
 PlayLytics was developed the capstone project for my
 B.S. in Software Engineering degree at *Western Governors University*, which I completed in October 2025.
 
-The project demonstrates a well-structured, full-stack architecture designed to deliver a professional, 
+The project demonstrates a well-structured, full-stack architecture designed to deliver a professional,
 production‑ready experience. It is organized across the following layers:
 - **Frontend:** Angular 20 hosted on **Render**
 - **Backend:** Spring Boot 3 (Java 21) hosted on **Render**
@@ -31,10 +31,10 @@ production‑ready experience. It is organized across the following layers:
 ---
 
 ## 🚀 Live Application & Video Demo
- [PlayLytics Application](https://playlytics.onrender.com)
+[PlayLytics Application](https://playlytics.onrender.com)
 
- > **Note Regarding Load Times:** 
-> - This application is hosted on Render’s free tier and automatically spins down after 15 minutes of inactivity.  
+> **Note Regarding Load Times:**
+> - This application is hosted on Render’s free tier and automatically spins down after 15 minutes of inactivity.
 > -  The first request after a period of idling may take up to **2–3 minutes to load** and the initial login can show a slight delay.
 > - Once the app is awake, performance is normal and responsive.
 
@@ -55,7 +55,7 @@ production‑ready experience. It is organized across the following layers:
 - Node 20.x / npm 10.x
 
 ### ⚙️ Backend
-- Java 24 (OpenJDK)
+- Java 21 (OpenJDK)
 - Spring Boot 3.5.5
 - Spring Data JPA 3.x  / Hibernate 6.x
 - Spring Security 6.x
@@ -80,65 +80,65 @@ production‑ready experience. It is organized across the following layers:
 
 
 -  **Analytics**
-  - Interactive dashboard with charts and visual insights
-  - Reports for past game play sessions
+- Interactive dashboard with charts and visual insights
+- Reports for past game play sessions
 
 
 - **Game Play Sessions**
-  - Log  game play sessions
-  - Review and delete past sessions
-  - Accept or decline pending game play sessions added under associated "guest player"
+    - Log  game play sessions
+    - Review and delete past sessions
+    - Accept or decline pending game play sessions added under associated "guest player"
 
 
 - **Networking**
-  - **Connections**
-    - Search for other players by email
-    - Send, cancel, accept, or decline connection requests
-    - Manage blocks and remove connections
-    
-  - **Associations**
-      - Search for existing "guest players"
-      - Add or create new guest players as associations
-      - Manage and remove associations
+    - **Connections**
+        - Search for other players by email
+        - Send, cancel, accept, or decline connection requests
+        - Manage blocks and remove connections
+
+    - **Associations**
+        - Search for existing "guest players"
+        - Add or create new guest players as associations
+        - Manage and remove associations
 
 
 - **Inventory Tracking**
-  - Search across nearly 10,000 board games in the PlayLytics database
-  - Add board games to personal collection
-  - Search board games in collection
-  - Remove board games from collection
+    - Search across nearly 10,000 board games in the PlayLytics database
+    - Add board games to personal collection
+    - Search board games in collection
+    - Remove board games from collection
 
 
 ---
 
 ##  🗓️ Upcoming Enhancements
->PlayLytics currently delivers a complete experience for gaming enthusiasts to track their sessions and gain valuable insights. 
+>PlayLytics currently delivers a complete experience for gaming enthusiasts to track their sessions and gain valuable insights.
 > As I continue to grow as a developer, I’m excited to build upon this strong foundation with enhancements that will elevate both functionality and user experience.
 
 - **Authentication & User Profiles**
-  - Email verification during account creation
-  - Password reset & update functionality
-  - Avatars for user profiles
-  - Streamlined player entity model for registered and guest users
-  
+    - Email verification during account creation
+    - Password reset & update functionality
+    - Avatars for user profiles
+    - Streamlined player entity model for registered and guest users
+
 
 - **User Experience & Interface**
-  - Modernized user interface
-  - Improved responsive layout
-  - Color scheme selection
-  - Optimized image loading performance
-  
+    - Modernized user interface
+    - Improved responsive layout
+    - Color scheme selection
+    - Optimized image loading performance
+
 
 - **Search & Data Insights**
-  - Improved search functionality across application
-  - Enhanced labeling and finer granularity in data visualizations
-  - Additional analytical insights
-  
+    - Improved search functionality across application
+    - Enhanced labeling and finer granularity in data visualizations
+    - Additional analytical insights
+
 
 - **Game Expansion & Integrations**
-  - Add additional board games to database
-  - Add scoring sheets to board games
-  - Integration with future game scoring applications
+    - Add additional board games to database
+    - Add scoring sheets to board games
+    - Integration with future game scoring applications
 
 ---
 
@@ -272,10 +272,10 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 My name is Melissa Parker, and I am a recent **Software Engineering graduate** from Western Governors University (Oct 2025).
 
 After a decade in administrative and operational roles, I am transitioning into software engineering, bringing strong organizational, technical, and people skills
-into my technical work.  Through my degree program, I gained hands‑on experience with Java, Spring Boot, Angular, TypeScript, and PostgreSQL, 
+into my technical work.  Through my degree program, I gained hands‑on experience with Java, Spring Boot, Angular, TypeScript, and PostgreSQL,
 applying these technologies to build full‑stack applications.
 
-My capstone project, PlayLytics, was inspired by my passion for board games — I currently own about 80 titles in my collection! 
+My capstone project, PlayLytics, was inspired by my passion for board games — I currently own about 80 titles in my collection!
 This project reflects both my technical growth and my enthusiasm for creating tools that bring people together.
 
 ---

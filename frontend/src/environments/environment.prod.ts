@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://playlytics.onrender.com'
+  apiUrl: (window as any).__env?.apiUrl || 'https://playlytics.onrender.com'
 };

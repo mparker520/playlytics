@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://playlytics.onrender.com'
+  apiUrl: (window as any).__env?.apiUrl || 'http://localhost:8080'
 };

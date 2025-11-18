@@ -1,9 +1,7 @@
-<table>
-  <tr>
-    <td><img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"></td>
-    <td><h1>PlayLytics</h1></td>
-  </tr>
-</table>
+<h1>
+  <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"> &nbsp; PlayLytics
+</h1>
+
 
 A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics,
 connect with other players, and track their board game inventory.

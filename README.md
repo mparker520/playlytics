@@ -31,15 +31,16 @@ production‑ready experience. It is organized across the following layers:
 
 ---
 
-## 🚀 Live Application & Video Demo
-[PlayLytics Application](https://playlytics.onrender.com)
+## 🚀 Live Application
+[PlayLytics Application Hosted Live on Render](https://playlytics.onrender.com)
 
 > **Note Regarding Load Times:**
 > - This application is hosted on Render’s free tier and automatically spins down after 15 minutes of inactivity.
 > -  The first request after a period of idling may take up to **2–3 minutes to load** and the initial login can show a slight delay.
 > - Once the app is awake, performance is normal and responsive.
 
-
+---
+## 🎥 Video Demo
 <a href="https://onedrive.live.com/?qt=allmyphotos&photosData=%2Fshare%2FE106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c%3Fithint%3Dvideo%26e%3D4%253aaj6GRI%26sharingv2%3Dtrue%26fromShare%3Dtrue%26at%3D9%26migratedtospo%3Dtrue&cid=E106B216D4E61861&id=E106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3YvYy9FMTA2QjIxNkQ0RTYxODYxL0VjMVZ6WkFxb2hCQmlEeFdMbnRWV1N3QmpBNTZ6NUwwa1RJUXRFT3ZXclM5Tmc%5FZT00OmFqNkdSSSZzaGFyaW5ndjI9dHJ1ZSZmcm9tU2hhcmU9dHJ1ZSZhdD05&v=photos">
   <img src="frontend/src/assets/PlayLyticsLogoOriginalDiceGradientFont.png" width="350" />
 </a>
@@ -100,7 +101,7 @@ Before running PlayLytics locally, ensure the following are installed:
 From your terminal run:
 ```bash 
 git clone https://github.com/mparker520/playlytics.git
-cd d424-software-engineering-capstone
+cd playlytics
 ```
 
 ### 2️⃣ Run Docker Compose Command
@@ -108,7 +109,7 @@ cd d424-software-engineering-capstone
 From your terminal, run:
 
 ```bash
-docker-compose up
+docker compose up --build
 ```
 
 ### 3️⃣ Navigate to LocalHost:8080

@@ -1,6 +1,5 @@
 # <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"> PlayLytics
 
-
 A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics,
 connect with other players, and track their board game inventory.
 

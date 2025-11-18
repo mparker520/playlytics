@@ -1,4 +1,5 @@
-# <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65" style="vertical-align:middle;"/>PlayLytics
+# <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"> PlayLytics
+
 
 A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics,
 connect with other players, and track their board game inventory.
@@ -9,9 +10,9 @@ connect with other players, and track their board game inventory.
 - [Project Overview](#-project-overview)
 - [Live Application](#-live-application--video-demo)
 - [Technologies Used](#-technologies-used)
+- [Local Setup Steps](#-local-setup-steps)
 - [Current Release Features](#-current-release-features)
 - [Upcoming Enhancements](#-upcoming-enhancements)
-- [Local Setup](#-local-setup)
 - [License](#-license)
 - [About Me](#-about-me)
 - [Contact](#-contact-me)
@@ -67,6 +68,52 @@ production‑ready experience. It is organized across the following layers:
 ### ☁️️ Hosting
 - Render (Frontend + Backend)
 - Neon (Database)
+
+---
+
+## 🏠 Local Setup Steps
+
+### 🔧 Prerequisites
+
+Before running PlayLytics locally, ensure the following are installed:
+
+#### 🔀 Git
+- Used to clone the repository and manage branches.
+- [Download Git](https://git-scm.com/downloads) for Windows, macOS, or Linux.
+- Verify installation by running:
+  ```bash
+  git --version
+  ``` 
+
+#### 🐳 Docker Desktop
+- Used to run the backend, frontend, and database with a single command without installing dependencies.
+- [Download Docker Desktop](https://www.docker.com/products/docker-desktop) for Windows or macOS.  
+  Linux users can install Docker Engine + Compose separately.
+- Verify installation by running:
+  ```bash
+  docker --version
+  docker-compose --version
+  ``` 
+
+### 1️⃣ Clone the Repository
+
+From your terminal run:
+```bash 
+git clone https://github.com/mparker520/playlytics.git
+cd d424-software-engineering-capstone
+```
+
+### 2️⃣ Run Docker Compose Command
+
+From your terminal, run:
+
+```bash
+docker-compose up
+```
+
+### 3️⃣ Navigate to LocalHost:8080
+
+Open [http://localhost:8080](http://localhost:8080/) in your browser
 
 ---
 
@@ -139,53 +186,6 @@ production‑ready experience. It is organized across the following layers:
     - Add additional board games to database
     - Add scoring sheets to board games
     - Integration with future game scoring applications
-
----
-
-## 🏠 Local Setup Steps
-
-### 🔧 Prerequisites
-
-Before running PlayLytics locally, ensure the following are installed:
-
-#### 🔀 Git
-- Used to clone the repository and manage branches.
-- [Download Git](https://git-scm.com/downloads) for Windows, macOS, or Linux.
-- Verify installation by running:
-  ```bash
-  git --version
-  ``` 
-  
-#### 🐳 Docker Desktop
-- Used to run the backend, frontend, and database with a single command without installing dependencies.
-- [Download Docker Desktop](https://www.docker.com/products/docker-desktop) for Windows or macOS.  
-  Linux users can install Docker Engine + Compose separately.
-- Verify installation by running:
-  ```bash
-  docker --version
-  docker-compose --version
-  ``` 
-  
-### 1️⃣ Clone the Repository
-
-From your terminal run: 
-```bash 
-git clone https://github.com/mparker520/playlytics.git
-cd d424-software-engineering-capstone
-```
-
-
-### 2️⃣ Run Docker Compose Command
-
-From your terminal, run:
-
-```bash
-docker-compose up
-```
-
-### 3️⃣ Navigate to LocalHost:8080
-
-Open [http://localhost:8080](http://localhost:8080/) in your browser
 
 ---
 

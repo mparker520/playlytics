@@ -1,6 +1,4 @@
-<h1>
-  <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"> &nbsp; PlayLytics
-</h1>
+# <img src="frontend/src/assets/PlayLytics Dice Logo Transparent.png" width="65"> PlayLytics
 
 
 A full-stack **board-game analytics web application** that lets users track their play sessions, view statistics,

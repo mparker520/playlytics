@@ -1,7 +1,11 @@
 FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
+
 COPY pom.xml .
 COPY src ./src
+ARG FRONTEND_ENV=prod
+COPY env-config/env.${FRONTEND_ENV}.js /app/src/main/resources/static/env.js
+
 RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jdk

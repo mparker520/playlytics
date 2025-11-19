@@ -116,6 +116,14 @@ docker compose up --build
 
 Open [http://localhost:8080](http://localhost:8080/) in your browser
 
+
+> **Note Regarding Sample Database:**
+> - The database has been seeded with 4 sample games (Azul, Banagrams, Canvas, and Wingspan)  for use in the local setup of PlayLytics.
+> - The full version of PlayLytics includes over 9,000 board games in the database.
+> - Future releases of PlayLytics will allow users to add their own board games.
+
+
+
 ---
 
 ## 🧩 Current Release Features

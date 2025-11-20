@@ -9,8 +9,9 @@ connect with other players, and track their board game inventory.
 
 - [Project Overview](#-project-overview)
 - [Live Application](#-live-application--video-demo)
+- [Video Demo](#-video-demo)
 - [Technologies Used](#-technologies-used)
-- [Local Setup Steps](#-local-setup-steps)
+- [Local Setup](#-local-setup)
 - [Current Release Features](#-current-release-features)
 - [Upcoming Enhancements](#-upcoming-enhancements)
 - [License](#-license)
@@ -41,8 +42,9 @@ production‑ready experience. It is organized across the following layers:
 
 ---
 ## 🎥 Video Demo
-<a href="https://onedrive.live.com/?qt=allmyphotos&photosData=%2Fshare%2FE106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c%3Fithint%3Dvideo%26e%3D4%253aaj6GRI%26sharingv2%3Dtrue%26fromShare%3Dtrue%26at%3D9%26migratedtospo%3Dtrue&cid=E106B216D4E61861&id=E106B216D4E61861%21s90cd55cda22a4110883c562e7b55592c&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3YvYy9FMTA2QjIxNkQ0RTYxODYxL0VjMVZ6WkFxb2hCQmlEeFdMbnRWV1N3QmpBNTZ6NUwwa1RJUXRFT3ZXclM5Tmc%5FZT00OmFqNkdSSSZzaGFyaW5ndjI9dHJ1ZSZmcm9tU2hhcmU9dHJ1ZSZhdD05&v=photos">
-  <img src="frontend/src/assets/PlayLyticsLogoOriginalDiceGradientFont.png" width="350" />
+
+<a href="https://www.youtube.com/watch?v=Xa25dN3rkhA">
+  <img src="https://img.youtube.com/vi/Xa25dN3rkhA/0.jpg" width="400" />
 </a>
 
 ---
@@ -72,7 +74,7 @@ production‑ready experience. It is organized across the following layers:
 
 ---
 
-## 🏠 Local Setup Steps
+## 🏠 Local Setup
 
 ### 🔧 Prerequisites
 
@@ -135,9 +137,9 @@ Open [http://localhost:8080](http://localhost:8080/) in your browser
     - Logout
 
 
--  **Analytics**
-- Interactive dashboard with charts and visual insights
-- Reports for past game play sessions
+- **Analytics**
+  - Interactive dashboard with charts and visual insights
+  - Reports for past game play sessions
 
 
 - **Game Play Sessions**
@@ -168,7 +170,7 @@ Open [http://localhost:8080](http://localhost:8080/) in your browser
 ---
 
 ##  🗓️ Upcoming Enhancements
->PlayLytics currently delivers a complete experience for gaming enthusiasts to track their sessions and gain valuable insights.
+>PlayLytics currently delivers a complete experience for gaming enthusiasts to track their sessions and gain valuable insights. <br>
 > As I continue to grow as a developer, I’m excited to build upon this strong foundation with enhancements that will elevate both functionality and user experience.
 
 - **Authentication & User Profiles**
@@ -207,8 +209,8 @@ This project is licensed under the MIT License – see the [LICENSE](LICENSE) fi
 My name is Melissa Parker, and I am a recent **Software Engineering graduate** from Western Governors University (Oct 2025).
 
 After a decade in administrative and operational roles, I am transitioning into software engineering, bringing strong organizational, technical, and people skills
-into my technical work.  Through my degree program, I gained hands‑on experience with Java, Spring Boot, Angular, TypeScript, and PostgreSQL,
-applying these technologies to build full‑stack applications.
+into my projects.  Through my degree program, I gained hands‑on experience with Java, Spring Boot, Angular, TypeScript, and PostgreSQL,
+applying these technologies to a build full‑stack application.
 
 My capstone project, PlayLytics, was inspired by my passion for board games — I currently own about 80 titles in my collection!
 This project reflects both my technical growth and my enthusiasm for creating tools that bring people together.

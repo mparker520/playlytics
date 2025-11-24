@@ -6,6 +6,7 @@ import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.service.GameService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,5 +46,15 @@ public class GameController {
         }
 
     //</editor-fold>
+
+    @PostMapping("/board-game")
+    public ResponseEntity<String> addBoardGame (
+            @RequestParam(value = "boardGame") String boardGame) {
+
+        String response = gameService.addBoardGame(boardGame);
+
+        return ResponseEntity.ok(response);
+
+    }
 
 }

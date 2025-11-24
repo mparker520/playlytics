@@ -24,30 +24,35 @@ public class GameService {
 
 //</editor-fold>
 
-//<editor-fold desc = "Get All Board Games By Title">
+    //<editor-fold desc = "Get All Board Games By Title">
 
-    public Set<GameResponseDTO> findByTitle(String title) {
+        public Set<GameResponseDTO> findByTitle(String title) {
 
-        Set <Game> gameSet = gameRepository.findByGameTitleStartingWithOrderByGameTitle(title);
-        Set<GameResponseDTO> gameResponseDTOSet = new HashSet<>();
+            Set <Game> gameSet = gameRepository.findByGameTitleStartingWithOrderByGameTitle(title);
+            Set<GameResponseDTO> gameResponseDTOSet = new HashSet<>();
 
-        if (gameSet.isEmpty()) {
-            gameSet = gameRepository.findByGameTitleContainingIgnoreCase(title);
+            if (gameSet.isEmpty()) {
+                gameSet = gameRepository.findByGameTitleContainingIgnoreCase(title);
+            }
+
+
+            for (Game game : gameSet) {
+
+                GameResponseDTO gameResponseDTO = new GameResponseDTO(game.getId(), game.getGameTitle());
+                gameResponseDTOSet.add(gameResponseDTO);
+
+            }
+
+            return  gameResponseDTOSet;
+
         }
 
+    //</editor-fold>
 
-        for (Game game : gameSet) {
-
-            GameResponseDTO gameResponseDTO = new GameResponseDTO(game.getId(), game.getGameTitle());
-            gameResponseDTOSet.add(gameResponseDTO);
-
-        }
-
-        return  gameResponseDTOSet;
-
+    public String addBoardGame(String boardGame) {
+        return boardGame;
     }
 
 }
 
-//</editor-fold>
 

@@ -9,8 +9,9 @@ import {
 import {
   PendingGamePlaySessionsComponent
 } from '../sessions-component/pending-game-play-sessions-component/pending-game-play-sessions-component';
-import {BoardGamesService} from '../../services/board-games-service';
+
 import {GamePlaySessionResponseDTO} from '../../dtos/game-play-session-response-dto';
+import {GameService} from '../../services/game-service';
 
 @Component({
   selector: 'app-board-games-component',
@@ -20,19 +21,19 @@ import {GamePlaySessionResponseDTO} from '../../dtos/game-play-session-response-
     GamePlaySessionListComponent,
     PendingGamePlaySessionsComponent
   ],
-  templateUrl: './board-games-component.html',
-  styleUrl: './board-games-component.css'
+  templateUrl: './games-component.html',
+  styleUrl: './games-component.css'
 })
-export class BoardGamesComponent {
+export class GamesComponent {
 
 
-constructor(private boardGameService: BoardGamesService) {
+constructor(private gameService: GameService) {
 }
 
   //<editor-fold desc="Submit Game Function">
 
     submitGame(boardGame: string) {
-        this.boardGameService.addBoardGame(boardGame).subscribe({
+        this.gameService.addBoardGame(boardGame).subscribe({
           next: (response: string) => {
             console.log(response);
           },

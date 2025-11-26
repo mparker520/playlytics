@@ -33,6 +33,7 @@ constructor(private gameService: GameService) {
   //<editor-fold desc="Submit Game Function">
 
     submitGame(boardGame: string) {
+
         this.gameService.addBoardGame(boardGame).subscribe({
           next: (response: string) => {
             console.log(response);

@@ -31,6 +31,8 @@ public class Game {
     // Establish uid for comparison and hashing
     @Column (name = "uid", nullable = false, updatable = false, unique = true)
     private UUID uid = UUID.randomUUID();
+
+
     // Define Equals
     @Override
     public boolean equals(Object o) {
@@ -71,5 +73,17 @@ public class Game {
 
 
     // </editor-fold>
+
+
+    //<editor-fold desc="Constructors">
+    public Game() {
+
+    }
+
+
+    public Game(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
+    //</editor-fold>
 
 }

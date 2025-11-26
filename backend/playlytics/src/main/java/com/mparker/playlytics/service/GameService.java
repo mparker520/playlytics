@@ -2,11 +2,17 @@ package com.mparker.playlytics.service;
 
 // Imports
 import com.mparker.playlytics.dto.GameResponseDTO;
+import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.entity.Game;
+import com.mparker.playlytics.entity.OwnedGame;
+import com.mparker.playlytics.entity.RegisteredPlayer;
+import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.GameRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -49,9 +55,18 @@ public class GameService {
 
     //</editor-fold>
 
-    public String addBoardGame(String boardGame) {
-        return boardGame;
+    // <editor-fold desc = "Add Game to Database">
+
+    @Transactional
+    public void addBoardGame(String boardGame)  {
+
+        Game game = new Game(boardGame);
+        gameRepository.save(game);
+
+
     }
+
+    // </editor-fold>
 
 }
 

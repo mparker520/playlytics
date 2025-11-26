@@ -48,12 +48,13 @@ public class GameController {
     //<editor-fold desc="Add Board Game">
 
         @PostMapping("/board-game")
-        public ResponseEntity<String> addBoardGame (
+        public ResponseEntity<Void> addBoardGame (
                 @RequestParam(value = "boardGame") String boardGame) {
 
-            String response = gameService.addBoardGame(boardGame);
+            System.out.print(boardGame);
+            gameService.addBoardGame(boardGame);
 
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(null);
 
         }
 

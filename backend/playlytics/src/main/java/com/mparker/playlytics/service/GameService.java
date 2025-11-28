@@ -6,6 +6,7 @@ import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.entity.Game;
 import com.mparker.playlytics.entity.OwnedGame;
 import com.mparker.playlytics.entity.RegisteredPlayer;
+import com.mparker.playlytics.exception.ExistingResourceException;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.GameRepository;
 import org.springframework.stereotype.Service;
@@ -58,10 +59,19 @@ public class GameService {
     // <editor-fold desc = "Add Game to Database">
 
     @Transactional
-    public void addBoardGame(String boardGame)  {
+    public void addBoardGame(String boardGame)  throws ExistingResourceException {
 
-        Game game = new Game(boardGame);
-        gameRepository.save(game);
+        boolean existingGame = false;
+
+
+        if (!existingGame) {
+            Game game = new Game(boardGame);
+            gameRepository.save(game);
+        }
+
+        else {
+            throw new ExistingResourceException("There is already a game with a duplicate or similar name / title.");
+        }
 
 
     }

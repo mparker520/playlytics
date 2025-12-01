@@ -12,9 +12,7 @@ import com.mparker.playlytics.repository.GameRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -61,26 +59,51 @@ public class GameService {
     @Transactional
     public void addBoardGame(String boardGame)  throws ExistingResourceException {
 
-        boolean gameInDB = false;
+        Set<Game> existingGames = new HashSet<>();
 
-        Game existingGame = gameRepository.getGameByGameTitleIgnoreCase(boardGame.trim().replaceAll("\\s+", " "));
-        if(existingGame != null) {
-            gameInDB = true;
+        for(String word: getSignificantWords(boardGame)) {
+            existingGames.addAll(gameRepository.getGamesByGameTitleContainingIgnoreCase(word));
         }
 
-        if (!gameInDB) {
-            Game game = new Game(boardGame);
-            gameRepository.save(game);
+        for (Game existingGame : existingGames) {
+                existingGame.setGameTitle(existingGame.getGameTitle().replaceAll("[^a-zA-Z0-9\\s]", " "));
+
+                if(existingGame.getGameTitle().equals(boardGame.replaceAll("[^a-zA-Z0-9\\s]", " "))){
+                    throw new ExistingResourceException("There is already a game with a duplicate or similar name / title.");
+                }
         }
 
-        else {
-            throw new ExistingResourceException("There is already a game with a duplicate or similar name / title.");
-        }
+        Game newGame = new Game(boardGame.trim().replaceAll("\\s+", " "));
+        gameRepository.save(newGame);
 
 
     }
 
     // </editor-fold>
+
+
+    //<editor-fold desc="Helper Methods">
+
+    private ArrayList<String> getSignificantWords(String boardGame) {
+        String[] titleWords = boardGame.split(" ");
+        ArrayList<String> signifiicantWords = new ArrayList<>(0);
+        Set<String> excludedWords = new HashSet<>(Arrays.asList(    "a", "an", "the", "and", "or", "but", "in", "on", "at", "to", "for",
+                "of", "by", "with", "from", "this", "that", "these", "those", "it",
+                "is", "are", "was", "were", "be", "been", "am", "do", "does", "did"));
+
+        for (String word : titleWords) {
+            if(!excludedWords.contains(word.toLowerCase().replaceAll("[^a-zA-Z0-9]", ""))) {
+                signifiicantWords.add(word);
+            }
+
+        }
+
+        return signifiicantWords;
+
+    }
+
+    //</editor-fold>
+
 
 }
 

@@ -4,6 +4,8 @@ package com.mparker.playlytics.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 import java.util.UUID;
 
 // This data will be imported from Board Game Geek data
@@ -59,9 +61,8 @@ public class Game {
 
     // </editor-fold>
 
-    // <editor-fold desc="Getters">
+    // <editor-fold desc="Getters & Setters">
 
-    // Currently Setters are being omitted since all games will be imported
 
     public Long getId() {
         return id;
@@ -71,6 +72,9 @@ public class Game {
         return gameTitle;
     }
 
+    public void setGameTitle(String gameTitle) {
+        this.gameTitle = gameTitle;
+    }
 
     // </editor-fold>
 
@@ -84,6 +88,8 @@ public class Game {
     public Game(String gameTitle) {
         this.gameTitle = gameTitle;
     }
+
+
     //</editor-fold>
 
 }

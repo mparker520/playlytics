@@ -17,4 +17,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     // Get all Games by Containing Filter, ignoring case
     Set<Game> findByGameTitleContainingIgnoreCase(String title);
 
+    Game getGameByGameTitleIgnoreCase(String boardGame);
 }

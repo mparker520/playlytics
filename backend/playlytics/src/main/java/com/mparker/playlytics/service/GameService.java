@@ -61,10 +61,14 @@ public class GameService {
     @Transactional
     public void addBoardGame(String boardGame)  throws ExistingResourceException {
 
-        boolean existingGame = false;
+        boolean gameInDB = false;
 
+        Game existingGame = gameRepository.getGameByGameTitleIgnoreCase(boardGame.trim().replaceAll("\\s+", " "));
+        if(existingGame != null) {
+            gameInDB = true;
+        }
 
-        if (!existingGame) {
+        if (!gameInDB) {
             Game game = new Game(boardGame);
             gameRepository.save(game);
         }

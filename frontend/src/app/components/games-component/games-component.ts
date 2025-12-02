@@ -26,9 +26,10 @@ import {GameService} from '../../services/game-service';
 })
 export class GamesComponent {
 
+  gameAddStatusMessage?: string;
 
-constructor(private gameService: GameService) {
-}
+  constructor(private gameService: GameService) {
+  }
 
   //<editor-fold desc="Submit Game Function">
 
@@ -36,10 +37,22 @@ constructor(private gameService: GameService) {
 
         this.gameService.addBoardGame(boardGame).subscribe({
           next: (response: string) => {
-            console.log(response);
+            this.gameAddStatusMessage = "You have successfully added your game to the database!"
+
+            setTimeout(() => {
+              this.gameAddStatusMessage = undefined;
+            }, 3000);
           },
-          error: (error: any) => console.error("fail", error)
-        });
+
+          error: (error: any) => {
+            this.gameAddStatusMessage = error.error.message
+
+            setTimeout(() => {
+              this.gameAddStatusMessage = undefined;
+            }, 3000);
+          }
+
+      })
     }
 
 

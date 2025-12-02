@@ -26,4 +26,14 @@ export class GameService {
 
   //</editor-fold>
 
+  //<editor-fold desc="Add Board Game Function">
+
+  addBoardGame(boardGame: string): Observable<string> {
+
+    return this.http.post<string>(`${environment.apiUrl}/board-game`, {}, {params: {boardGame}, withCredentials: true})
+  }
+
+
+  //</editor-fold>
+
 }

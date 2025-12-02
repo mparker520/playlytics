@@ -91,6 +91,7 @@ export class SessionsComponent implements OnInit{
           this.gameLookUpErrorMessage = undefined;
         }, 3000);
       }
+
     })
   }
   //</editor-fold>

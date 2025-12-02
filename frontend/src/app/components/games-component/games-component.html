@@ -1,0 +1,24 @@
+<div class="flex flex-col justify-center items-center">
+
+  <section class="mx-auto navBar: flex justify-start">
+    <h2 class="text-3xl font-bold p-6 pb-2 text-brand4 border-b-4 border-b-brand1">Add a Board Game</h2>
+  </section>
+
+  <section class="flex flex-col">
+
+    <div class="flex flex-col mt-4">
+      <input class="p-2  h-10 border-2 rounded-md border-t-brand5 border-r-brand4 border-b-brand3 border-l-brand2 text-gray-700  focus:border-brand4 focus:ring-2 focus:ring-brand1 focus:outline-none w-full max-w-lg"
+             type="text" placeholder="Enter Game Title" #input id="gameSearchBox">
+      <label class="pt-2 block text-sm font-medium text-gray-700" for="gameSearchBox">Game Title</label>
+    </div>
+
+    <button class=" bg-brand5 text-white font-semibold my-4 py-2 px-4 rounded-md hover:bg-brand4 focus:outline-none focus:ring-2 focus:ring-brand2 active:bg-brand3 w-full max-w-lg"
+            (click)="submitGame(input.value)">Add Board Game to Database</button>
+
+
+
+  </section>
+
+  <h4 class="text-md font-bold  text-[#ff3254] ">{{ gameAddStatusMessage }}</h4>
+
+</div>

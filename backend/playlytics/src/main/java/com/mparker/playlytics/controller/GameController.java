@@ -5,14 +5,13 @@ import com.mparker.playlytics.dto.GameResponseDTO;
 import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.service.GameService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class GameController {
 
     //<editor-fold desc = "Constructor">
@@ -41,6 +40,21 @@ public class GameController {
 
                 // Else return DTO
                 return ResponseEntity.ok(boardGameResponseDTO);
+
+        }
+
+    //</editor-fold>
+
+    //<editor-fold desc="Add Board Game">
+
+        @PostMapping("/board-game")
+        public ResponseEntity<Void> addBoardGame (
+                @RequestParam(value = "boardGame") String boardGame) {
+
+            System.out.print(boardGame);
+            gameService.addBoardGame(boardGame);
+
+            return ResponseEntity.ok(null);
 
         }
 

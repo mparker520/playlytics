@@ -5,6 +5,8 @@ import com.mparker.playlytics.entity.Game;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Set;
 
 
@@ -17,4 +19,5 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     // Get all Games by Containing Filter, ignoring case
     Set<Game> findByGameTitleContainingIgnoreCase(String title);
 
+    Set<Game> getGamesByGameTitleContainingIgnoreCase(String word);
 }

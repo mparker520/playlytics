@@ -2,12 +2,8 @@ package com.mparker.playlytics.service;
 
 // Imports
 import com.mparker.playlytics.dto.GameResponseDTO;
-import com.mparker.playlytics.dto.OwnedGameResponseDTO;
 import com.mparker.playlytics.entity.Game;
-import com.mparker.playlytics.entity.OwnedGame;
-import com.mparker.playlytics.entity.RegisteredPlayer;
 import com.mparker.playlytics.exception.ExistingResourceException;
-import com.mparker.playlytics.exception.NotFoundException;
 import com.mparker.playlytics.repository.GameRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,17 +56,21 @@ public class GameService {
     public void addBoardGame(String boardGame)  throws ExistingResourceException {
 
         Set<Game> existingGames = new HashSet<>();
+        String normalizedNewGame = boardGame.toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
 
         for(String word: getSignificantWords(boardGame)) {
             existingGames.addAll(gameRepository.getGamesByGameTitleContainingIgnoreCase(word));
         }
 
         for (Game existingGame : existingGames) {
-                existingGame.setGameTitle(existingGame.getGameTitle().replaceAll("[^a-zA-Z0-9\\s]", " "));
 
-                if(existingGame.getGameTitle().equals(boardGame.replaceAll("[^a-zA-Z0-9\\s]", " "))){
+                String normalizedExistingGame = existingGame.getGameTitle().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
+
+
+                if(normalizedExistingGame.equals(normalizedNewGame)){
                     throw new ExistingResourceException("There is already a game with a duplicate or similar name / title.");
                 }
+
         }
 
         Game newGame = new Game(boardGame.trim().replaceAll("\\s+", " "));
@@ -93,7 +93,7 @@ public class GameService {
 
         for (String word : titleWords) {
             if(!excludedWords.contains(word.toLowerCase().replaceAll("[^a-zA-Z0-9]", ""))) {
-                signifiicantWords.add(word);
+                signifiicantWords.add(word.toLowerCase().replaceAll("[^a-zA-Z0-9]", ""));
             }
 
         }

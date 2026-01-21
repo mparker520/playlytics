@@ -8,7 +8,7 @@ connect with other players, and track their board game inventory.
 ## 📖Table of Contents
 
 - [Project Overview](#-project-overview)
-- [Live Application](#-live-application--video-demo)
+- [Live Application](#-live-application)
 - [Video Demo](#-video-demo)
 - [Technologies Used](#-technologies-used)
 - [Local Setup](#-local-setup)
@@ -166,6 +166,9 @@ Open [http://localhost:8080](http://localhost:8080/) in your browser
     - Search board games in collection
     - Remove board games from collection
 
+- **Board Games**
+    - Add board games to the database
+
 
 ---
 
@@ -187,8 +190,7 @@ Open [http://localhost:8080](http://localhost:8080/) in your browser
     - Optimized image loading performance
 
 
-- **Search & Data Insights**
-    - Improved search functionality across application
+- **Data Insights**
     - Enhanced labeling and finer granularity in data visualizations
     - Additional analytical insights
 
